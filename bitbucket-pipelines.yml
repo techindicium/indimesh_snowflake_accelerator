@@ -1,0 +1,11 @@
+image: golang:latest
+
+pipelines:
+  default:
+    - parallel:
+      - step:
+          name: Test Snowflake Module
+          script:
+            - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh
+  pullrequest:
+    '**':
