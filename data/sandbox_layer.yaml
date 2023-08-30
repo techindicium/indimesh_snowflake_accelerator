@@ -1,0 +1,40 @@
+marketing:
+  warehouse_attributes:
+    warehouse_name: WH_MARKETING_LAB
+    warehouse_size: X-Small
+    auto_suspend: 300
+    enable_query_acceleration: false
+    max_concurrency_level: 8
+    max_cluster_count: 1
+    min_cluster_count: 1
+    query_acceleration_max_scale_factor: 0
+    statement_queued_timeout_in_seconds: 300
+    statement_timeout_in_seconds: 300
+    scaling_policy: null 
+  database_name: MARKETING_DATABASE
+  database_role_name: MARKETING_DATABASE_ROLE
+  warehouse_role_name: WH_MARKETING_LAB_ROLE
+  team_role_name: MARKETING_ROLE
+  schema_name: marketing_test
+
+financial:
+  warehouse_attributes:
+    warehouse_name: WH_FINANCIAL_LAB
+    warehouse_size: X-Small
+    auto_suspend: 300
+    enable_query_acceleration: false
+    max_cluster_count: 1
+    min_cluster_count: 1
+    max_concurrency_level: 8
+    query_acceleration_max_scale_factor: 0
+    statement_queued_timeout_in_seconds: 300
+    statement_timeout_in_seconds: 300
+    scaling_policy: null
+  database_name: FINANCIALDATABASE
+  database_role_name: FINANCIALDATABASE_ROLE
+  warehouse_role_name: WH_FINANCIALLAB_ROLE
+  team_role_name: FINANCIAL_ROLE
+  schema_name: financial_test
+
+rh:
+  w
