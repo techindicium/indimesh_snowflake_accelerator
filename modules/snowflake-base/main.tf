@@ -31,3 +31,22 @@ resource "snowflake_schema" "schema" {
   is_managed          = false
   data_retention_days = 0
 }
+
+
+resource "snowflake_warehouse_grant" "warehouse_usage" {
+  provider               = snowflake.security_admin
+  warehouse_name         = snowflake_warehouse.warehouse.name
+  privilege              = "USAGE"
+  roles                  = [snowflake_role.warehouse_role.name]
+  with_grant_option      = false
+  enable_multiple_grants = false
+}
+
+resource "snowflake_database_grant" "database_usage" {
+  provider               = snowflake.security_admin
+  database_name          = snowflake_database.database.name
+  privilege              = "USAGE"
+  roles                  = [snowflake_role.database_role.name]
+  with_grant_option      = false
+  enable_multiple_grants = false
+}
