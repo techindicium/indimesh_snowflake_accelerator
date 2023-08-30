@@ -56,7 +56,7 @@ provider "snowflake" {
 
 module "snowflake_sandbox" {
   for_each = local.config_sandbox_layer
-  source   = "../modules/snowflake-base"
+  source   = "../../modules/snowflake-base"
 
   providers = {
     snowflake.sys_admin      = snowflake.sys_admin

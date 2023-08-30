@@ -56,7 +56,7 @@ provider "snowflake" {
 
 module "snowflake_mds" {
   for_each = local.config_mds_layer
-  source   = "../modules/snowflake-base"
+  source   = "../../modules/snowflake-base"
 
   providers = {
     snowflake.sys_admin      = snowflake.sys_admin
@@ -66,7 +66,6 @@ module "snowflake_mds" {
     snowsql.security_admin   = snowsql.security_admin
     snowsql.account_admin    = snowsql.account_admin
   }
-
   warehouse_name                      = each.value.warehouse_attributes.warehouse_name
   warehouse_size                      = each.value.warehouse_attributes.warehouse_size
   auto_suspend                        = each.value.warehouse_attributes.auto_suspend
@@ -77,9 +76,9 @@ module "snowflake_mds" {
   statement_queued_timeout_in_seconds = each.value.warehouse_attributes.statement_queued_timeout_in_seconds
   statement_timeout_in_seconds        = each.value.warehouse_attributes.statement_timeout_in_seconds
   scaling_policy                      = each.value.warehouse_attributes.scaling_policy
-  warehouse_role_name                 = each.value.warehouse_attributes.warehouse_role_name
-  database_name                       = each.value.data_sources[0].database_name
-  database_role_name                  = each.value.data_sources[0].database_role_name
-  team_role_name                      = each.value.data_sources[0].team_role_name
+  database_name                       = each.value.database_name
+  database_role_name                  = each.value.database_role_name
+  warehouse_role_name                 = each.value.warehouse_role_name
+  team_role_name                      = each.value.team_role_name
   create_optional_resource            = false
 }
