@@ -14,3 +14,10 @@ resource "snowflake_warehouse" "warehouse" {
   statement_timeout_in_seconds        = var.statement_timeout_in_seconds
   scaling_policy                      = var.scaling_policy
 }
+
+resource "snowflake_database" "database" {
+  provider                    = snowflake.account_admin
+  name                        = var.database_name
+  is_transient                = false
+  data_retention_time_in_days = 0
+}
