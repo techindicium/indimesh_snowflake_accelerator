@@ -16,4 +16,7 @@ raw:
   database_name: RAW_DATABASE
   database_role_name: SOURCE_1_DB_ROLE
   team_role_name: SOURCE_1_ROLE_NAME
-  schema_name: [BITRIX, FACEBOOK, SAP]
+  schema_name: 
+    - BITRIX
+    - FACEBOOK
+    - SAP

@@ -15,7 +15,8 @@ marketing:
   database_role_name: MARKETING_DATABASE_ROLE
   warehouse_role_name: WH_MARKETING_LAB_ROLE
   team_role_name: MARKETING_ROLE
-  schema_name: marketing_test
+  schema_name: 
+    - marketing_test
 
 financial:
   warehouse_attributes:
@@ -34,7 +35,5 @@ financial:
   database_role_name: FINANCIALDATABASE_ROLE
   warehouse_role_name: WH_FINANCIALLAB_ROLE
   team_role_name: FINANCIAL_ROLE
-  schema_name: financial_test
-
-rh:
-  w
+  schema_name: 
+    - financial_test

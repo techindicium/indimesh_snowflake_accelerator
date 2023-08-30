@@ -11,7 +11,7 @@ dev:
     statement_queued_timeout_in_seconds: 300
     statement_timeout_in_seconds: 300
     scaling_policy: null
-    warehouse_role_name: "WH_DBT_DEV_ROLE"
+  warehouse_role_name: "WH_DBT_DEV_ROLE"
   database_name: DBT_DEV_DATABASE
   database_role_name: DBT_DEV_ROLE
   team_role_name: AIRFLOW_DBT_DEV
@@ -29,7 +29,7 @@ prod:
     statement_queued_timeout_in_seconds: 300
     statement_timeout_in_seconds: 300
     scaling_policy: null
-    warehouse_role_name: "WH_DBT_PROD_ROLE"
+  warehouse_role_name: "WH_DBT_PROD_ROLE"
   database_name: DBT_PROD_DATABASE
   database_role_name: DBT_PROD_ROLE
   warehouse_role_name: WH_DBT_PROD_ROLE
