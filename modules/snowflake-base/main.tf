@@ -21,3 +21,13 @@ resource "snowflake_database" "database" {
   is_transient                = false
   data_retention_time_in_days = 0
 }
+
+resource "snowflake_schema" "schema" {
+  provider            = snowflake.account_admin
+  count               = var.create_optional_resource ? 1 : 0
+  database            = snowflake_database.database.name
+  name                = var.schema_name
+  is_transient        = false
+  is_managed          = false
+  data_retention_days = 0
+}
