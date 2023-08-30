@@ -1,0 +1,14 @@
+.env
+
+**/.terraform/
+**/terraform.tfstate.lock
+*.terraform.lock.hcl
+*.terraform.tfstate.backup
+*.terraform.tfstate
+
+modules/snowflake-base/.terraform.lock.hcl
+modules/snowflake-base/terraform.tfstate
+modules/snowflake-base/terraform.tfstate.backup
+
+tests/go.mod
+tests/go.sum
