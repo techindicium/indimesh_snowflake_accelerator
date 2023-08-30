@@ -1,7 +1,7 @@
 image: golang:latest
 
 pipelines:
-  pull-request:
+  pull-requests:
     '**':
       - step:
           name: Test Snowflake Base Module
