@@ -1,9 +1,9 @@
-# image: golang:latest
+image: golang:latest
 
-# pipelines:
-#   pull-requests:
-#     '**':
-#       - step:
-#           name: Test Snowflake Base Module
-#           script:
-#             - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh
+pipelines:
+  pull-requests:
+    '**':
+      - step:
+          name: Test Snowflake Base Module
+          script:
+            - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh
