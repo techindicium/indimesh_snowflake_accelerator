@@ -15,5 +15,5 @@ locals {
   database_role_name                  = "TEST_DATABASE_ROLE"
   warehouse_role_name                 = "TEST_WH_ROLE"
   team_role_name                      = "TEST_TEAM_ROLE"
-  schema_name                         = "schema_test"
+  schema_name                         = ["schema_test"]
 }
