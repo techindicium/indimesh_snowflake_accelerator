@@ -83,9 +83,9 @@ variable "team_role_name" {
 }
 
 variable "schema_name" {
-  description = "Name of schema"
-  type        = string
-  default     = null
+  description = "List of schema names or single schema name"
+  type        = list(string)
+  default     = []
 }
 
 variable "create_optional_resource" {

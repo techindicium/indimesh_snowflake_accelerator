@@ -38,15 +38,15 @@ resource "snowflake_database" "database" {
 }
 
 resource "snowflake_schema" "schema" {
-  provider            = snowflake.account_admin
-  count               = var.create_optional_resource ? 1 : 0
+  provider = snowflake.account_admin
+  count    = var.create_optional_resource ? length(flatten([toset(var.schema_name)])) : 0
+
   database            = snowflake_database.database.name
-  name                = var.schema_name
+  name                = var.schema_name[count.index]
   is_transient        = false
   is_managed          = false
   data_retention_days = 0
 }
-
 
 resource "snowflake_warehouse_grant" "warehouse_usage" {
   provider               = snowflake.security_admin

@@ -23,5 +23,5 @@ output "team_role_name" {
 }
 
 output "schema_name" {
-  value = snowflake_schema.schema[0].name
+  value = length(snowflake_schema.schema) > 0 ? snowflake_schema.schema[0].name : null
 }
