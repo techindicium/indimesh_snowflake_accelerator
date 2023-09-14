@@ -3,13 +3,13 @@ image: golang:latest
 pipelines:
   pull-requests:
     '**':
-      -step:
-        name: Terraform Lint
-        image: ghcr.io/terraform-linters/tflint:v0.48.0
-        script:
-          - cd ${BITBUCKET_CLONE_DIR}/tests
-          - tflint --init
-          - tflint
+      - step:
+          name: Terraform Lint
+          image: ghcr.io/terraform-linters/tflint:v0.48.0
+          script:
+            - cd ${BITBUCKET_CLONE_DIR}/tests
+            - tflint --init
+            - tflint
 
       - step:
           name: Static Analysis Test
