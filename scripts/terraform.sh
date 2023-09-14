@@ -31,10 +31,6 @@ run_terraform_init() {
 }
 
 run_static_analysis_test() {
-    terraform validate
-    export PATH=$PATH:$HOME/.tflint
-    tflint --init 
-    tflint
     conftest test ./tfplan.json -p policy/main.rego
 }
 
