@@ -9,14 +9,14 @@ install_terraform() {
 }
 
 install_tflint () {
-  curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+    curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
 }
 
 install_conftest () {
-  LATEST_VERSION=$(wget -O - "https://api.github.com/repos/open-policy-agent/conftest/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | cut -c 2-)
-  wget "https://github.com/open-policy-agent/conftest/releases/download/v${LATEST_VERSION}/conftest_${LATEST_VERSION}_Linux_x86_64.tar.gz"
-  tar xzf conftest_${LATEST_VERSION}_Linux_x86_64.tar.gz
-  mv conftest /usr/local/bin
+    LATEST_VERSION=$(wget -O - "https://api.github.com/repos/open-policy-agent/conftest/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | cut -c 2-)
+    wget "https://github.com/open-policy-agent/conftest/releases/download/v${LATEST_VERSION}/conftest_${LATEST_VERSION}_Linux_x86_64.tar.gz"
+    tar xzf conftest_${LATEST_VERSION}_Linux_x86_64.tar.gz
+    mv conftest /usr/local/bin
 }
 
 run_terraform_init() {
@@ -31,10 +31,10 @@ run_terraform_init() {
 }
 
 run_static_analysis_test() {
-  terraform validate
-  tflint --init 
-  tflint
-  conftest test ./tfplan.json -p policy/main.rego
+    terraform validate
+    tflint --init 
+    tflint
+    conftest test ./tfplan.json -p policy/main.rego
 }
 
 run_integration_test() {
@@ -46,21 +46,22 @@ run_integration_test() {
 METHODS=${1//,/ }
 
 for TASK in $METHODS; do
-  case "$TASK" in
-    "setup_environment")
-      install_terraform
-      install_tflint
-      install_conftest
-      ;;
-    "static_analysis_test")
-      run_static_analysis_test
-      ;;
-    "integration_test")
-      run_integration_test
-      ;;
-    *)
-      echo "Invalid TASK: $TASK"
-      exit 1
-      ;;
-  esac
+    case "$TASK" in
+        "setup_environment")
+          install_terraform
+          install_tflint
+          install_conftest
+          run_terraform_init
+          ;;
+        "static_analysis_test")
+          run_static_analysis_test
+          ;;
+        "integration_test")
+          run_integration_test
+          ;;
+        *)
+          echo "Invalid TASK: $TASK"
+          exit 1
+          ;;
+    esac
 done
