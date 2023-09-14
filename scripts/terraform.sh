@@ -43,10 +43,10 @@ run_integration_test() {
     go test snowflake_base_test.go
 }
 
-STACKS=${1//,/ }
+METHODS=${1//,/ }
 
-for STACK in $STACKS; do
-  case "$STACK" in
+for TASK in $METHODS; do
+  case "$TASK" in
     "setup_environment")
       install_terraform
       install_tflint
@@ -59,7 +59,7 @@ for STACK in $STACKS; do
       run_integration_test
       ;;
     *)
-      echo "Invalid stack: $STACK"
+      echo "Invalid TASK: $TASK"
       exit 1
       ;;
   esac

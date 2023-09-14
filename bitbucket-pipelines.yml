@@ -11,7 +11,7 @@ pipelines:
           name: Static Analysis Test
           script:
             - cd ${BITBUCKET_CLONE_DIR}/tests
-            - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh static_analysis
+            - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh static_analysis_test
       # - step:
       #     name: Unit and Integration Test
       #     script:
