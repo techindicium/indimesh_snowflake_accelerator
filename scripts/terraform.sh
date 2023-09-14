@@ -9,7 +9,10 @@ install_terraform() {
 }
 
 install_tflint () {
-    curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+    wget https://github.com/terraform-linters/tflint/releases/download/v0.48.0/tflint_linux_amd64.zip \
+    && unzip tflint_linux_amd64.zip \
+    && mv tflint /usr/local/bin/ \
+    && rm tflint_linux_amd64.zip
 }
 
 install_conftest () {
@@ -31,6 +34,9 @@ run_terraform_init() {
 }
 
 run_static_analysis_test() {
+    terraform validate
+    tflint --init
+    tflint
     conftest test ./tfplan.json -p policy/main.rego
 }
 
