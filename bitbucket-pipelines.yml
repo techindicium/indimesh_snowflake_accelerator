@@ -4,11 +4,15 @@ pipelines:
   pull-requests:
     '**':
       - step:
-          name: Install Terraform
+          name: Setup Environment
+          caches:
+            - env
           script:
             - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh setup_environment
       - step:
           name: Static Analysis Test
+          caches:
+            - env
           script:
             - cd ${BITBUCKET_CLONE_DIR}/tests
             - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh static_analysis_test
