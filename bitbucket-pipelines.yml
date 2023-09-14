@@ -7,6 +7,7 @@ pipelines:
           name: Terraform Lint
           image: ghcr.io/terraform-linters/tflint:v0.48.0
           script:
+            - $TFLINT_SETUP_COMMAND
             - cd ${BITBUCKET_CLONE_DIR}/tests
             - tflint --init
             - tflint
@@ -14,12 +15,23 @@ pipelines:
       - step:
           name: Static Analysis Test
           script:
-            - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh setup_environment
+            - $TERRAFORM_SETUP_COMMAND
             - cd ${BITBUCKET_CLONE_DIR}/tests
-            - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh static_analysis_test
+            - $TERRAFORM_STATIC_ANALYSIS_COMMAND
             
       - step:
           name: Unit and Integration Test
           script:
+            - $TERRAFORM_SETUP_COMMAND
             - cd ${BITBUCKET_CLONE_DIR}/tests
-            - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh integration_test
+            - $TERRAFORM_INTEGRATION_TEST_COMMAND
+
+definitions:
+  caches:
+    tflint: ~/.tflint-cache
+
+variables:
+  TFLINT_SETUP_COMMAND: bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh setup_environment
+  TERRAFORM_SETUP_COMMAND: bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh setup_environment
+  TERRAFORM_STATIC_ANALYSIS_COMMAND: bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh static_analysis_test
+  TERRAFORM_INTEGRATION_TEST_COMMAND: bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh integration_test
