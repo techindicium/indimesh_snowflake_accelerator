@@ -4,6 +4,16 @@ pipelines:
   pull-requests:
     '**':
       - step:
-          name: Test Snowflake Base Module
-          script:
-            - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh
+        name: Install Terraform
+        script:
+          - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh setup_environment
+      # - step:
+      #     name: Static Analysis Test
+      #     script:
+      #       - cd ${BITBUCKET_CLONE_DIR}/tests
+      #       - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform_test.sh static_analysis
+      # - step:
+      #     name: Unit and Integration Test
+      #     script:
+      #       - cd ${BITBUCKET_CLONE_DIR}/tests
+      #       - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform_test.sh
