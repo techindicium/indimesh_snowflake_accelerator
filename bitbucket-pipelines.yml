@@ -4,9 +4,9 @@ pipelines:
   pull-requests:
     '**':
       - step:
-        name: Install Terraform
-        script:
-          - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh setup_environment
+          name: Install Terraform
+          script:
+            - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh setup_environment
       # - step:
       #     name: Static Analysis Test
       #     script:
