@@ -7,8 +7,8 @@ pipelines:
           name: Terraform Lint
           image: ghcr.io/terraform-linters/tflint:v0.48.0
           script:
-            - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh setup_environment
             - cd ${BITBUCKET_CLONE_DIR}/tests
+            - terraform init -backend-config="key=${BACKEND_KEY}" -backend-config="bucket=${BACKEND_BUCKET}" -backend-config="region=${AWS_REGION}"
             - tflint --init
             - tflint
 
