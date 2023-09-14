@@ -22,6 +22,6 @@ pipelines:
       - step:
           name: Unit and Integration Test
           script:
-            - - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh setup_environment
+            - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh setup_environment
             - cd ${BITBUCKET_CLONE_DIR}/tests
             - bash ${BITBUCKET_CLONE_DIR}/scripts/terraform.sh integration_test
