@@ -47,7 +47,7 @@ STACKS=${1//,/ }
 
 for STACK in $STACKS; do
   case "$STACK" in
-    "setup_enverioment")
+    "setup_environment")
       install_terraform
       install_tflint
       install_conftest

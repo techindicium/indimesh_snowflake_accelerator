@@ -12,3 +12,5 @@ modules/snowflake-base/terraform.tfstate.backup
 
 tests/go.mod
 tests/go.sum
+tests/tfplan.json
+tests/tfplan

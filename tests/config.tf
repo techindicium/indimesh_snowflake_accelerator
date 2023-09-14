@@ -6,7 +6,6 @@ locals {
   enable_query_acceleration           = false
   max_concurrency_level               = 2
   max_cluster_count                   = 1
-  min_cluster_count                   = 1
   query_acceleration_max_scale_factor = 0
   statement_queued_timeout_in_seconds = 300
   statement_timeout_in_seconds        = 300
