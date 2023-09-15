@@ -1,5 +1,14 @@
 import input
 
+snowflake_warehouse[attributes] {
+  input.resource_changes[_].type == "snowflake_warehouse"
+  attributes := {
+    "warehouse_name": input.resource_changes[_].change.after.warehouse_name,
+    "warehouse_size ": input.resource_changes[_].change.after.warehouse_size,
+    "enable_query_acceleration ": input.resource_changes[_].change.after.enable_query_acceleration
+  }
+}
+
 snowflake_database[attributes] {
   input.resource_changes[_].type == "snowflake_database"
   attributes := {
