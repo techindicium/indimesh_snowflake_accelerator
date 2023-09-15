@@ -10,18 +10,18 @@ run_terraform_init() {
 
 run_static_analysis_test() {
     run_terraform_init
-    terraform plan -out=tfplan && terraform show -json ./tfplan > tfplan.json
-    terraform validate
-    tflint --init
-    tflint
-    conftest test ./tfplan.json -p policy/main.rego
+    terraform plan -out=tfplan && terraform show -json ./tfplan > tfplan.json  || exit 1
+    terraform validate || exit 1
+    tflint --init  || exit 1
+    tflint  || exit 1
+    conftest test ./tfplan.json -p policy/main.rego || exit 1
 }
 
 run_integration_test() {
     run_terraform_init
     go mod init snowflake-base
     go get github.com/gruntwork-io/terratest/modules/terraform
-    go test snowflake_base_test.go
+    go test snowflake_base_test.go  || exit 1
 }
 
 METHODS=${1//,/ }
