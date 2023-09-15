@@ -3,11 +3,14 @@ run_terraform_init() {
     chmod 600 snowflake_tf_snow_key.p8
 
     export SNOWFLAKE_PRIVATE_KEY_PATH="${BITBUCKET_CLONE_DIR}/snowflake_tf_snow_key.p8"
+    cd "${BITBUCKET_CLONE_DIR}/tests"
+
     terraform init \
     -backend-config="key=${BACKEND_KEY}" \
     -backend-config="bucket=${BACKEND_BUCKET}" \
-    -backend-config="region=${AWS_REGION}" \
-    -chdir="${BITBUCKET_CLONE_DIR}/tests"
+    -backend-config="region=${AWS_REGION}" 
+
+    cd -
 }
 
 run_static_analysis_test() {
