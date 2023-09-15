@@ -1,4 +1,4 @@
-image: golang:latest
+image: techindicium/snowflake-base:latest
 
 pipelines:
   pull-requests:
