@@ -6,35 +6,28 @@ run_terraform_init() {
     cd "${BITBUCKET_CLONE_DIR}/tests"
     
     terraform init -backend-config="key=${BACKEND_KEY}" -backend-config="bucket=${BACKEND_BUCKET}" -backend-config="region=${AWS_REGION}"
-    terraform plan
-    cd -
 }
 
 run_static_analysis_test() {
-    cd "${BITBUCKET_CLONE_DIR}/tests"
+    run_terraform_init
+    terraform plan -out=tfplan && terraform show -json ./tfplan > tfplan.json
     terraform validate
     tflint --init
     tflint
-    terraform plan -out=tfplan && terraform show -json ./tfplan > tfplan.json
     conftest test ./tfplan.json -p policy/main.rego
-    cd -
 }
 
 run_integration_test() {
-    cd "${BITBUCKET_CLONE_DIR}/tests"
+    run_terraform_init
     go mod init snowflake-base
     go get github.com/gruntwork-io/terratest/modules/terraform
     go test snowflake_base_test.go
-    cd -
 }
 
 METHODS=${1//,/ }
 
 for TASK in $METHODS; do
     case "$TASK" in
-        "setup_environment")
-          run_terraform_init
-          ;;
         "static_analysis_test")
           run_static_analysis_test
           ;;
