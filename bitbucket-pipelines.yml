@@ -1,4 +1,4 @@
-image: techindicium/snowflake-base:latest
+image: techindicium/snowflake-base:0.0.1
 
 pipelines:
   pull-requests:
