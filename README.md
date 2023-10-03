@@ -18,8 +18,8 @@ The test to ensure the Terraform code adheres to coding standards and guidelines
 
 In addition to static analysis tests, interaction tests with the module using Terratest have been performed. Terratest is a testing framework that enables automation of infrastructure tests in a real environment. The interaction tests verify:
 
-1. Successful Provisioning: The team has verified whether the module successfully provisions Snowflake resources as specified in the Terraform code.
+1. **Successful provisioning**: The team has verified whether the module successfully provisions Snowflake resources as specified in the Terraform code.
 
-2. Expected Behavior: Validation has been conducted to ensure that the provisioned resources behave as expected and that parameters are configured correctly.
+2. **Expected behavior**: Validation has been conducted to ensure that the provisioned resources behave as expected and that parameters are configured correctly.
 
 These tests ensure that the Terraform code functions as intended and that future changes do not break the existing infrastructure.
