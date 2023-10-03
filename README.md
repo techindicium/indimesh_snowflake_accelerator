@@ -3,7 +3,7 @@ This repository contains a Terraform module for provisioning Snowflake resources
 
 # Testing and Quality Assurance
 
-**Static Analysis Test**
+**Static Analysis Test:**
 
 The test to ensure the Terraform code adheres to coding standards and guidelines. The following tools have been utilized for this test:
 
@@ -14,7 +14,7 @@ The test to ensure the Terraform code adheres to coding standards and guidelines
 3. **Conftest in REGO**: The policies was written in REGO and applied Conftest to validate if the terraform code complies with internal standards and security regulations.
 
 
-**Integration Test**
+**Integration Test:**
 
 In addition to static analysis tests, interaction tests with the module using Terratest have been performed. Terratest is a testing framework that enables automation of infrastructure tests in a real environment. The interaction tests verify:
 
