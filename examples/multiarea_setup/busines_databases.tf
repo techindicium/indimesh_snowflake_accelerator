@@ -1,6 +1,6 @@
 # # # --------------  DATABASES
 module "business_databases" {
-  source   = "../modules/business-database"
+  source   = "../../modules/business-database"
   for_each = local.config.business_databases
 
   providers = {

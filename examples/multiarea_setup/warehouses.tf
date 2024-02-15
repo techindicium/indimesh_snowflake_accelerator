@@ -1,6 +1,6 @@
 module "snowflake_warehouses" {
   for_each = local.config.warehouses
-  source   = "../modules/warehouse"
+  source   = "../../modules/warehouse"
 
   providers = {
     snowflake.sys_admin      = snowflake.sys_admin

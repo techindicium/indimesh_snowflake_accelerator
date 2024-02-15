@@ -1,6 +1,6 @@
 module "custom_roles" {
   for_each = toset(local.config.roles)
-  source = "../modules/custom-role"
+  source = "../../modules/custom-role"
 
   providers = {
     snowflake.sys_admin      = snowflake.sys_admin

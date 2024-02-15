@@ -55,7 +55,7 @@ provider "snowflake" {
 }
 
 module "snowflake_base" {
-  source = "../modules/snowflake-base"
+  source = "../../modules/snowflake-base"
 
   providers = {
     snowflake.sys_admin      = snowflake.sys_admin
