@@ -1,0 +1,102 @@
+roles:
+  - AE_ROLE
+  - PRD_ROLE
+  - DEV_ROLE
+  
+
+users:
+
+  ae_user:
+    login: ae_user
+    comment: "Comment about this user"
+    name: "ae_user"
+    email: "ae_user@indicium.tech"
+    first_name: ae_user
+    last_anme: ae_user
+    default_warehouse: DEV_WRH       
+    default_role: AE_ROLE            
+    secondary_roles: []
+
+  prd_user:
+    login: prd_user
+    comment: "Comment about this user"
+    name: "prd_user"
+    email: "prd@indicium.tech"
+    first_name: prd
+    last_anme: prd
+    default_warehouse: PRD_WRH       
+    default_role: PRD_ROLE            
+    secondary_roles: []
+
+  dev_user:
+    login: dev_user
+    comment: "Comment about this user"
+    name: "dev_user"
+    email: "dev_user@indicium.tech"
+    first_name: dev
+    last_anme: user
+    default_warehouse: DEV_WRH       
+    default_role: DEV_ROLE            
+    secondary_roles: []
+
+business_databases:
+ 
+  HUMAN_RESOURCES:
+    database_name: HUMAN_RESOURCES_DB
+    database_comment: "HUMAN_RESOURCES_DB stuff"
+    data_retention_time_in_days: 7
+    staging_schema_data_retention_days: 0
+    assing_manage_roles: [PRD_ROL]
+    assing_create_roles: []
+    assing_select_roles: [AE_ROLE]
+    assing_bi_roles: []
+  
+  PRD:
+    database_name: PRD_DB
+    database_comment: "PRD stuff"
+    data_retention_time_in_days: 7
+    staging_schema_data_retention_days: 0
+    assing_manage_roles: [PRD_ROL]
+    assing_create_roles: []
+    assing_select_roles: [AE_ROLE]
+    assing_bi_roles: []
+
+  DEV:
+    database_name: DEV_DB
+    database_comment: "PRD stuff"
+    data_retention_time_in_days: 7
+    staging_schema_data_retention_days: 0
+    assing_manage_roles: [PRD_ROL]
+    assing_create_roles: [AE_ROLE]
+    assing_select_roles: [DEV_ROLE]
+    assing_bi_roles: []
+
+warehouses:
+ 
+  DEV_WRH:
+    warehouse_name: DEV_WRH
+    warehouse_size: X-Small
+    auto_suspend: 300
+    enable_query_acceleration: false
+    max_cluster_count: 1
+    min_cluster_count: 1
+    max_concurrency_level: 2
+    query_acceleration_max_scale_factor: 0
+    statement_queued_timeout_in_seconds: 300
+    statement_timeout_in_seconds: 300
+    scaling_policy: null
+    assing_warehouse_role_to_roles: [AE_ROLE, DEV_ROLE]
+  
+  PRD_WRH:
+    warehouse_name: PRD_WRH
+    warehouse_size: X-Small
+    auto_suspend: 300
+    enable_query_acceleration: false
+    max_cluster_count: 1
+    min_cluster_count: 1
+    max_concurrency_level: 2
+    query_acceleration_max_scale_factor: 0
+    statement_queued_timeout_in_seconds: 300
+    statement_timeout_in_seconds: 300
+    scaling_policy: null
+    assing_warehouse_role_to_roles: [PRD_ROLE]
