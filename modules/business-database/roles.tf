@@ -77,13 +77,13 @@ resource "snowsql_exec" "grant_create_to_manage_role" {
   create {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
-    GRANT ROLE "${module.create_custom_role.custom_role_name}" TO ROLE ${module.manage_custom_role.custom_role_name};
+    GRANT ROLE "${module.create_custom_role.custom_role_name}" TO ROLE "${module.manage_custom_role.custom_role_name}";
     EOT
   }
   delete {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
-    REVOKE ROLE "${module.create_custom_role.custom_role_name}" FROM ROLE ${module.manage_custom_role.custom_role_name};
+    REVOKE ROLE "${module.create_custom_role.custom_role_name}" FROM ROLE "${module.manage_custom_role.custom_role_name}";
     EOT
   }
 }
@@ -93,13 +93,13 @@ resource "snowsql_exec" "grant_select_to_create_role" {
   create {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
-    GRANT ROLE "${module.select_custom_role.custom_role_name}" TO ROLE ${module.create_custom_role.custom_role_name};
+    GRANT ROLE "${module.select_custom_role.custom_role_name}" TO ROLE "${module.create_custom_role.custom_role_name}";
     EOT
   }
   delete {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
-    REVOKE ROLE "${module.select_custom_role.custom_role_name}" FROM ROLE ${module.create_custom_role.custom_role_name};
+    REVOKE ROLE "${module.select_custom_role.custom_role_name}" FROM ROLE "${module.create_custom_role.custom_role_name}";
     EOT
   }
 }
@@ -110,13 +110,13 @@ resource "snowsql_exec" "grant_bi_to_select_role" {
   create {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
-    GRANT ROLE "${module.bi_custom_role[0].custom_role_name}" TO ROLE ${module.select_custom_role.custom_role_name};
+    GRANT ROLE "${module.bi_custom_role[0].custom_role_name}" TO ROLE "${module.select_custom_role.custom_role_name}";
     EOT
   }
   delete {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
-    REVOKE ROLE "${module.bi_custom_role[0].custom_role_name}" FROM ROLE ${module.select_custom_role.custom_role_name};
+    REVOKE ROLE "${module.bi_custom_role[0].custom_role_name}" FROM ROLE "${module.select_custom_role.custom_role_name}";
     EOT
   }
 }
@@ -127,13 +127,13 @@ resource "snowsql_exec" "grants_mng_role" {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
 
-    GRANT USAGE ON DATABASE ${local.db_name} TO ROLE ${module.manage_custom_role.custom_role_name};
+    GRANT USAGE ON DATABASE ${local.db_name} TO ROLE "${module.manage_custom_role.custom_role_name}";
 
-    GRANT ALL PRIVILEGES ON FUTURE SCHEMAS IN  DATABASE ${local.db_name} TO ROLE ${module.manage_custom_role.custom_role_name};
-    GRANT ALL PRIVILEGES ON ALL SCHEMAS IN  DATABASE ${local.db_name} TO ROLE ${module.manage_custom_role.custom_role_name};
+    GRANT ALL PRIVILEGES ON FUTURE SCHEMAS IN  DATABASE ${local.db_name} TO ROLE "${module.manage_custom_role.custom_role_name}";
+    GRANT ALL PRIVILEGES ON ALL SCHEMAS IN  DATABASE ${local.db_name} TO ROLE "${module.manage_custom_role.custom_role_name}";
 
-    GRANT ALL PRIVILEGES ON FUTURE TABLES IN DATABASE ${local.db_name} TO ROLE ${module.manage_custom_role.custom_role_name};
-    GRANT ALL PRIVILEGES ON ALL TABLES IN DATABASE ${local.db_name} TO ROLE ${module.manage_custom_role.custom_role_name};
+    GRANT ALL PRIVILEGES ON FUTURE TABLES IN DATABASE ${local.db_name} TO ROLE "${module.manage_custom_role.custom_role_name}";
+    GRANT ALL PRIVILEGES ON ALL TABLES IN DATABASE ${local.db_name} TO ROLE "${module.manage_custom_role.custom_role_name}";
     
     EOT
   }
@@ -141,13 +141,13 @@ resource "snowsql_exec" "grants_mng_role" {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
     
-    REVOKE USAGE ON DATABASE ${local.db_name} FROM ROLE ${module.manage_custom_role.custom_role_name};
+    REVOKE USAGE ON DATABASE ${local.db_name} FROM ROLE "${module.manage_custom_role.custom_role_name}";
 
-    REVOKE ALL PRIVILEGES ON FUTURE SCHEMAS IN  DATABASE ${local.db_name} FROM ROLE ${module.manage_custom_role.custom_role_name};
-    REVOKE ALL PRIVILEGES ON ALL SCHEMAS IN  DATABASE ${local.db_name} FROM ROLE ${module.manage_custom_role.custom_role_name};
+    REVOKE ALL PRIVILEGES ON FUTURE SCHEMAS IN  DATABASE ${local.db_name} FROM ROLE "${module.manage_custom_role.custom_role_name}";
+    REVOKE ALL PRIVILEGES ON ALL SCHEMAS IN  DATABASE ${local.db_name} FROM ROLE "${module.manage_custom_role.custom_role_name}";
 
-    REVOKE ALL PRIVILEGES ON FUTURE TABLES IN DATABASE ${local.db_name} FROM ROLE ${module.manage_custom_role.custom_role_name};
-    REVOKE ALL PRIVILEGES ON ALL TABLES IN DATABASE ${local.db_name} FROM ROLE ${module.manage_custom_role.custom_role_name};
+    REVOKE ALL PRIVILEGES ON FUTURE TABLES IN DATABASE ${local.db_name} FROM ROLE "${module.manage_custom_role.custom_role_name}";
+    REVOKE ALL PRIVILEGES ON ALL TABLES IN DATABASE ${local.db_name} FROM ROLE "${module.manage_custom_role.custom_role_name}";
     
     EOT
   }
@@ -159,8 +159,8 @@ resource "snowsql_exec" "grants_create_role" {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
         
-    GRANT USAGE ON DATABASE ${local.db_name} TO ROLE ${module.create_custom_role.custom_role_name};
-    GRANT CREATE SCHEMA ON DATABASE ${local.db_name} TO ROLE ${module.create_custom_role.custom_role_name};
+    GRANT USAGE ON DATABASE ${local.db_name} TO ROLE "${module.create_custom_role.custom_role_name}";
+    GRANT CREATE SCHEMA ON DATABASE ${local.db_name} TO ROLE "${module.create_custom_role.custom_role_name}";
     
     EOT
   }
@@ -168,8 +168,8 @@ resource "snowsql_exec" "grants_create_role" {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
     
-    REVOKE USAGE ON DATABASE ${local.db_name} FROM ROLE ${module.create_custom_role.custom_role_name};
-    REVOKE CREATE SCHEMA ON DATABASE ${local.db_name} FROM ROLE ${module.create_custom_role.custom_role_name};
+    REVOKE USAGE ON DATABASE ${local.db_name} FROM ROLE "${module.create_custom_role.custom_role_name}";
+    REVOKE CREATE SCHEMA ON DATABASE ${local.db_name} FROM ROLE "${module.create_custom_role.custom_role_name}";
     
     EOT
   }
@@ -181,44 +181,44 @@ resource "snowsql_exec" "grants_select_role" {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
 
-    GRANT USAGE ON DATABASE ${local.db_name} TO ROLE ${module.select_custom_role.custom_role_name};
+    GRANT USAGE ON DATABASE ${local.db_name} TO ROLE "${module.select_custom_role.custom_role_name}";
 
-    GRANT USAGE ON FUTURE SCHEMAS IN  DATABASE ${local.db_name} TO ROLE ${module.select_custom_role.custom_role_name};
-    GRANT USAGE ON ALL SCHEMAS IN  DATABASE ${local.db_name} TO ROLE ${module.select_custom_role.custom_role_name};
+    GRANT USAGE ON FUTURE SCHEMAS IN  DATABASE ${local.db_name} TO ROLE "${module.select_custom_role.custom_role_name}";
+    GRANT USAGE ON ALL SCHEMAS IN  DATABASE ${local.db_name} TO ROLE "${module.select_custom_role.custom_role_name}";
 
-    GRANT SELECT ON FUTURE TABLES IN DATABASE ${local.db_name} TO ROLE ${module.select_custom_role.custom_role_name};
-    GRANT SELECT ON ALL TABLES IN DATABASE ${local.db_name} TO ROLE ${module.select_custom_role.custom_role_name};
+    GRANT SELECT ON FUTURE TABLES IN DATABASE ${local.db_name} TO ROLE "${module.select_custom_role.custom_role_name}";
+    GRANT SELECT ON ALL TABLES IN DATABASE ${local.db_name} TO ROLE "${module.select_custom_role.custom_role_name}";
 
-    GRANT SELECT ON FUTURE VIEWS IN DATABASE ${local.db_name} TO ROLE ${module.select_custom_role.custom_role_name};
-    GRANT SELECT ON ALL VIEWS IN DATABASE ${local.db_name} TO ROLE ${module.select_custom_role.custom_role_name};
+    GRANT SELECT ON FUTURE VIEWS IN DATABASE ${local.db_name} TO ROLE "${module.select_custom_role.custom_role_name}";
+    GRANT SELECT ON ALL VIEWS IN DATABASE ${local.db_name} TO ROLE "${module.select_custom_role.custom_role_name}";
 
-    GRANT SELECT ON FUTURE MATERIALIZED VIEWS IN DATABASE ${local.db_name} TO ROLE ${module.select_custom_role.custom_role_name};
-    GRANT SELECT ON ALL MATERIALIZED VIEWS IN DATABASE ${local.db_name} TO ROLE ${module.select_custom_role.custom_role_name};
+    GRANT SELECT ON FUTURE MATERIALIZED VIEWS IN DATABASE ${local.db_name} TO ROLE "${module.select_custom_role.custom_role_name}";
+    GRANT SELECT ON ALL MATERIALIZED VIEWS IN DATABASE ${local.db_name} TO ROLE "${module.select_custom_role.custom_role_name}";
 
-    GRANT SELECT ON FUTURE EXTERNAL TABLES IN DATABASE ${local.db_name} TO ROLE ${module.select_custom_role.custom_role_name};
-    GRANT SELECT ON ALL EXTERNAL TABLES IN DATABASE ${local.db_name} TO ROLE ${module.select_custom_role.custom_role_name};
+    GRANT SELECT ON FUTURE EXTERNAL TABLES IN DATABASE ${local.db_name} TO ROLE "${module.select_custom_role.custom_role_name}";
+    GRANT SELECT ON ALL EXTERNAL TABLES IN DATABASE ${local.db_name} TO ROLE "${module.select_custom_role.custom_role_name}";
    
     EOT
   }
   delete {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
-    REVOKE USAGE ON DATABASE ${local.db_name} FROM ROLE ${module.select_custom_role.custom_role_name};
+    REVOKE USAGE ON DATABASE ${local.db_name} FROM ROLE "${module.select_custom_role.custom_role_name}";
 
-    REVOKE USAGE ON FUTURE SCHEMAS IN  DATABASE ${local.db_name} FROM ROLE ${module.select_custom_role.custom_role_name};
-    REVOKE USAGE ON ALL SCHEMAS IN  DATABASE ${local.db_name} FROM ROLE ${module.select_custom_role.custom_role_name};
+    REVOKE USAGE ON FUTURE SCHEMAS IN  DATABASE ${local.db_name} FROM ROLE "${module.select_custom_role.custom_role_name}";
+    REVOKE USAGE ON ALL SCHEMAS IN  DATABASE ${local.db_name} FROM ROLE "${module.select_custom_role.custom_role_name}";
 
-    REVOKE SELECT ON FUTURE TABLES IN DATABASE ${local.db_name} FROM ROLE ${module.select_custom_role.custom_role_name};
-    REVOKE SELECT ON ALL TABLES IN DATABASE ${local.db_name} FROM ROLE ${module.select_custom_role.custom_role_name};
+    REVOKE SELECT ON FUTURE TABLES IN DATABASE ${local.db_name} FROM ROLE "${module.select_custom_role.custom_role_name}";
+    REVOKE SELECT ON ALL TABLES IN DATABASE ${local.db_name} FROM ROLE "${module.select_custom_role.custom_role_name}";
 
-    REVOKE SELECT ON FUTURE VIEWS IN DATABASE ${local.db_name} FROM ROLE ${module.select_custom_role.custom_role_name};
-    REVOKE SELECT ON ALL VIEWS IN DATABASE ${local.db_name} FROM ROLE ${module.select_custom_role.custom_role_name};
+    REVOKE SELECT ON FUTURE VIEWS IN DATABASE ${local.db_name} FROM ROLE "${module.select_custom_role.custom_role_name}";
+    REVOKE SELECT ON ALL VIEWS IN DATABASE ${local.db_name} FROM ROLE "${module.select_custom_role.custom_role_name}";
 
-    REVOKE SELECT ON FUTURE MATERIALIZED VIEWS IN DATABASE ${local.db_name} FROM ROLE ${module.select_custom_role.custom_role_name};
-    REVOKE SELECT ON ALL MATERIALIZED VIEWS IN DATABASE ${local.db_name} FROM ROLE ${module.select_custom_role.custom_role_name};
+    REVOKE SELECT ON FUTURE MATERIALIZED VIEWS IN DATABASE ${local.db_name} FROM ROLE "${module.select_custom_role.custom_role_name}";
+    REVOKE SELECT ON ALL MATERIALIZED VIEWS IN DATABASE ${local.db_name} FROM ROLE "${module.select_custom_role.custom_role_name}";
 
-    REVOKE SELECT ON FUTURE EXTERNAL TABLES IN DATABASE ${local.db_name} FROM ROLE ${module.select_custom_role.custom_role_name};
-    REVOKE SELECT ON ALL EXTERNAL TABLES IN DATABASE ${local.db_name} FROM ROLE ${module.select_custom_role.custom_role_name};
+    REVOKE SELECT ON FUTURE EXTERNAL TABLES IN DATABASE ${local.db_name} FROM ROLE "${module.select_custom_role.custom_role_name}";
+    REVOKE SELECT ON ALL EXTERNAL TABLES IN DATABASE ${local.db_name} FROM ROLE "${module.select_custom_role.custom_role_name}";
     
     EOT
   }
@@ -232,17 +232,17 @@ resource "snowsql_exec" "grants_bi_role" {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
 
-    GRANT USAGE ON DATABASE ${local.db_name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
-    GRANT USAGE ON SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
+    GRANT USAGE ON DATABASE ${local.db_name} TO ROLE "${module.bi_custom_role[0].custom_role_name}";
+    GRANT USAGE ON SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} TO ROLE "${module.bi_custom_role[0].custom_role_name}";
 
-    GRANT SELECT ON FUTURE TABLES IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
-    GRANT SELECT ON ALL TABLES IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
+    GRANT SELECT ON FUTURE TABLES IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} TO ROLE "${module.bi_custom_role[0].custom_role_name}";
+    GRANT SELECT ON ALL TABLES IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} TO ROLE "${module.bi_custom_role[0].custom_role_name}";
 
-    GRANT SELECT ON FUTURE VIEWS IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
-    GRANT SELECT ON ALL VIEWS IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
+    GRANT SELECT ON FUTURE VIEWS IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} TO ROLE "${module.bi_custom_role[0].custom_role_name}";
+    GRANT SELECT ON ALL VIEWS IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} TO ROLE "${module.bi_custom_role[0].custom_role_name}";
 
-    GRANT SELECT ON FUTURE MATERIALIZED VIEWS IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
-    GRANT SELECT ON ALL MATERIALIZED VIEWS IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
+    GRANT SELECT ON FUTURE MATERIALIZED VIEWS IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} TO ROLE "${module.bi_custom_role[0].custom_role_name}";
+    GRANT SELECT ON ALL MATERIALIZED VIEWS IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} TO ROLE "${module.bi_custom_role[0].custom_role_name}";
     
     EOT
   }
@@ -250,17 +250,17 @@ resource "snowsql_exec" "grants_bi_role" {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
     
-    REVOKE USAGE ON DATABASE ${local.db_name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
-    REVOKE USAGE ON SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
+    REVOKE USAGE ON DATABASE ${local.db_name} FROM ROLE "${module.bi_custom_role[0].custom_role_name}";
+    REVOKE USAGE ON SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} FROM ROLE "${module.bi_custom_role[0].custom_role_name}";
 
-    REVOKE SELECT ON FUTURE TABLES IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
-    REVOKE SELECT ON ALL TABLES IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
+    REVOKE SELECT ON FUTURE TABLES IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} FROM ROLE "${module.bi_custom_role[0].custom_role_name}";
+    REVOKE SELECT ON ALL TABLES IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} FROM ROLE "${module.bi_custom_role[0].custom_role_name}";
 
-    REVOKE SELECT ON FUTURE VIEWS IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
-    REVOKE SELECT ON ALL VIEWS IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
+    REVOKE SELECT ON FUTURE VIEWS IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} FROM ROLE "${module.bi_custom_role[0].custom_role_name}";
+    REVOKE SELECT ON ALL VIEWS IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} FROM ROLE "${module.bi_custom_role[0].custom_role_name}";
 
-    REVOKE SELECT ON FUTURE MATERIALIZED VIEWS IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
-    REVOKE SELECT ON ALL MATERIALIZED VIEWS IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
+    REVOKE SELECT ON FUTURE MATERIALIZED VIEWS IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} FROM ROLE "${module.bi_custom_role[0].custom_role_name}";
+    REVOKE SELECT ON ALL MATERIALIZED VIEWS IN SCHEMA ${local.db_name}.${snowflake_schema.marts_schema.name} FROM ROLE "${module.bi_custom_role[0].custom_role_name}";
     
     EOT
   }

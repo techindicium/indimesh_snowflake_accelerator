@@ -44,7 +44,7 @@ business_databases:
   HUMAN_RESOURCES:
     database_name: HUMAN_RESOURCES_DB
     database_comment: "HUMAN_RESOURCES_DB stuff"
-    data_retention_time_in_days: 1
+    data_retention_time_in_days: 0
     staging_schema_data_retention_days: 0
     assing_manage_roles: [PRD_ROL]
     assing_create_roles: []
@@ -54,7 +54,7 @@ business_databases:
   PRD:
     database_name: PRD_DB
     database_comment: "PRD stuff"
-    data_retention_time_in_days: 1
+    data_retention_time_in_days: 0
     staging_schema_data_retention_days: 0
     assing_manage_roles: [PRD_ROL]
     assing_create_roles: []
@@ -64,7 +64,7 @@ business_databases:
   DEV:
     database_name: DEV_DB
     database_comment: "PRD stuff"
-    data_retention_time_in_days: 1
+    data_retention_time_in_days: 0
     staging_schema_data_retention_days: 0
     assing_manage_roles: [PRD_ROL]
     assing_create_roles: [AE_ROLE]

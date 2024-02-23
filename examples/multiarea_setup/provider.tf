@@ -48,8 +48,3 @@ provider "snowflake" {
   alias = "security_admin"
   role  = "SECURITYADMIN"
 }
-
-provider "snowflake" {
-  alias = "account_admin"
-  role  = "ACCOUNTADMIN"
-}

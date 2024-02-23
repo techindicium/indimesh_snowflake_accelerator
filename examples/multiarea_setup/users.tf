@@ -1,7 +1,7 @@
 
 ## Tem que dar o grant aqui tambem, nao ta funcioando só o defaultrole
 resource "snowflake_user" "user" {
-  provider = snowflake.account_admin
+  provider = snowflake.security_admin
   for_each = local.config.users
 
   name         = each.value.name
@@ -39,13 +39,13 @@ resource "snowsql_exec" "grant_default_role" {
   create {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
-    GRANT ROLE "${each.value.default_role}" TO USER ${each.value.name};
+    GRANT ROLE "${each.value.default_role}" TO USER "${each.value.name}";
     EOT
   }
   delete {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
-    REVOKE ROLE "${each.value.default_role}" FROM USER ${each.value.name};
+    REVOKE ROLE "${each.value.default_role}" FROM USER "${each.value.name}";
     EOT
   }
 }

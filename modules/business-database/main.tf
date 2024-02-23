@@ -29,6 +29,7 @@ resource "snowflake_database" "database" {
 # staging
 # intermediate
 resource "snowflake_schema" "marts_schema" {
+  provider                    = snowflake.sys_admin
   name = "MARTS"
   database = snowflake_database.database.name
   data_retention_days = var.staging_schema_data_retention_days
