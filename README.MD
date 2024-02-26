@@ -132,5 +132,22 @@ $ terraform version
 
 ## Repository Structure
 
+```
+└── snowflake-base
+    ├── examples            -> Contains example templates to up a snowflake structure
+    ├── modules
+    │ ├── business-database -> Configuration to up databases.
+    │ └── custom-role       -> Configuration to up custom-roles
+    │ └── warehouse         -> Configuration to up warehouse
+```
+
+### Understanding module file
+Every module contains at least the following files:
+
+- **`main.tf`**: File responsible for declaring the main resources related to the given module
+- **`output.tf`**: [Terraform output variables](https://developer.hashicorp.com/terraform/language/values/outputs) that may export important values to the user or for another module to access the given value.
+- **`variables.tf`**: Declaration of [Terraform input variables](https://developer.hashicorp.com/terraform/language/values/variables)
+- **`roles.tf`**: VALIDATE
+
 ## Up Structure to Snowflake
-Link to modules explain
+- [Multi Area Setup](/examples/multiarea_setup/README.md)
