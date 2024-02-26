@@ -1,6 +1,65 @@
 # Snowflake Base Project
 This is the repository of the snowflake base project, which aims to facilitate the creation of a new structure within snowflake, creating Roles, Users, Databases, and warehouses. The project's goal is for a configuration to be done using lines of code and then, after running 2 commands, your entire desired structure is implemented in snowflake.
 
+## Requirements
+
+This project requires:
+
+- terraform
+- snowsql
+- python 3.8 or later
+
+### Install requirements
+
+In this section, you will understand how to install the necessary requirements.
+
+#### Install terraform
+
+For the installation, you can follow the official [Terraform installation](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli), but we highly recommend you to install [tfenv](https://github.com/tfutils/tfenv) instead, to have more freedom in using and updating Terraform versions.
+
+##### Automatic installation using Homebrew
+
+```bash
+$ brew install tfenv
+```
+##### Manual installation
+
+1. Check out tfenv into any path (here is `${HOME}/.tfenv`)
+
+```console
+git clone --depth=1 https://github.com/tfutils/tfenv.git ~/.tfenv
+```
+
+2. Add `~/.tfenv/bin` to your `$PATH` any way you like
+
+```bash
+# bash terminal
+$ echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.bash_profile
+
+# zsh terminal
+$ echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.zprofile
+```
+
+3. Install an version and set it as active
+
+You can check the available version running `tfenv list-remote`
+
+```
+$ tfenv install 1.7.4
+$ tfenv use 1.7.4
+```
+
+4. Test if Terraform is actually running
+```bash
+$ terraform version
+```
+
+#### Install snowsql
+
+SnowSQL is a CLI (Command Line Interface) for Snowflake that allows you to run SQL commands once connected to an account. It will be necessary in the next step.
+
+[**CLICK HERE TO SEE HOW INSTALL SNOWSQL**](https://developers.snowflake.com/snowsql/)
+
 ## Prerequisites
 
 Before running Terraform in this  project, ensure you meet the following prerequisites:
@@ -74,66 +133,6 @@ GRANT ROLE SECURITYADMIN TO USER <YOUR_USERNAME>;
 ```
 
 Upon completing this step, your account will be authenticated to proceed with uploading your structure.
-
-## Requirements
-
-This project requires:
-
-- terraform
-- snowsql
-- python 3.8 or later
-
-### Install requirements
-
-In this section, you will understand how to install the necessary requirements.
-
-#### Install terraform
-
-For the installation, you can follow the official [Terraform installation](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli), but we highly recommend you to install [tfenv](https://github.com/tfutils/tfenv) instead, to have more freedom in using and updating Terraform versions.
-
-##### Automatic installation using Homebrew
-
-```bash
-$ brew install tfenv
-```
-##### Manual installation
-
-1. Check out tfenv into any path (here is `${HOME}/.tfenv`)
-
-```console
-git clone --depth=1 https://github.com/tfutils/tfenv.git ~/.tfenv
-```
-
-2. Add `~/.tfenv/bin` to your `$PATH` any way you like
-
-```bash
-# bash terminal
-$ echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.bash_profile
-
-# zsh terminal
-$ echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.zprofile
-```
-
-3. Install an version and set it as active
-
-You can check the available version running `tfenv list-remote`
-
-```
-$ tfenv install 1.7.4
-$ tfenv use 1.7.4
-```
-
-4. Test if Terraform is actually running
-```bash
-$ terraform version
-```
-
-#### Install snowsql
-
-SnowSQL is a CLI (Command Line Interface) for Snowflake that allows you to run SQL commands once connected to an account. It will be necessary in the next step.
-
-[**CLICK HERE TO SEE HOW INSTALL SNOWSQL**](https://developers.snowflake.com/snowsql/)
-
 
 ## Repository Structure
 
