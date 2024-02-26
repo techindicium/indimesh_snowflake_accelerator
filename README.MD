@@ -143,7 +143,7 @@ SnowSQL is a CLI (Command Line Interface) for Snowflake that allows you to run S
     ├── modules
     │ ├── business-database -> Configuration to up databases
     │ └── custom-role       -> Configuration to up custom-roles
-    │ └── warehouse         -> Configuration to up warehouse
+    │ └── warehouse         -> Configuration to up warehouses
 ```
 
 ### Understanding module file
