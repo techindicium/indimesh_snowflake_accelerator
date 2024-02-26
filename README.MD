@@ -7,6 +7,41 @@ Before running Terraform in this  project, ensure you meet the following prerequ
 
 ### .env file
 
+Before we think about uploading some structures, we need to configure some variables.
+
+First, copy the content inside the .env.example file and paste it into a new file called .env. Your empty .env file should look like this:
+
+```bash
+#AWS credentials
+export AWS_REGION="us-east-1"
+export AWS_ACCESS_KEY_ID=""
+export AWS_SECRET_ACCESS_KEY=""
+
+####VALIDATE
+export BACKEND_KEY="prod/snowflake/terraform.tfstate"
+export BACKEND_BUCKET="indicium-sf-terraform-state"
+
+#Snowflake credentials
+export SNOWFLAKE_USER=""
+export SNOWFLAKE_ACCOUNT=""
+export SNOWFLAKE_PRIVATE_KEY_PATH="~/.ssh/snowflake_tf_snow_key.p8"
+```
+
+Finish the configuration by adding the missing variables:
+-**AWS_ACCESS_KEY_ID**: Service account access key id.
+-**AWS_SECRET_ACCESS_KEY**: Service account secret access key.
+-**SNOWFLAKE_USER**: Your snowflake username.
+-**SNOWFLAKE_ACCOUNT**: Your snowflake account
+
+**To get your correct Snowflake account, do the following:**
+
+- *Log into your Snowflake account*
+- *At the bottom left corner, click on your user*
+- *Hover the mouse over the account field*
+- *Hover the mouse over the selected account*
+- *Click on the copy account identifier button (it's a copy symbol)*
+- *Paste it into the .env and replace the '.' with a '-'* **IMPORTANT**
+
 ### Snowsql
 
 ### Snowflake Private Key
@@ -38,6 +73,8 @@ ALTER USER <YOUR_USERNAME> SET RSA_PUBLIC_KEY='YOUR_PUBLIC_(.PUB)_KEY_COPIED_HER
 GRANT ROLE SYSADMIN TO USER <YOUR_USERNAME>;
 GRANT ROLE SECURITYADMIN TO USER <YOUR_USERNAME>;
 ```
+
+Upon completing this step, your account will be authenticated to proceed with uploading your structure.
 
 ## Requirements
 
