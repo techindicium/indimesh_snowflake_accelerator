@@ -28,10 +28,10 @@ export SNOWFLAKE_PRIVATE_KEY_PATH="~/.ssh/snowflake_tf_snow_key.p8"
 ```
 
 Finish the configuration by adding the missing variables:
--**AWS_ACCESS_KEY_ID**: Service account access key id.
--**AWS_SECRET_ACCESS_KEY**: Service account secret access key.
--**SNOWFLAKE_USER**: Your snowflake username.
--**SNOWFLAKE_ACCOUNT**: Your snowflake account
+- **AWS_ACCESS_KEY_ID**: Service account access key id.
+- **AWS_SECRET_ACCESS_KEY**: Service account secret access key.
+- **SNOWFLAKE_USER**: Your snowflake username.
+- **SNOWFLAKE_ACCOUNT**: Your snowflake account.
 
 **To get your correct Snowflake account, do the following:**
 
@@ -40,7 +40,7 @@ Finish the configuration by adding the missing variables:
 - *Hover the mouse over the account field*
 - *Hover the mouse over the selected account*
 - *Click on the copy account identifier button (it's a copy symbol)*
-- *Paste it into the .env and replace the '.' with a '-'* **IMPORTANT**
+- *Paste it into the .env and replace the '.' with a '-'* (**IMPORTANT**)
 
 ### Snowsql
 
