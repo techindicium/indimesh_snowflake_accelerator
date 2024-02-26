@@ -28,6 +28,7 @@ export SNOWFLAKE_PRIVATE_KEY_PATH="~/.ssh/snowflake_tf_snow_key.p8"
 ```
 
 Finish the configuration by adding the missing variables:
+
 - **AWS_ACCESS_KEY_ID**: Service account access key id.
 - **AWS_SECRET_ACCESS_KEY**: Service account secret access key.
 - **SNOWFLAKE_USER**: Your snowflake username.
