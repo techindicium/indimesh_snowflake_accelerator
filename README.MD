@@ -85,19 +85,18 @@ This project requires:
 
 ### Install requirements
 
-
 In this section, you will understand how to install the necessary requirements.
 
 #### Install terraform
 
 For the installation, you can follow the official [Terraform installation](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli), but we highly recommend you to install [tfenv](https://github.com/tfutils/tfenv) instead, to have more freedom in using and updating Terraform versions.
 
-### Automatic installation using Homebrew
+##### Automatic installation using Homebrew
 
 ```bash
 $ brew install tfenv
 ```
-### Manual installation
+##### Manual installation
 
 1. Check out tfenv into any path (here is `${HOME}/.tfenv`)
 
@@ -131,5 +130,7 @@ $ terraform version
 
 #### Install snowsql
 
-## Snowflake Structure
+## Repository Structure
+
+## Up Structure to Snowflake
 Link to modules explain
