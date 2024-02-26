@@ -132,7 +132,7 @@ $ terraform version
 
 SnowSQL is a CLI (Command Line Interface) for Snowflake that allows you to run SQL commands once connected to an account. It will be necessary in the next step.
 
-[**CLICK HERE TO SEE HOW INSTALL SNOWSQL**]("https://developers.snowflake.com/snowsql/")
+[**CLICK HERE TO SEE HOW INSTALL SNOWSQL**](https://developers.snowflake.com/snowsql/)
 
 
 ## Repository Structure
