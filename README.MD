@@ -43,8 +43,6 @@ Finish the configuration by adding the missing variables:
 - *Click on the copy account identifier button (it's a copy symbol)*
 - *Paste it into the .env and replace the '.' with a '-'* (**IMPORTANT**)
 
-### Snowsql
-
 ### Snowflake Private Key
 
 The snowflake private key is a key that we will create to authenticate our user, similar to an ssh key, to enable the use of terraform on our machine. Below, we have the step-by-step on how to create the key.
@@ -79,13 +77,59 @@ Upon completing this step, your account will be authenticated to proceed with up
 
 ## Requirements
 
-this project requires
+This project requires:
 
 - terraform
+- snowsql
 - python 3.8 or later
 
-### Install dependencies
-Explain how user can install terraform. Validate
+### Install requirements
 
-### Configuration
+
+In this section, you will understand how to install the necessary requirements.
+
+#### Install terraform
+
+For the installation, you can follow the official [Terraform installation](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli), but we highly recommend you to install [tfenv](https://github.com/tfutils/tfenv) instead, to have more freedom in using and updating Terraform versions.
+
+### Automatic installation using Homebrew
+
+```bash
+$ brew install tfenv
+```
+### Manual installation
+
+1. Check out tfenv into any path (here is `${HOME}/.tfenv`)
+
+```console
+git clone --depth=1 https://github.com/tfutils/tfenv.git ~/.tfenv
+```
+
+2. Add `~/.tfenv/bin` to your `$PATH` any way you like
+
+```bash
+# bash terminal
+$ echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.bash_profile
+
+# zsh terminal
+$ echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.zprofile
+```
+
+3. Install an version and set it as active
+
+You can check the available version running `tfenv list-remote`
+
+```
+$ tfenv install 1.7.4
+$ tfenv use 1.7.4
+```
+
+4. Test if Terraform is actually running
+```bash
+$ terraform version
+```
+
+#### Install snowsql
+
+## Snowflake Structure
 Link to modules explain
