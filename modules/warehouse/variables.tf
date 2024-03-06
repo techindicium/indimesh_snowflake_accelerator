@@ -10,6 +10,12 @@ variable "warehouse_size" {
   default     = null
 }
 
+variable "warehouse_role" {
+  description = "Machine size provisioned in Snowflake"
+  type        = string
+  default     = null
+}
+
 variable "auto_suspend" {
   description = "Specifies the number of seconds of inactivity after which a warehouse is automatically suspended"
   type        = number
@@ -58,38 +64,26 @@ variable "scaling_policy" {
   default     = "null"
 }
 
-variable "database_name" {
-  description = "Name of database"
-  type        = string
-  default     = null
-}
-
-variable "database_role_name" {
-  description = "Name of database role name"
-  type        = string
-  default     = null
-}
-
-variable "warehouse_role_name" {
-  description = "Name of warehouse role name"
-  type        = string
-  default     = null
-}
-
-variable "team_role_name" {
-  description = "Name of team role"
-  type        = string
-  default     = null
-}
-
-variable "schema_name" {
-  description = "List of schema names or single schema name"
-  type        = list(string)
-  default     = []
-}
-
 variable "create_optional_resource" {
   description = "Controls whether to create the optional resource"
   type        = bool
   default     = false
+}
+
+variable "env" {
+  description = "Controls whether to create the optional resource"
+  type        = string
+  default     = null
+}
+
+variable "assing_warehouse_role_to_roles" {
+  description = "Roles to assignt the warehouse operate role to."
+  type        = list
+  default     = []
+}
+
+variable "auto_resume" {
+  description = "Should the warehouse autoresume on queries."
+  type        = bool
+  default     = true
 }
