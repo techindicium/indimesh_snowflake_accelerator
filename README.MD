@@ -153,5 +153,8 @@ Every module contains at least the following files:
 - **`variables.tf`**: Declaration of [Terraform input variables](https://developer.hashicorp.com/terraform/language/values/variables)
 - **`roles.tf`**: VALIDATE
 
+## Permissions and users
+By default, when your account is provisioned, the first user is assigned the ACCOUNTADMIN role. This user should then create one or more additional users who are assigned the USERADMIN role. All remaining users should be created by the user(s) with the USERADMIN role or another role that is granted the global CREATE USER privilege.
+
 ## Up Structure to Snowflake
 - [Multi Area Setup](/examples/multiarea_setup/README.md)

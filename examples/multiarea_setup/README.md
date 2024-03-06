@@ -1,6 +1,3 @@
-# Deveria estar no README principal
-By default, when your account is provisioned, the first user is assigned the ACCOUNTADMIN role. This user should then create one or more additional users who are assigned the USERADMIN role. All remaining users should be created by the user(s) with the USERADMIN role or another role that is granted the global CREATE USER privilege.
-
 # Multiarea Example
 
 This example configures an multi business areas snowflake setup.
@@ -41,4 +38,9 @@ Run:
 ```
 terraform init
 terraform apply
+```
+After running the tests on this module, you can run a terraform destroy command to tear down the created structure and set up one according to your needs.
+
+```
+terraform destroy
 ```
