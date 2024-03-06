@@ -1,8 +1,9 @@
+wh_terraform: "TRAINING_WAREHOUSE"
+
 roles:
   - AE_ROLE
   - PRD_ROLE
   - DEV_ROLE
-  
 
 users:
 
