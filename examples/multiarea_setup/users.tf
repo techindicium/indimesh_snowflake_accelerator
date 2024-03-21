@@ -10,7 +10,7 @@ resource "snowflake_user" "user" {
   display_name = each.value.name
   email        = each.value.email
   first_name   = each.value.first_name
-  last_name    = each.value.last_anme
+  last_name    = each.value.last_name
 
   default_warehouse = module.snowflake_warehouses[each.value.default_warehouse].warehouse_name
   default_role      = module.custom_roles[each.value.default_role].custom_role_name

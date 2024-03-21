@@ -13,7 +13,7 @@ users:
     name: "ae_user"
     email: "ae_user@indicium.tech"
     first_name: ae_user
-    last_anme: ae_user
+    last_name: ae_user
     default_warehouse: DEV_WRH       
     default_role: AE_ROLE            
     secondary_roles: []
@@ -24,7 +24,7 @@ users:
     name: "prd_user"
     email: "prd@indicium.tech"
     first_name: prd
-    last_anme: prd
+    last_name: prd
     default_warehouse: PRD_WRH       
     default_role: PRD_ROLE            
     secondary_roles: []
@@ -35,7 +35,7 @@ users:
     name: "dev_user"
     email: "dev_user@indicium.tech"
     first_name: dev
-    last_anme: user
+    last_name: user
     default_warehouse: DEV_WRH       
     default_role: DEV_ROLE            
     secondary_roles: []
@@ -46,7 +46,7 @@ users:
     name: "service_user"
     email: "service_user@indicium.tech"
     first_name: service
-    last_anme: user
+    last_name: user
     default_warehouse: DEV_WRH       
     default_role: DEV_ROLE            
     secondary_roles: []
