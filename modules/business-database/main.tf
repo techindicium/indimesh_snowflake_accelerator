@@ -33,5 +33,7 @@ resource "snowflake_schema" "marts_schema" {
   name = "MARTS"
   database = snowflake_database.database.name
   data_retention_days = var.staging_schema_data_retention_days
+  
+  depends_on = [snowflake_database.database]
 }
  
