@@ -23,6 +23,7 @@ resource "snowflake_user" "user" {
     if contains(each.value.secondary_roles, custom_role.custom_role_name)
   ]
 
+  rsa_public_key       = try(each.value.rsa_public_key, null)
   must_change_password = true
 
   lifecycle {

@@ -39,6 +39,21 @@ users:
     default_warehouse: DEV_WRH       
     default_role: DEV_ROLE            
     secondary_roles: []
+    
+  service_user:
+    login: service_user
+    comment: "Comment about this user"
+    name: "service_user"
+    email: "service_user@indicium.tech"
+    first_name: service
+    last_anme: user
+    default_warehouse: DEV_WRH       
+    default_role: DEV_ROLE            
+    secondary_roles: []
+    # one line string containing just the key content
+    # remove -----BEGIN PUBLIC KEY----- and -----END PUBLIC KEY-----
+    # e.g.
+    rsa_public_key: "MIICIjANBgkqhkiG9w0BAQEFA..."
 
 business_databases:
  
