@@ -134,6 +134,10 @@ GRANT USAGE ON WAREHOUSE COMPUTE_WH TO ROLE SECURITYADMIN;
 GRANT USAGE ON WAREHOUSE COMPUTE_WH TO ROLE SYSADMIN;
 ```
 
+```
+Also, ensure that you have configured the warehouse name on ./examples/data/config.yaml.
+```
+
 There's the need to grant usage to the default warehouse created with the snowflake's account, which at this moment is named as "COMPUTE_WH".
 Upon completing this step, your account will be authenticated to proceed with uploading your structure.
 
