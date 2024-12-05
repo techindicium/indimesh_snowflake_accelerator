@@ -1,12 +1,12 @@
 {
-    "tables": [
+  "tables": [
       {
-          "name": "EMPRESA",
-          "name_schema": "MVBIKE",
+          "name": "table_three",
+          "name_schema": "schema_two",
           "columns": [
               {"name": "id", "type": "INT"},
               {"name": "dump", "type": "INT"}
           ]
       }
-    ]
-  }
+  ]
+}

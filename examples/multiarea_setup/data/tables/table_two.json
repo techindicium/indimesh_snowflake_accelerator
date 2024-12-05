@@ -1,12 +1,12 @@
 {
-  "tables": [
+    "tables": [
       {
-          "name": "MOB_CHECKLIST",
-          "name_schema": "MVMOBILE",
+          "name": "table_two",
+          "name_schema": "schema_one",
           "columns": [
               {"name": "id", "type": "INT"},
               {"name": "dump", "type": "INT"}
           ]
       }
-  ]
-}
+    ]
+  }

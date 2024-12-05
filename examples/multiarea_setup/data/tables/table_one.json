@@ -1,8 +1,8 @@
 {
     "tables": [
         {
-          "name": "CLIENTE",
-          "name_schema": "MVBIKE",
+          "name": "table_one",
+          "name_schema": "schema_one",
           "columns": [
               {"name": "id", "type": "INT"},
               {"name": "dump", "type": "INT"}

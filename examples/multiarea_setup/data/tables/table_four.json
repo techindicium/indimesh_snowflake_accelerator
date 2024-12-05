@@ -1,8 +1,8 @@
 {
     "tables": [
         {
-            "name": "MOB_APP_CHECKLIST",
-            "name_schema": "MVMOBILE",
+            "name": "table_four",
+            "name_schema": "schema_two",
             "columns": [
                 {"name": "id", "type": "INT"},
                 {"name": "dump", "type": "INT"}
