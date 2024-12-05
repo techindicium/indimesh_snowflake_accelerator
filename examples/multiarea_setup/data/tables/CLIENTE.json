@@ -1,0 +1,12 @@
+{
+    "tables": [
+        {
+          "name": "CLIENTE",
+          "name_schema": "MVBIKE",
+          "columns": [
+              {"name": "id", "type": "INT"},
+              {"name": "dump", "type": "INT"}
+          ]
+      }
+    ]
+  }

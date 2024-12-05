@@ -130,8 +130,15 @@ ALTER USER <YOUR_USERNAME> SET RSA_PUBLIC_KEY='YOUR_PUBLIC_(.PUB)_KEY_COPIED_HER
 
 GRANT ROLE SYSADMIN TO USER <YOUR_USERNAME>;
 GRANT ROLE SECURITYADMIN TO USER <YOUR_USERNAME>;
+GRANT USAGE ON WAREHOUSE COMPUTE_WH TO ROLE SECURITYADMIN;
+GRANT USAGE ON WAREHOUSE COMPUTE_WH TO ROLE SYSADMIN;
 ```
 
+```
+Also, ensure that you have configured the warehouse name on "./examples/multiarea_setup/data/config.yaml".
+```
+
+There's the need to grant usage to the default warehouse created with the snowflake's account, which at this moment is named as "COMPUTE_WH".
 Upon completing this step, your account will be authenticated to proceed with uploading your structure.
 
 ## Repository Structure
