@@ -54,7 +54,7 @@ provider "snowflake" {
   role  = "ACCOUNTADMIN"
 }
 
-module "snowflake_base" {
+module "snowflake_warehouses" {
   source = "../../modules/warehouse"
 
   providers = {
