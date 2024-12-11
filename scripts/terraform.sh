@@ -19,7 +19,7 @@ run_terraform_init() {
 }
 
 run_go_test() {
-    go mod init snowflake-base
+    go mod init warehouse
     go get github.com/gruntwork-io/terratest/modules/terraform
     go test snowflake_base_test.go
 }
