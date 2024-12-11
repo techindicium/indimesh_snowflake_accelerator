@@ -14,7 +14,7 @@ terraform {
     }
     snowflake = {
       source  = "Snowflake-Labs/snowflake"
-      version = "0.59.0"
+      version = "0.70.0"
     }
   }
 }
@@ -55,7 +55,7 @@ provider "snowflake" {
 }
 
 module "snowflake_base" {
-  source = "../../modules/snowflake-base"
+  source = "../../modules/warehouse"
 
   providers = {
     snowflake.sys_admin      = snowflake.sys_admin
