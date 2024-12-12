@@ -1,6 +1,6 @@
 module "snowpipe" {
     depends_on = [ module.business_table]
-    source = "../../modules/pipeline_s3"
+    source = "../../modules/snowpipe"
     for_each = local.config.snowpipe
 
 schema_name = each.value.schema_name
