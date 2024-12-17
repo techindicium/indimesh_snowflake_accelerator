@@ -130,8 +130,15 @@ ALTER USER <YOUR_USERNAME> SET RSA_PUBLIC_KEY='YOUR_PUBLIC_(.PUB)_KEY_COPIED_HER
 
 GRANT ROLE SYSADMIN TO USER <YOUR_USERNAME>;
 GRANT ROLE SECURITYADMIN TO USER <YOUR_USERNAME>;
+GRANT USAGE ON WAREHOUSE COMPUTE_WH TO ROLE SECURITYADMIN;
+GRANT USAGE ON WAREHOUSE COMPUTE_WH TO ROLE SYSADMIN;
 ```
 
+```
+Also, ensure that you have configured the warehouse name on "./examples/multiarea_setup/data/config.yaml".
+```
+
+There's the need to grant usage to the default warehouse created with the snowflake's account, which at this moment is named as "COMPUTE_WH".
 Upon completing this step, your account will be authenticated to proceed with uploading your structure.
 
 ## Repository Structure
@@ -155,6 +162,9 @@ Every module contains at least the following files:
 
 ## Permissions and users
 By default, when your account is provisioned, the first user is assigned the ACCOUNTADMIN role. This user should then create one or more additional users who are assigned the USERADMIN role. All remaining users should be created by the user(s) with the USERADMIN role or another role that is granted the global CREATE USER privilege.
+
+## Setting the bucket
+By default, the config.yaml and the var.data_bucket_arns have the bucket mentioned as "mybucket", you are gonna need change it, based on your s3 bucket you created on your training aws env.
 
 ## Up Structure to Snowflake
 - [Multi Area Setup](/examples/multiarea_setup/README.md)

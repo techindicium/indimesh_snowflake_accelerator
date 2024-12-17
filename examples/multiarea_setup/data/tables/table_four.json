@@ -1,0 +1,12 @@
+{
+    "tables": [
+        {
+            "name": "TABLE_FOUR",
+            "name_schema": "SCHEMA_TWO",
+            "columns": [
+                {"name": "id", "type": "INT"},
+                {"name": "dump", "type": "INT"}
+            ]
+        }
+    ]
+}

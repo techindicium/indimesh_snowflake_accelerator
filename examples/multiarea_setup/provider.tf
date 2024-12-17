@@ -11,15 +11,22 @@ terraform {
     snowsql = {
       source  = "aidanmelen/snowsql"
       version = "1.3.3"
+      configuration_aliases = [snowsql.sys_admin, snowsql.security_admin]
     }
     snowflake = {
       source  = "Snowflake-Labs/snowflake"
-      version = "0.59.0"
+      version = "0.70.0"
+      configuration_aliases = [
+        snowflake.storage_integration_role,
+      ]      
     }
   }
 }
 
-provider "aws" {}
+provider "aws" {
+  region = "us-east-2"
+  profile = "training"
+}
 
 provider "snowsql" {
   alias     = "account_admin"
@@ -47,4 +54,10 @@ provider "snowflake" {
 provider "snowflake" {
   alias = "security_admin"
   role  = "SECURITYADMIN"
+}
+
+provider "snowflake" {
+  alias = "storage_integration_role"
+  account = var.snowflake_account
+  role    = var.snowflake_storage_integration_owner_role
 }

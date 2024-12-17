@@ -1,4 +1,4 @@
-wh_terraform: "TRAINING_WAREHOUSE"
+wh_terraform: "COMPUTE_WH"
 
 roles:
   - AE_ROLE
@@ -72,6 +72,16 @@ business_databases:
     assing_select_roles: [DEV_ROLE]
     assing_bi_roles: []
 
+  BRONZE:
+    database_name: BRONZE_DB
+    database_comment: "BRONZE stuff"
+    data_retention_time_in_days: 0
+    staging_schema_data_retention_days: 0
+    assing_manage_roles: [PRD_ROL]
+    assing_create_roles: [AE_ROLE]
+    assing_select_roles: [DEV_ROLE]
+    assing_bi_roles: []
+
 warehouses:
  
   DEV_WRH:
@@ -101,3 +111,51 @@ warehouses:
     statement_timeout_in_seconds: 300
     scaling_policy: null
     assing_warehouse_role_to_roles: [PRD_ROLE]
+
+SCHEMAS:
+
+  FISRT:
+    database_name: BRONZE_DB
+    schema_name: SCHEMA_ONE
+    stage_name: STAGE_ONE
+    file_format: PARQUET
+    file_format_name: FILE_FORMAT_ONE
+    url_stage: s3://mybucket/schema_one
+
+  SECOND:
+    database_name: BRONZE_DB
+    schema_name: SCHEMA_TWO
+    stage_name: STAGE_TWO
+    file_format: PARQUET
+    file_format_name: FILE_FORMAT_TWO
+    url_stage: s3://mybucket/schema_two
+
+SNOWPIPE:
+  
+  FIRST:
+    database_name: BRONZE_DB
+    schema_name: SCHEMA_ONE
+    table_name: TABLE_ONE
+    stage_name: STAGE_ONE
+    pipe_name: PIPE_ONE
+  
+  SECOND:
+    database_name: BRONZE_DB
+    schema_name: SCHEMA_ONE
+    table_name: TABLE_TWO
+    stage_name: STAGE_ONE
+    pipe_name: PIPE_TWO
+
+  THIRD:
+    database_name: BRONZE_DB
+    schema_name: SCHEMA_TWO
+    table_name: TABLE_THREE
+    stage_name: STAGE_TWO
+    pipe_name: PIPE_THREE
+
+  FOURTH:
+    database_name: BRONZE_DB
+    schema_name: SCHEMA_TWO
+    table_name: TABLE_FOUR
+    stage_name: STAGE_TWO
+    pipe_name: PIPE_FOUR
