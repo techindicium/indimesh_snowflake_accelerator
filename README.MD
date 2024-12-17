@@ -163,5 +163,8 @@ Every module contains at least the following files:
 ## Permissions and users
 By default, when your account is provisioned, the first user is assigned the ACCOUNTADMIN role. This user should then create one or more additional users who are assigned the USERADMIN role. All remaining users should be created by the user(s) with the USERADMIN role or another role that is granted the global CREATE USER privilege.
 
+## Setting the bucket
+By default, the config.yaml and the var.data_bucket_arns have the bucket mentioned as "mybucket", you are gonna need change it, based on your s3 bucket you created on your training aws env.
+
 ## Up Structure to Snowflake
 - [Multi Area Setup](/examples/multiarea_setup/README.md)

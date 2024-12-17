@@ -1,8 +1,8 @@
 {
     "tables": [
       {
-          "name": "table_two",
-          "name_schema": "schema_one",
+          "name": "TABLE_TWO",
+          "name_schema": "SCHEMA_ONE",
           "columns": [
               {"name": "id", "type": "INT"},
               {"name": "dump", "type": "INT"}

@@ -1,8 +1,8 @@
 {
   "tables": [
       {
-          "name": "table_three",
-          "name_schema": "schema_two",
+          "name": "TABLE_THREE",
+          "name_schema": "SCHEMA_TWO",
           "columns": [
               {"name": "id", "type": "INT"},
               {"name": "dump", "type": "INT"}
