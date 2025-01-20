@@ -1,6 +1,16 @@
 # Snowflake Base Project
 This is the repository of the snowflake base project, which aims to facilitate the creation of a new structure within snowflake, creating Roles, Users, Databases, and warehouses. The project's goal is for a configuration to be done using lines of code and then, after running 2 commands, your entire desired structure is implemented in snowflake.
 
+## Tables of contents
+
+1. [Requirements](#requirements)
+2. [Prerequisites](#prerequisites)
+3. [Repository Structure](#repository-structure)
+4. [Permissions and users](#permissions-and-users)
+5. [Setting the bucket](#setting-the-bucket)
+6. [Up Structure to Snowflake](#up-structure-to-snowflake)
+7. [Example of how to use in other projects](#example-of-how-to-use-in-other-projects)
+
 ## Requirements
 
 This project requires:
@@ -168,3 +178,47 @@ By default, the config.yaml and the var.data_bucket_arns have the bucket mention
 
 ## Up Structure to Snowflake
 - [Multi Area Setup](/examples/multiarea_setup/README.md)
+
+## Example of how to use in other projects
+
+Based on the repository structure, to call a specific module like snowpipe in a Terraform project, you can do so using the source parameter in the module block, as in the example below:
+
+```terraform
+locals {
+  bitbucket_repo = "indiciumtech/done-snowflake-base"
+  module_path    = "modules/snowpipe"
+  module_version = "v0.0.0"
+}
+
+module "snowpipe" {
+    source = "git::https://x-token-auth:${BITBUCKET_TOKEN}@bitbucket.org/${local.bitbucket_repo}.git//${local.module_path}?ref=${local.module_version}"
+    for_each = local.config.snowpipe
+
+    schema_name = each.value.schema_name
+    database_name = each.value.database_name
+    pipe_name = each.value.pipe_name
+    table_name = each.value.table_name
+    stage_name = each.value.stage_name
+    sns_topic = module.storage_integration.sns_topic_arn
+
+
+    providers = {
+        snowflake.sys_admin = snowflake.sys_admin
+        snowflake.security_admin = snowflake.security_admin
+        snowsql.security_admin = snowsql.security_admin
+        snowsql.sys_admin = snowsql.sys_admin
+    }
+}
+```
+
+Points to pay attention to when using the module:
+
+1. It is necessary to pay attention to the structure of the ```source```, because it is necessary for the environment variable ```BITBUCKET_TOKEN``` to be configured in the ```.env``` file, this variable having read permissions for the repository.
+
+2. In the configured ```locals.tf```, make sure that the variable ```bitbucket_repo``` has the value ```<workspace>/<repository_name>```.
+
+3. In the configured ```locals.tf```, make sure that the variable ```module_path``` exists in the repository.
+
+4. In the configured ```locals.tf```, make sure that the variable ```module_version``` has the value equal to some version existing in the repository.
+
+With the above points verified and in accordance with the project, the next step is to configure the module to create the desired infrastructure, and for this it is possible to see usage examples in the ```examples/``` folder.
