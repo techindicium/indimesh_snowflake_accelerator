@@ -17,20 +17,18 @@ pipelines:
             - PR_ID=$(curl -s -u "x-token-auth:$BITBUCKET_TOKEN" \
               "https://api.bitbucket.org/2.0/repositories/indiciumtech/done-snowflake-base/pullrequests?q=destination.branch.name==\"master\"&state=MERGED" | jq -r '.values[0].id')
 
-            # Extracts name and email of the author of the last PR and configure Git with this credentials
+            # Extracts name of the author of the last PR and configure Git with this credentials
             - |
               if [ -n "$PR_ID" ]; then
                 echo "PR found: $PR_ID";
 
                 AUTHOR_NAME=$(curl -s -u "x-token-auth:$BITBUCKET_TOKEN" \
                   "https://api.bitbucket.org/2.0/repositories/indiciumtech/done-snowflake-base/pullrequests/$PR_ID" | jq -r '.author.display_name')
-                AUTHOR_EMAIL="no-reply@bitbucket.org"
                 
                 echo "Merge Author: $AUTHOR_NAME";
                 echo "Git setup with the author of the merged branch";
                 
                 git config --global user.name "$AUTHOR_NAME"
-                git config --global user.email "$AUTHOR_EMAIL"
               else
                 echo "No merged PRs found. Using default configuration.";
               fi
