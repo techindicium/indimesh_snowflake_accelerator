@@ -37,12 +37,12 @@ pipelines:
             - |
               latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null)
               if [ -z "$latest_tag" ]; then
+                echo "No tags found. Creating first tag..."
+                new_tag="v0.0.0"
+              else
                 echo "Last tag: $latest_tag"
                 new_tag=$(echo $latest_tag | awk -F. '{print $1 "." $2 "." $3+1}')
                 echo "New tag: $new_tag"
-              else
-                echo "No tags found. Creating first tag..."
-                new_tag="v0.0.0"
               fi
 
             - git tag $new_tag
