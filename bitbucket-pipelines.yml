@@ -6,6 +6,8 @@ pipelines:
       - step:
           name: Update TAG when merging
           script:
+            - apt-get update && apt-get install -y jq
+
             - git config --global user.email "no-reply@bitbucket.org"
             - git config --global user.name "Bitbucket Bot"
 
