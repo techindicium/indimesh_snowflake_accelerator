@@ -10,6 +10,7 @@ This is the repository of the snowflake base project, which aims to facilitate t
 5. [Setting the bucket](#setting-the-bucket)
 6. [Up Structure to Snowflake](#up-structure-to-snowflake)
 7. [Example of how to use in other projects](#example-of-how-to-use-in-other-projects)
+8. [How to contribute to the repository](#how-to-contribute-to-the-repository)
 
 ## Requirements
 
@@ -222,3 +223,24 @@ Points to pay attention to when using the module:
 4. In the configured ```locals.tf```, make sure that the variable ```module_version``` has the value equal to some version existing in the repository.
 
 With the above points verified and in accordance with the project, the next step is to configure the module to create the desired infrastructure, and for this it is possible to see usage examples in the ```examples/``` folder.
+
+# How to contribute to the repository
+
+To contribute to this repository, you must remember that it is configured to generate a new version whenever a merge is made to the ```master``` branch. Therefore, it is necessary to identify the current version of the repository and what the version will be after the contribution to the repository is made, in order to document the changes made so that repository users can follow the changes and apply them to their projects.
+
+The documentation of the changes made should be done in the ```releases.md``` file following the example template below:
+
+```markdown
+# v0.0.0
+
+### What's changed
+
+- File ```modules/snowpipe/variables.tf```: Added ```table_name``` variable.
+
+- File ```modules/snowpipe/main.tf```: Use of the new ``table_name``` variable.
+
+### Features
+
+- Implemented new Snowpipe module configuration method.
+```
+
