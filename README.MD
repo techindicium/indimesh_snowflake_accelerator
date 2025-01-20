@@ -222,13 +222,13 @@ Points to pay attention to when using the module:
 
 4. In the configured ```locals.tf```, make sure that the variable ```module_version``` has the value equal to some version existing in the repository.
 
-With the above points verified and in accordance with the project, the next step is to configure the module to create the desired infrastructure, and for this it is possible to see usage examples in the ```examples/``` folder.
+With the above points verified and in accordance with the project, the next step is to configure the module to create the desired infrastructure, and for this it is possible to see usage examples in the [examples](./examples/) folder.
 
 # How to contribute to the repository
 
 To contribute to this repository, you must remember that it is configured to generate a new version whenever a merge is made to the ```master``` branch. Therefore, it is necessary to identify the current version of the repository and what the version will be after the contribution to the repository is made, in order to document the changes made so that repository users can follow the changes and apply them to their projects.
 
-The documentation of the changes made should be done in the ```releases.md``` file following the example template below:
+The documentation of the changes made should be done in the [releases.md](./releases.md) file following the example template below:
 
 ```markdown
 # v0.0.0
