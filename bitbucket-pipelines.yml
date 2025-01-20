@@ -6,14 +6,18 @@ pipelines:
       - step:
           name: Update TAG when merging
           script:
+            # Install JQ
             - apt-get update && apt-get install -y jq
 
+            # Default config for git
             - git config --global user.email "no-reply@bitbucket.org"
             - git config --global user.name "Bitbucket Bot"
 
+            # Use BITBUCKET_TOKEN to get ID from last PR
             - PR_ID=$(curl -s -u "x-token-auth:$BITBUCKET_TOKEN" \
               "https://api.bitbucket.org/2.0/repositories/indiciumtech/done-snowflake-base/pullrequests?q=destination.branch.name==\"master\"&state=MERGED" | jq -r '.values[0].id')
 
+            # Extracts name and email of the author of the last PR and configure Git with this credentials
             - |
               if [ -n "$PR_ID" ]; then
                 echo "PR found: $PR_ID";
@@ -31,6 +35,7 @@ pipelines:
                 echo "No merged PRs found. Using default configuration.";
               fi
 
+            # Create a new tag
             - |
               latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null)
               if [ -z "$latest_tag" ]; then
