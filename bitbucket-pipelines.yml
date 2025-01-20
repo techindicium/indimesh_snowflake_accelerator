@@ -4,41 +4,41 @@ pipelines:
   branches:
     master:
       - step:
-        name: Update TAG when merging
-        script:
-          - git config --global user.email "no-reply@bitbucket.org"
-          - git config --global user.name "Bitbucket Bot"
+          name: Update TAG when merging
+          script:
+            - git config --global user.email "no-reply@bitbucket.org"
+            - git config --global user.name "Bitbucket Bot"
 
-          - PR_ID=$(curl -s -u "x-token-auth:$BITBUCKET_TOKEN" \
-            "https://api.bitbucket.org/2.0/repositories/indiciumtech/done-snowflake-base/pullrequests?q=destination.branch.name==\"master\"&state=MERGED" | jq -r '.values[0].id')
+            - PR_ID=$(curl -s -u "x-token-auth:$BITBUCKET_TOKEN" \
+              "https://api.bitbucket.org/2.0/repositories/indiciumtech/done-snowflake-base/pullrequests?q=destination.branch.name==\"master\"&state=MERGED" | jq -r '.values[0].id')
 
-          - |
-            if [ -n "$PR_ID" ]; then
-              echo "PR found: $PR_ID";
+            - |
+              if [ -n "$PR_ID" ]; then
+                echo "PR found: $PR_ID";
 
-              AUTHOR_NAME=$(curl -s -u "x-token-auth:$BITBUCKET_TOKEN" \
-                "https://api.bitbucket.org/2.0/repositories/indiciumtech/done-snowflake-base/pullrequests/$PR_ID" | jq -r '.author.display_name')
-              AUTHOR_EMAIL="no-reply@bitbucket.org"
-              
-              echo "Merge Author: $AUTHOR_NAME";
-              echo "Git setup with the author of the merged branch";
-              
-              git config --global user.name "$AUTHOR_NAME"
-              git config --global user.email "$AUTHOR_EMAIL"
-            else
-              echo "No merged PRs found. Using default configuration.";
-            fi
+                AUTHOR_NAME=$(curl -s -u "x-token-auth:$BITBUCKET_TOKEN" \
+                  "https://api.bitbucket.org/2.0/repositories/indiciumtech/done-snowflake-base/pullrequests/$PR_ID" | jq -r '.author.display_name')
+                AUTHOR_EMAIL="no-reply@bitbucket.org"
+                
+                echo "Merge Author: $AUTHOR_NAME";
+                echo "Git setup with the author of the merged branch";
+                
+                git config --global user.name "$AUTHOR_NAME"
+                git config --global user.email "$AUTHOR_EMAIL"
+              else
+                echo "No merged PRs found. Using default configuration.";
+              fi
 
-          - |
-            latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null)
-            if [ -z "$latest_tag" ]; then
-              echo "No tags found. Creating first tag..."
-              new_tag="v0.0.0"
-            else
-              echo "Last tag: $latest_tag"
-              new_tag=$(echo $latest_tag | awk -F. '{print $1 "." $2 "." $3+1}')
-              echo "New tag: $new_tag"
-            fi
+            - |
+              latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null)
+              if [ -z "$latest_tag" ]; then
+                echo "No tags found. Creating first tag..."
+                new_tag="v0.0.0"
+              else
+                echo "Last tag: $latest_tag"
+                new_tag=$(echo $latest_tag | awk -F. '{print $1 "." $2 "." $3+1}')
+                echo "New tag: $new_tag"
+              fi
 
-          - git tag $new_tag
-          - git push origin $new_tag
+            - git tag $new_tag
+            - git push origin $new_tag
