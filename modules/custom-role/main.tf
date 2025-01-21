@@ -1,19 +1,4 @@
-terraform {
-  required_providers {
-    snowflake = {
-      source                = "Snowflake-Labs/snowflake"
-      version               = "0.70.0"
-      configuration_aliases = [snowflake.sys_admin, snowflake.security_admin]
-    }
-    snowsql = {
-      source                = "aidanmelen/snowsql"
-      version               = "1.3.3"
-      configuration_aliases = [snowsql.sys_admin, snowsql.security_admin]
-    }
-  }
-}
-
-resource "snowflake_role" "custom_role" {
+resource "snowflake_account_role" "custom_role" {
   provider = snowflake.security_admin
   name     = var.custom_role_name
 }

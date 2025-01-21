@@ -9,4 +9,3 @@ variable "inherit_sysadmin" {
   type        = bool
   default     = true
 }
-
