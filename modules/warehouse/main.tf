@@ -1,18 +1,3 @@
-terraform {
-  required_providers {
-    snowflake = {
-      source                = "Snowflake-Labs/snowflake"
-      version               = "0.70.0"
-      configuration_aliases = [snowflake.sys_admin, snowflake.security_admin]
-    }
-    snowsql = {
-      source                = "aidanmelen/snowsql"
-      version               = "1.3.3"
-      configuration_aliases = [snowsql.sys_admin, snowsql.security_admin]
-    }
-  }
-}
-
 resource "snowflake_warehouse" "warehouse" {
   provider                            = snowflake.sys_admin
   name                                = var.warehouse_name
@@ -47,32 +32,24 @@ module "warehouse_custom_role" {
   ]
 }
 
-resource "snowflake_warehouse_grant" "warehouse_usage" {
+resource "snowflake_grant_privileges_to_account_role" "warehouse_usage" {
   provider               = snowflake.security_admin
-  warehouse_name         = snowflake_warehouse.warehouse.name
-  privilege              = "USAGE"
-  roles                  = [module.warehouse_custom_role.custom_role_name]
+  privileges             = ["USAGE"]
+  account_role_name      = module.warehouse_custom_role.custom_role_name
   with_grant_option      = false
-  enable_multiple_grants = true
+  on_account_object {
+    object_type          = "WAREHOUSE"
+    object_name          = snowflake_warehouse.warehouse.name
+  }
 }
 
-resource "snowsql_exec" "grant_warehouse_role_to_var_assigned_roles" {
-  provider = snowsql.security_admin
+resource "snowflake_grant_account_role" "grant_warehouse_role_to_var_assigned_roles" {
+  provider = snowflake.security_admin
   for_each   = {
     for index, role in var.assing_warehouse_role_to_roles:
     role => role
   }
 
-  create {
-    statements = <<-EOT
-    USE ROLE SECURITYADMIN;
-    GRANT ROLE "${module.warehouse_custom_role.custom_role_name}" TO ROLE "${each.key}";
-    EOT
-  }
-  delete {
-    statements = <<-EOT
-    USE ROLE SECURITYADMIN;
-    REVOKE ROLE "${module.warehouse_custom_role.custom_role_name}" FROM ROLE "${each.key}";
-    EOT
-  }
+  role_name = module.warehouse_custom_role.custom_role_name
+  parent_role_name = "${each.key}"
 }
