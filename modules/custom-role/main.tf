@@ -9,15 +9,15 @@ resource "snowsql_exec" "inherit_role" {
   create {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
-    GRANT ROLE "${snowflake_role.custom_role.name}" TO ROLE SYSADMIN;
-    GRANT ROLE "${snowflake_role.custom_role.name}" TO ROLE SECURITYADMIN;
+    GRANT ROLE "${snowflake_account_role.custom_role.name}" TO ROLE SYSADMIN;
+    GRANT ROLE "${snowflake_account_role.custom_role.name}" TO ROLE SECURITYADMIN;
     EOT
   }
   delete {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
-    REVOKE ROLE "${snowflake_role.custom_role.name}" FROM ROLE SYSADMIN;
-    REVOKE ROLE "${snowflake_role.custom_role.name}" FROM ROLE SECURITYADMIN;
+    REVOKE ROLE "${snowflake_account_role.custom_role.name}" FROM ROLE SYSADMIN;
+    REVOKE ROLE "${snowflake_account_role.custom_role.name}" FROM ROLE SECURITYADMIN;
     EOT
   }
 }
