@@ -182,14 +182,14 @@ By default, the config.yaml and the var.data_bucket_arns have the bucket mention
 
 ## Example of how to use in other projects
 
-Based on the repository structure, to call a specific module like snowpipe in a Terraform project, you can do so using the source parameter in the module block, as in the example below, taken from the [Mesh AWS Snowflake](https://bitbucket.org/indiciumtech/done-awssnowflake_reference_platform/src/main/infrastructure/2_users_and_groups/roles.tf) project:
+Based on the repository structure, to call a specific module like snowpipe in a Terraform project, you can do so using the source parameter in the module block, as in the example below, taken from the [Mesh AWS Snowflake](https://bitbucket.org/indiciumtech/awssnowflake_reference_platform/src/main/infrastructure/2_users_and_groups/roles.tf) project:
 
 ```terraform
 module "custom_roles" {
   for_each = toset(local.config.roles)
   
   # Fix the source string by replacing <BITBUCKET_TOKEN> with the access token generated in the repository, <TAG>" with the repository version you want, for example, 'v0.0.2'.
-  source = "git::https://x-token-auth:<BITBUCKET_TOKEN>@bitbucket.org/indiciumtech/done-snowflake-base.git//module/custom-role?ref=<TAG>"
+  source = "git::https://x-token-auth:<BITBUCKET_TOKEN>@bitbucket.org/indiciumtech/snowflake-base.git//module/custom-role?ref=<TAG>"
   
   providers = {
     snowflake.sys_admin      = snowflake.sys_admin
@@ -206,7 +206,7 @@ Points to note when using the module:
 
 1. The `source` variable is hard-coded, which means that it does not accept the use of variables within the string, and only accepts the string in literal form.
 
-2. The access token can be obtained by creating a read access token in the [Snowflake Base](https://bitbucket.org/indiciumtech/done-snowflake-base/src/master/) repository itself.
+2. The access token can be obtained by creating a read access token in the [Snowflake Base](https://bitbucket.org/indiciumtech/snowflake-base/src/master/) repository itself.
 
 3. Also check if the path to the module is correct at the end of the `source` string, something like `/modules/custom-role`
 
