@@ -1,35 +1,29 @@
-variable "stage_name" {
-    description = "Name of the stage."
-    type = string
-    default = null
+variable "name" {
+  type        = string
+  description = "Name of the Snowflake pipe."
 }
 
-variable "database_name" {
-  description = "Name of the database."
+variable "database" {
   type        = string
-  default     = null
+  description = "Name of the Snowflake database."
 }
 
-variable "pipe_name" {
-  description = "Name of the pipe."
+variable "schema" {
   type        = string
-  default     = null
+  description = "Name of the Snowflake schema."
 }
 
-variable "sns_topic" {
-  description = "Notification Channel."
-  type        = string
-  default     = null
+variable "auto_ingest" {
+  type        = bool
+  description = "Enable auto ingestion for the pipe."
 }
 
-variable "schema_name" {
-  description = "Name of the schema."
+variable "aws_sns_topic_arn" {
   type        = string
-  default     = null
+  description = "ARN of the AWS SNS topic for notifications."
 }
 
-variable "table_name" {
-  description = "Name of the schema."
+variable "copy_statement" {
   type        = string
-  default     = null
+  description = "Custom COPY statement for the pipe."
 }
