@@ -182,45 +182,33 @@ By default, the config.yaml and the var.data_bucket_arns have the bucket mention
 
 ## Example of how to use in other projects
 
-Based on the repository structure, to call a specific module like snowpipe in a Terraform project, you can do so using the source parameter in the module block, as in the example below:
+Based on the repository structure, to call a specific module like snowpipe in a Terraform project, you can do so using the source parameter in the module block, as in the example below, taken from the [Mesh AWS Snowflake](https://bitbucket.org/indiciumtech/awssnowflake_reference_platform/src/main/infrastructure/2_users_and_groups/roles.tf) project:
 
 ```terraform
-locals {
-  bitbucket_repo = "indiciumtech/done-snowflake-base"
-  module_path    = "modules/snowpipe"
-  module_version = "v0.0.0"
-}
+module "custom_roles" {
+  for_each = toset(local.config.roles)
+  
+  # Fix the source string by replacing <BITBUCKET_TOKEN> with the access token generated in the repository, <TAG>" with the repository version you want, for example, 'v0.0.2'.
+  source = "git::https://x-token-auth:<BITBUCKET_TOKEN>@bitbucket.org/indiciumtech/snowflake-base.git//module/custom-role?ref=<TAG>"
+  
+  providers = {
+    snowflake.sys_admin      = snowflake.sys_admin
+    snowsql.sys_admin        = snowsql.sys_admin
+    snowflake.security_admin = snowflake.security_admin
+    snowsql.security_admin   = snowsql.security_admin
+  }
 
-module "snowpipe" {
-    source = "git::https://x-token-auth:${BITBUCKET_TOKEN}@bitbucket.org/${local.bitbucket_repo}.git//${local.module_path}?ref=${local.module_version}"
-    for_each = local.config.snowpipe
-
-    schema_name = each.value.schema_name
-    database_name = each.value.database_name
-    pipe_name = each.value.pipe_name
-    table_name = each.value.table_name
-    stage_name = each.value.stage_name
-    sns_topic = module.storage_integration.sns_topic_arn
-
-
-    providers = {
-        snowflake.sys_admin = snowflake.sys_admin
-        snowflake.security_admin = snowflake.security_admin
-        snowsql.security_admin = snowsql.security_admin
-        snowsql.sys_admin = snowsql.sys_admin
-    }
+  custom_role_name = each.value
 }
 ```
 
-Points to pay attention to when using the module:
+Points to note when using the module:
 
-1. It is necessary to pay attention to the structure of the ```source```, because it is necessary for the environment variable ```BITBUCKET_TOKEN``` to be configured in the ```.env``` file, this variable having read permissions for the repository.
+1. The `source` variable is hard-coded, which means that it does not accept the use of variables within the string, and only accepts the string in literal form.
 
-2. In the configured ```locals.tf```, make sure that the variable ```bitbucket_repo``` has the value ```<workspace>/<repository_name>```.
+2. The access token can be obtained by creating a read access token in the [Snowflake Base](https://bitbucket.org/indiciumtech/snowflake-base/src/master/) repository itself.
 
-3. In the configured ```locals.tf```, make sure that the variable ```module_path``` exists in the repository.
-
-4. In the configured ```locals.tf```, make sure that the variable ```module_version``` has the value equal to some version existing in the repository.
+3. Also check if the path to the module is correct at the end of the `source` string, something like `/modules/custom-role`
 
 With the above points verified and in accordance with the project, the next step is to configure the module to create the desired infrastructure, and for this it is possible to see usage examples in the [examples](./examples/) folder.
 

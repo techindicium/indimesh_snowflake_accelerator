@@ -1,19 +1,4 @@
-terraform {
-  required_providers {
-    snowflake = {
-      source                = "Snowflake-Labs/snowflake"
-      version               = "0.70.0"
-      configuration_aliases = [snowflake.sys_admin, snowflake.security_admin]
-    }
-    snowsql = {
-      source                = "aidanmelen/snowsql"
-      version               = "1.3.3"
-      configuration_aliases = [snowsql.sys_admin, snowsql.security_admin]
-    }
-  }
-}
-
-resource "snowflake_role" "custom_role" {
+resource "snowflake_account_role" "custom_role" {
   provider = snowflake.security_admin
   name     = var.custom_role_name
 }
@@ -24,15 +9,15 @@ resource "snowsql_exec" "inherit_role" {
   create {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
-    GRANT ROLE "${snowflake_role.custom_role.name}" TO ROLE SYSADMIN;
-    GRANT ROLE "${snowflake_role.custom_role.name}" TO ROLE SECURITYADMIN;
+    GRANT ROLE "${snowflake_account_role.custom_role.name}" TO ROLE SYSADMIN;
+    GRANT ROLE "${snowflake_account_role.custom_role.name}" TO ROLE SECURITYADMIN;
     EOT
   }
   delete {
     statements = <<-EOT
     USE ROLE SECURITYADMIN;
-    REVOKE ROLE "${snowflake_role.custom_role.name}" FROM ROLE SYSADMIN;
-    REVOKE ROLE "${snowflake_role.custom_role.name}" FROM ROLE SECURITYADMIN;
+    REVOKE ROLE "${snowflake_account_role.custom_role.name}" FROM ROLE SYSADMIN;
+    REVOKE ROLE "${snowflake_account_role.custom_role.name}" FROM ROLE SECURITYADMIN;
     EOT
   }
 }
