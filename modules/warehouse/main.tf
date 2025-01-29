@@ -46,7 +46,7 @@ resource "snowflake_grant_privileges_to_account_role" "warehouse_usage" {
 resource "snowflake_grant_account_role" "grant_warehouse_role_to_var_assigned_roles" {
   provider = snowflake.security_admin
   for_each   = {
-    for index, role in var.assing_warehouse_role_to_roles:
+    for index, role in var.assign_warehouse_role_to_roles:
     role => role
   }
 

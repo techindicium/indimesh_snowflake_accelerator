@@ -77,7 +77,7 @@ This Terraform configuration automates the creation and management of Snowflake 
 - **Resource:** `snowsql_exec.grant_warehouse_role_to_var_assigned_roles`
 - **Description:** Grants the custom warehouse role to a list of specified Snowflake roles.
 - **Parameters:**
-  - Uses a `for_each` loop to iterate over the `var.assing_warehouse_role_to_roles` variable and apply grants for each role.
+  - Uses a `for_each` loop to iterate over the `var.assign_warehouse_role_to_roles` variable and apply grants for each role.
   - `create` block grants the custom role to each role in the list.
   - `delete` block revokes the custom role from each role in the list.
 
@@ -93,7 +93,7 @@ This Terraform configuration automates the creation and management of Snowflake 
 - **`var.statement_queued_timeout_in_seconds`:** Timeout for queued statements.
 - **`var.statement_timeout_in_seconds`:** Timeout for executing statements.
 - **`var.scaling_policy`:** Defines the scaling policy for the warehouse (e.g., "STANDARD").
-- **`var.assing_warehouse_role_to_roles`:** List of roles to which the custom warehouse role should be granted.
+- **`var.assign_warehouse_role_to_roles`:** List of roles to which the custom warehouse role should be granted.
 
 ## TL;DR
 

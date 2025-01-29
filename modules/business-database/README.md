@@ -73,10 +73,10 @@ Custom roles are organized hierarchically:
 
 Created roles are assigned to existing roles, defined by variables:
 
-- `var.assing_manage_roles`: Assigns the `manage_custom_role` role.
-- `var.assing_create_roles`: Assigns the `create_custom_role` role.
-- `var.assing_select_roles`: Assigns the `select_custom_role` role.
-- `var.assing_bi_roles`: Assigns the `bi_custom_role` role.
+- `var.assign_manage_roles`: Assigns the `manage_custom_role` role.
+- `var.assign_create_roles`: Assigns the `create_custom_role` role.
+- `var.assign_select_roles`: Assigns the `select_custom_role` role.
+- `var.assign_bi_roles`: Assigns the `bi_custom_role` role.
 
 ## Technical Settings
 

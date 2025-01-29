@@ -18,26 +18,26 @@ module "business_databases" {
 
   
   # Iterate all roles created with custom_role module and return only those included in the
-  # assing_manage_roles, assing_create_roles, assing_select_roles and assing_br_roles configs
+  # assign_manage_roles, assign_create_roles, assign_select_roles and assign_br_roles configs
 
-  assing_manage_roles = [
+  assign_manage_roles = [
     for index, custom_role in module.custom_roles : custom_role.custom_role_name
-    if contains(each.value.assing_manage_roles, custom_role.custom_role_name)
+    if contains(each.value.assign_manage_roles, custom_role.custom_role_name)
   ]
   
-  assing_create_roles = [
+  assign_create_roles = [
     for index, custom_role in module.custom_roles : custom_role.custom_role_name
-    if contains(each.value.assing_create_roles, custom_role.custom_role_name)
+    if contains(each.value.assign_create_roles, custom_role.custom_role_name)
   ]
 
-  assing_select_roles = [
+  assign_select_roles = [
     for index, custom_role in module.custom_roles : custom_role.custom_role_name
-    if contains(each.value.assing_select_roles, custom_role.custom_role_name)
+    if contains(each.value.assign_select_roles, custom_role.custom_role_name)
   ]
 
-  assing_bi_roles = [
+  assign_bi_roles = [
     for index, custom_role in module.custom_roles : custom_role.custom_role_name
-    if contains(each.value.assing_bi_roles, custom_role.custom_role_name)
+    if contains(each.value.assign_bi_roles, custom_role.custom_role_name)
   ]
 }
 
