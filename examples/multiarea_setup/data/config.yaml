@@ -130,7 +130,7 @@ schemas:
     file_format_name: FILE_FORMAT_TWO
     url_stage: s3://mybucket/schema_two
 
-SNOWPIPE:
+snowpipe:
   
   FIRST:
     database_name: BRONZE_DB
