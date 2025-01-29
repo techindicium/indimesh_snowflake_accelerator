@@ -112,9 +112,9 @@ warehouses:
     scaling_policy: null
     assign_warehouse_role_to_roles: [PRD_ROLE]
 
-SCHEMAS:
+schemas:
 
-  FISRT:
+  FIRST:
     database_name: BRONZE_DB
     schema_name: SCHEMA_ONE
     stage_name: STAGE_ONE
