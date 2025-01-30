@@ -76,7 +76,7 @@ variable "env" {
   default     = null
 }
 
-variable "assing_warehouse_role_to_roles" {
+variable "assign_warehouse_role_to_roles" {
   description = "Roles to assignt the warehouse operate role to."
   type        = list
   default     = []

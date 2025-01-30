@@ -47,40 +47,40 @@ business_databases:
     database_comment: "HUMAN_RESOURCES_DB stuff"
     data_retention_time_in_days: 0
     staging_schema_data_retention_days: 0
-    assing_manage_roles: [PRD_ROL]
-    assing_create_roles: []
-    assing_select_roles: [AE_ROLE]
-    assing_bi_roles: []
+    assign_manage_roles: [PRD_ROL]
+    assign_create_roles: []
+    assign_select_roles: [AE_ROLE]
+    assign_bi_roles: []
   
   PRD:
     database_name: PRD_DB
     database_comment: "PRD stuff"
     data_retention_time_in_days: 0
     staging_schema_data_retention_days: 0
-    assing_manage_roles: [PRD_ROL]
-    assing_create_roles: []
-    assing_select_roles: [AE_ROLE]
-    assing_bi_roles: []
+    assign_manage_roles: [PRD_ROL]
+    assign_create_roles: []
+    assign_select_roles: [AE_ROLE]
+    assign_bi_roles: []
 
   DEV:
     database_name: DEV_DB
     database_comment: "PRD stuff"
     data_retention_time_in_days: 0
     staging_schema_data_retention_days: 0
-    assing_manage_roles: [PRD_ROL]
-    assing_create_roles: [AE_ROLE]
-    assing_select_roles: [DEV_ROLE]
-    assing_bi_roles: []
+    assign_manage_roles: [PRD_ROL]
+    assign_create_roles: [AE_ROLE]
+    assign_select_roles: [DEV_ROLE]
+    assign_bi_roles: []
 
   BRONZE:
     database_name: BRONZE_DB
     database_comment: "BRONZE stuff"
     data_retention_time_in_days: 0
     staging_schema_data_retention_days: 0
-    assing_manage_roles: [PRD_ROL]
-    assing_create_roles: [AE_ROLE]
-    assing_select_roles: [DEV_ROLE]
-    assing_bi_roles: []
+    assign_manage_roles: [PRD_ROL]
+    assign_create_roles: [AE_ROLE]
+    assign_select_roles: [DEV_ROLE]
+    assign_bi_roles: []
 
 warehouses:
  
@@ -96,7 +96,7 @@ warehouses:
     statement_queued_timeout_in_seconds: 300
     statement_timeout_in_seconds: 300
     scaling_policy: null
-    assing_warehouse_role_to_roles: [AE_ROLE, DEV_ROLE]
+    assign_warehouse_role_to_roles: [AE_ROLE, DEV_ROLE]
   
   PRD_WRH:
     warehouse_name: PRD_WRH
@@ -110,11 +110,11 @@ warehouses:
     statement_queued_timeout_in_seconds: 300
     statement_timeout_in_seconds: 300
     scaling_policy: null
-    assing_warehouse_role_to_roles: [PRD_ROLE]
+    assign_warehouse_role_to_roles: [PRD_ROLE]
 
-SCHEMAS:
+schemas:
 
-  FISRT:
+  FIRST:
     database_name: BRONZE_DB
     schema_name: SCHEMA_ONE
     stage_name: STAGE_ONE
@@ -130,7 +130,7 @@ SCHEMAS:
     file_format_name: FILE_FORMAT_TWO
     url_stage: s3://mybucket/schema_two
 
-SNOWPIPE:
+snowpipe:
   
   FIRST:
     database_name: BRONZE_DB

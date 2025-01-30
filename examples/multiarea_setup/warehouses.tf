@@ -22,10 +22,10 @@ module "snowflake_warehouses" {
   auto_resume                         = true 
   
   # Iterate all roles created with custom_role module and return only those included in the
-  # assing_warehouse_role_to_roles config
-  assing_warehouse_role_to_roles = [
+  # assign_warehouse_role_to_roles config
+  assign_warehouse_role_to_roles = [
     for index, custom_role in module.custom_roles : custom_role.custom_role_name
-    if contains(each.value.assing_warehouse_role_to_roles, custom_role.custom_role_name)
+    if contains(each.value.assign_warehouse_role_to_roles, custom_role.custom_role_name)
   ]
 }
 
