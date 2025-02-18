@@ -39,3 +39,18 @@ Documentation explained on the changes to the files in [what's changed](#whats-c
 ### Features
 
 No features at the moment, just corrections and adjustments.
+
+# v0.0.5
+
+### What's changed
+
+- File ```modules/business-database/versions.tf```: "Snowflake-Labs/snowflake" provider version changed from 0.97.0 to 0.98.0 to fix bug that did not convert NULL to String in snowflake_user resource.
+
+- File ```modules/warehouse/versions.tf```: "Snowflake-Labs/snowflake" provider version changed from 0.97.0 to 0.98.0 to fix bug that did not convert NULL to String in snowflake_user resource.
+
+- File ```modules/custom-role/versions.tf```: "Snowflake-Labs/snowflake" provider version changed from 0.97.0 to 0.98.0 to fix bug that did not convert NULL to String in snowflake_user resource.
+
+
+### Features
+
+No features at the moment, just corrections and adjustments.
