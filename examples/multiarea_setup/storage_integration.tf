@@ -1,21 +1,16 @@
 module "storage_integration" {
   source = "../../modules/storage-integration"
 
-  # General
-  prefix = var.prefix
-  env    = var.env
-
-  # AWS
-  arn_format       = var.arn_format
-  data_bucket_arns = var.data_bucket_arns
-  AWS_ACCESS_KEY_ID = var.AWS_ACCESS_KEY_ID
-  AWS_SECRET_ACCESS_KEY = var.AWS_SECRET_ACCESS_KEY
-
-  # Snowflake
-  snowflake_integration_user_roles = var.snowflake_integration_user_roles
-  bucket_object_ownership_settings = var.bucket_object_ownership_settings
-
   providers = {
-    snowflake.storage_integration_role = snowflake.storage_integration_role
+    snowflake.sys_admin    = snowflake.sys_admin
+    snowsql.security_admin = snowsql.security_admin
   }
+
+  storage_integration_name        = var.storage_integration_name
+  storage_integration_policy_name = var.storage_integration_policy_name
+  storage_integration_role_name   = var.storage_integration_role_name
+
+  aws_account_id          = var.aws_account_id
+  tf_state_s3_bucket_name = var.tf_state_s3_bucket_name
+  region                  = var.region
 }
