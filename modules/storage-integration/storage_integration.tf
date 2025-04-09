@@ -1,30 +1,39 @@
-locals {
-  pipeline_bucket_ids = [
-    for bucket_arn in var.data_bucket_arns : element(split(":::", bucket_arn), 1)
-  ]
-  storage_provider = length(regexall(".*gov.*", local.aws_region)) > 0 ? "S3GOV" : "S3"
-}
-
 resource "snowflake_storage_integration" "this" {
-  provider = snowflake.storage_integration_role
+  name     = var.storage_integration_name
+  provider = snowflake.sys_admin
 
-  name    = "${upper(replace(var.prefix, "-", "_"))}_STORAGE_INTEGRATION"
-  type    = "EXTERNAL_STAGE"
-  enabled = true
-  storage_allowed_locations = concat(
-    ["${local.storage_provider}://${aws_s3_bucket.geff_bucket.id}/"],
-    [for bucket_id in local.pipeline_bucket_ids : "s3://${bucket_id}/"]
-  )
-  storage_provider     = local.storage_provider
-  storage_aws_role_arn = "arn:${var.arn_format}:iam::${local.account_id}:role/${local.s3_reader_role_name}"
+  storage_provider     = "S3"
+  storage_aws_role_arn = "arn:aws:iam::${var.aws_account_id}:role/${var.storage_integration_role_name}"
+  enabled              = true
+  storage_allowed_locations = [
+    "s3://${data.terraform_remote_state.this.outputs.s3_bucket_name}/"
+  ]
+
+  comment = "${var.storage_integration_name} - Snowflake Integration with AWS S3"
 }
 
-resource "snowflake_integration_grant" "this" {
-  provider         = snowflake.storage_integration_role
-  integration_name = snowflake_storage_integration.this.name
+resource "snowsql_exec" "this" {
+  depends_on = [snowflake_storage_integration.this]
+  provider   = snowsql.security_admin
 
-  privilege = "OWNERSHIP"
-  roles     = ["SYSADMIN"]
+  create {
+    statements = <<-EOT
+    USE ROLE SECURITYADMIN;
+    GRANT USAGE ON INTEGRATION "${snowflake_storage_integration.this.name}" TO ROLE LOADER_ROL;
+    EOT
+  }
 
-  with_grant_option = false
+  read {
+    statements = <<-EOT
+    USE ROLE SECURITYADMIN;
+    DESC INTEGRATION "${snowflake_storage_integration.this.name}";
+    EOT
+  }
+
+  delete {
+    statements = <<-EOT
+    USE ROLE SECURITYADMIN;
+    REVOKE USAGE ON INTEGRATION "${snowflake_storage_integration.this.name}" FROM ROLE LOADER_ROL;
+    EOT
+  }
 }

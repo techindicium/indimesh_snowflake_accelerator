@@ -1,19 +1,15 @@
-output "storage_integration_name" {
-  description = "Name of Storage integration"
-  value       = snowflake_storage_integration.this.name
+output "s3_external_url" {
+  value = "s3://${data.terraform_remote_state.this.outputs.s3_bucket_name}"
 }
 
-output "bucket_url" {
-  description = "GEFF S3 Bucket URL"
-  value       = var.arn_format == "aws-us-gov" ? "s3gov://${aws_s3_bucket.geff_bucket.id}/" : "s3://${aws_s3_bucket.geff_bucket.id}/"
+output "snowflake_s3_datalake_storage_integration_name" {
+  value = snowflake_storage_integration.this.name
 }
 
-output "bucket_arn" {
-  description = "GEFF S3 Bucket ARN"
-  value       = aws_s3_bucket.geff_bucket.arn
+output "snowflake_s3_datalake_storage_integration_aws_iam_user_arn" {
+  value = snowflake_storage_integration.this.storage_aws_iam_user_arn
 }
 
-output "sns_topic_arn" {
-  description = "GEFF S3 SNS Topic to use while creating the Snowflake PIPE."
-  value       = aws_sns_topic.geff_bucket_sns.arn
+output "snowflake_s3_datalake_storage_integration_aws_external_id" {
+  value = snowflake_storage_integration.this.storage_aws_external_id
 }
