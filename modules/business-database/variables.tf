@@ -28,30 +28,30 @@ variable "staging_schema_data_retention_days" {
 
 variable "assign_manage_roles" {
   description = "Roles to assign the manage/full roles to."
-  type        = list
+  type        = list(any)
   default     = []
 }
 
 variable "assign_create_roles" {
   description = "Roles to assign the create/write roles to."
-  type        = list
+  type        = list(any)
   default     = []
 }
 
 variable "assign_select_roles" {
   description = "Roles to assign the select/readonly roles to."
-  type        = list
+  type        = list(any)
   default     = []
 }
 
 variable "assign_bi_roles" {
   description = "Roles to assign the select/readonly on marts schemas roles to."
-  type        = list
+  type        = list(any)
   default     = []
 }
 
 variable "schemas" {
   description = "Schemas created in the infrastructure"
-  type        = list
+  type        = list(any)
   default     = []
 }

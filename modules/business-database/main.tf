@@ -7,11 +7,11 @@ resource "snowflake_database" "database" {
 }
 
 resource "snowflake_schema" "schema" {
-  for_each                    = toset(local.schemas)
-  provider                    = snowflake.sys_admin
-  database                    = snowflake_database.database.name
-  name                        = each.value
-  comment                     = "${each.value} schema for ${var.database_name}"
+  for_each = toset(local.schemas)
+  provider = snowflake.sys_admin
+  database = snowflake_database.database.name
+  name     = each.value
+  comment  = "${each.value} schema for ${var.database_name}"
 
-  depends_on                  = [snowflake_database.database]
+  depends_on = [snowflake_database.database]
 }
