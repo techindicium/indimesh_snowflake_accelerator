@@ -48,7 +48,7 @@ resource "snowflake_grant_privileges_to_account_role" "grant_select_usage" {
   provider = snowflake.security_admin
 
   account_role_name = each.value.role
-  privileges        = ["USAGE", "SELECT"]
+  privileges        = ["USAGE"]
 
   on_schema {
     schema_name = "${var.database_name}.${each.value.schema}"
