@@ -27,3 +27,19 @@ variable "copy_statement" {
   type        = string
   description = "Custom COPY statement for the pipe."
 }
+
+variable "warehouse" {
+  type        = string
+  description = "Warehouse name used by Snowflake alert."
+}
+
+variable "email" {
+  type        = string
+  description = "Email to which the snowpipe error alert will be sent."
+}
+
+variable "alert" {
+  type        = bool
+  description = "Variable that defines whether or not the alert will be created for Snowpipes."
+  default     = false
+}
