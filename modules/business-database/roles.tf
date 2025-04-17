@@ -534,40 +534,88 @@ resource "snowflake_grant_privileges_to_database_role" "grant_bi_select_all_exte
   }
 }
 
-##### 4
+##### 4 Account roles receive database roles
 
-resource "snowflake_grant_database_role" "grant_manage_role_to_var_assigned_roles" {
-  provider = snowflake.security_admin
+resource "snowsql_exec" "grant_manage_role_to_var_assigned_roles" {
+  provider = snowsql.security_admin
+  for_each   = {
+    for index, role in var.assign_manage_roles:
+    role => role
+  }
 
-  for_each = { for index, role in var.assign_manage_roles : role => role }
-
-  database_role_name = snowflake_database_role.manage_custom_role.fully_qualified_name
-  parent_role_name   = each.key
+  create {
+    statements = <<-EOT
+    USE ROLE SECURITYADMIN;
+    GRANT ROLE "${module.manage_custom_role.custom_role_name}" TO ROLE "${each.key}";
+    EOT
+  }
+  delete {
+    statements = <<-EOT
+    USE ROLE SECURITYADMIN;
+    REVOKE ROLE "${module.manage_custom_role.custom_role_name}" FROM ROLE "${each.key}";
+    EOT
+  }
 }
 
-resource "snowflake_grant_database_role" "grant_create_role_to_var_assigned_roles" {
-  provider = snowflake.security_admin
+resource "snowsql_exec" "grant_create_role_to_var_assigned_roles" {
+  provider = snowsql.security_admin
+  for_each   = {
+    for index, role in var.assign_create_roles:
+    role => role
+  }
 
-  for_each = { for index, role in var.assign_create_roles : role => role }
-
-  database_role_name = snowflake_database_role.create_custom_role.fully_qualified_name
-  parent_role_name   = each.key
+  create {
+    statements = <<-EOT
+    USE ROLE SECURITYADMIN;
+    GRANT ROLE "${module.create_custom_role.custom_role_name}" TO ROLE "${each.key}";
+    EOT
+  }
+  delete {
+    statements = <<-EOT
+    USE ROLE SECURITYADMIN;
+    REVOKE ROLE "${module.create_custom_role.custom_role_name}" FROM ROLE "${each.key}";
+    EOT
+  }
 }
 
-resource "snowflake_grant_database_role" "grant_select_role_to_var_assigned_roles" {
-  provider = snowflake.security_admin
+resource "snowsql_exec" "grant_select_role_to_var_assigned_roles" {
+  provider = snowsql.security_admin
+  for_each   = {
+    for index, role in var.assign_select_roles:
+    role => role
+  }
 
-  for_each = { for index, role in var.assign_select_roles : role => role }
-
-  database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
-  parent_role_name   = each.key
+  create {
+    statements = <<-EOT
+    USE ROLE SECURITYADMIN;
+    GRANT ROLE "${module.select_custom_role.custom_role_name}" TO ROLE "${each.key}";
+    EOT
+  }
+  delete {
+    statements = <<-EOT
+    USE ROLE SECURITYADMIN;
+    REVOKE ROLE "${module.select_custom_role.custom_role_name}" FROM ROLE "${each.key}";
+    EOT
+  }
 }
 
-resource "snowflake_grant_database_role" "grant_bi_role_to_var_assigned_roles" {
-  provider = snowflake.security_admin
+resource "snowsql_exec" "grant_bi_role_to_var_assigned_roles" {
+  provider = snowsql.security_admin
+  for_each   = {
+    for index, role in var.assign_bi_roles:
+    role => role
+  }
 
-  for_each = { for index, role in var.assign_bi_roles : role => role }
-
-  database_role_name = snowflake_database_role.bi_custom_role.fully_qualified_name
-  parent_role_name   = each.key
+  create {
+    statements = <<-EOT
+    USE ROLE SECURITYADMIN;
+    GRANT ROLE "${module.bi_custom_role[0].custom_role_name}" TO ROLE "${each.key}";
+    EOT
+  }
+  delete {
+    statements = <<-EOT
+    USE ROLE SECURITYADMIN;
+    REVOKE ROLE "${module.bi_custom_role[0].custom_role_name}" FROM ROLE "${each.key}";
+    EOT
+  }
 }
