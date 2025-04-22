@@ -37,6 +37,23 @@ This Terraform code automates the creation of a Snowflake Pipe, which is used fo
   - `schema`: The schema in which the pipe will be created, defined by `var.schema_name`.
   - `name`: The name of the pipe, provided by `var.pipe_name`.
   - `copy_statement`: The SQL `COPY INTO` statement that defines the data ingestion process, including the target table and stage. It uses the `match_by_column_name` setting to ensure case-insensitive matching of column names.
+
+      For this variable, use something like this example below to perform Snowpipe error handling.
+
+    ```sql
+    <<EOT 
+      COPY INTO ${var.database}.${var.schemas[each.value.stage]}.${each.value.table} 
+      FROM @${var.database}.${snowflake_schema.raw.name}.${upper(each.value.stage)}_STAGE 
+      FILE_FORMAT = (TYPE = 'PARQUET') 
+      PATTERN = '${each.value.table}/.*[.]parquet' 
+      MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE 
+      ON_ERROR = 'SKIP_FILE_3' 
+      VALIDATION_MODE = 'RETURN_ERRORS';
+    EOT
+    ```
+
+    The `ON_ERROR` and `VALIDATION_MODE` parameters will skip the file to be inserted after three errors and will return that error to the user.
+
   - `auto_ingest`: Enables automatic ingestion when new data arrives in the stage.
   - `aws_sns_topic_arn`: The ARN of the AWS SNS topic to notify for new data arrivals, provided by `var.sns_topic`.
 
@@ -70,6 +87,26 @@ This Terraform code automates the creation of a Snowflake Pipe, which is used fo
 - **`var.table_name`:** The target table where the data will be ingested.
 - **`var.stage_name`:** The stage from which data will be copied into the table.
 - **`var.sns_topic`:** The ARN of the AWS SNS topic to receive notifications about data ingestion.
+- **`var.alert`:** Variable that defines whether or not the alert will be created for Snowpipes.
+- **`var.warehouse`:** Warehouse name used by Snowflake alert.
+- **`var.email`:** Email to which the snowpipe error alert will be sent.
+
+## Costs
+
+- **Alerts:** Considering that each alert is executed every hour, it is executed 720 times per month. Considering that an alert can consume 1 to 2 computational units that cost 2 and 4 credits respectively, we can estimate that each alert generates a monthly cost of **US$6 to US$12**, considering the cost of the credit at US$3.
+
+- **Snowpipes:** The cost estimate for using Snowpipes depends on the serverless compute cost and the overhead rate per file.
+
+  - **Compute:** Snowpipe uses a "serverless" compute model, where Snowflake automatically manages the resources needed to load data. The cost is calculated based on the time CPU cores are used (per second) while processing the files, following the serverless resource credit schedule. The price is 1.25× the standard cost of a virtual warehouse (example: if an X-Small warehouse costs 1 credit/hour, Snowpipe will cost 1.25 credits/hour for the same capacity).
+
+  - **Overhead rate:** In addition to compute, there is a fixed cost of 0.06 credits for every 1,000 files processed, regardless of whether the data is loaded successfully or not. This cost covers the management of notifications and queues.
+
+  So, using an example of a single Snowpipe that processes 10 GB of data per day in files of 10 MB each (1,000 files/day), the calculation would be something like:
+
+  - **Compute:** 1000 * 30 * 0.0004 = 12 credits
+  - **Overhead:** (1000 * 30 / 1000) * 0.06 = 1.8 credits
+
+  Considering the credit value between US$3 and US$4, the cost for this example Snowpipe would be somewhere between **US$41.4** and **US$55.2**.
 
 ## TL;DR
 
@@ -79,3 +116,5 @@ This Terraform configuration automates the creation of a Snowflake pipe, which f
 - **Automated Data Ingestion:** Data is automatically loaded into Snowflake when new data arrives at the stage.
 - **Seamless Integration:** Supports integration with AWS SNS for real-time notifications.
 - **Flexibility:** Allows easy configuration of source and target parameters for different use cases.
+
+This module also creates alerts in Snowflake in case the Snowpipe corresponding to the alert fails.
