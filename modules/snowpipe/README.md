@@ -37,6 +37,23 @@ This Terraform code automates the creation of a Snowflake Pipe, which is used fo
   - `schema`: The schema in which the pipe will be created, defined by `var.schema_name`.
   - `name`: The name of the pipe, provided by `var.pipe_name`.
   - `copy_statement`: The SQL `COPY INTO` statement that defines the data ingestion process, including the target table and stage. It uses the `match_by_column_name` setting to ensure case-insensitive matching of column names.
+
+      For this variable, use something like this example below to perform Snowpipe error handling.
+
+    ```sql
+    <<EOT 
+      COPY INTO ${var.database}.${var.schemas[each.value.stage]}.${each.value.table} 
+      FROM @${var.database}.${snowflake_schema.raw.name}.${upper(each.value.stage)}_STAGE 
+      FILE_FORMAT = (TYPE = 'PARQUET') 
+      PATTERN = '${each.value.table}/.*[.]parquet' 
+      MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE 
+      ON_ERROR = 'SKIP_FILE_3' 
+      VALIDATION_MODE = 'RETURN_ERRORS';
+    EOT
+    ```
+
+    The `ON_ERROR` and `VALIDATION_MODE` parameters will skip the file to be inserted after three errors and will return that error to the user.
+
   - `auto_ingest`: Enables automatic ingestion when new data arrives in the stage.
   - `aws_sns_topic_arn`: The ARN of the AWS SNS topic to notify for new data arrivals, provided by `var.sns_topic`.
 
