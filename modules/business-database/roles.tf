@@ -1,15 +1,14 @@
-
-
+##### 1 Create custom roles
 module "manage_custom_role" {
-  source   = "../custom-role"
+  source = "../custom-role"
 
   providers = {
-    snowflake.sys_admin      = snowflake.sys_admin  
+    snowflake.sys_admin      = snowflake.sys_admin
     snowflake.security_admin = snowflake.security_admin
     snowsql.sys_admin        = snowsql.sys_admin
     snowsql.security_admin   = snowsql.security_admin
   }
-  
+
   custom_role_name = "DB_${var.database_name}_MNG_ROL"
   inherit_sysadmin = true
 
@@ -19,15 +18,15 @@ module "manage_custom_role" {
 }
 
 module "create_custom_role" {
-  source   = "../custom-role"
+  source = "../custom-role"
 
   providers = {
-    snowflake.sys_admin      = snowflake.sys_admin  
+    snowflake.sys_admin      = snowflake.sys_admin
     snowflake.security_admin = snowflake.security_admin
     snowsql.sys_admin        = snowsql.sys_admin
     snowsql.security_admin   = snowsql.security_admin
   }
-  
+
   custom_role_name = "DB_${var.database_name}_CRT_ROL"
   inherit_sysadmin = false
 
@@ -37,33 +36,34 @@ module "create_custom_role" {
 }
 
 module "select_custom_role" {
-  source   = "../custom-role"
+  source = "../custom-role"
 
   providers = {
-    snowflake.sys_admin      = snowflake.sys_admin  
-    snowflake.security_admin   = snowflake.security_admin
+    snowflake.sys_admin      = snowflake.sys_admin
+    snowflake.security_admin = snowflake.security_admin
     snowsql.sys_admin        = snowsql.sys_admin
     snowsql.security_admin   = snowsql.security_admin
   }
-  
+
   custom_role_name = "DB_${var.database_name}_SEL_ROL"
   inherit_sysadmin = false
+
   depends_on = [
     snowflake_database.database
   ]
 }
 
 module "bi_custom_role" {
-  source   = "../custom-role"
-  count =  var.create_bi_role ? 1 : 0
+  source = "../custom-role"
+  count  = var.create_bi_role ? 1 : 0
 
   providers = {
-    snowflake.sys_admin      = snowflake.sys_admin  
-    snowflake.security_admin   = snowflake.security_admin
+    snowflake.sys_admin      = snowflake.sys_admin
+    snowflake.security_admin = snowflake.security_admin
     snowsql.sys_admin        = snowsql.sys_admin
     snowsql.security_admin   = snowsql.security_admin
   }
-  
+
   custom_role_name = "DB_${var.database_name}_BI_ROL"
   inherit_sysadmin = false
 
@@ -72,274 +72,469 @@ module "bi_custom_role" {
   ]
 }
 
-resource "snowsql_exec" "grant_create_to_manage_role" {
-  provider = snowsql.security_admin
-  create {
-    statements = <<-EOT
-    USE ROLE SECURITYADMIN;
-    GRANT ROLE "${module.create_custom_role.custom_role_name}" TO ROLE ${module.manage_custom_role.custom_role_name};
-    EOT
-  }
-  delete {
-    statements = <<-EOT
-    USE ROLE SECURITYADMIN;
-    REVOKE ROLE "${module.create_custom_role.custom_role_name}" FROM ROLE ${module.manage_custom_role.custom_role_name};
-    EOT
+##### 2 Create database roles
+
+resource "snowflake_database_role" "bi_custom_role" {
+  provider = snowflake.sys_admin
+  database = snowflake_database.database.name
+  name     = module.bi_custom_role[0].custom_role_name
+}
+
+resource "snowflake_database_role" "select_custom_role" {
+  provider = snowflake.sys_admin
+  database = snowflake_database.database.name
+  name     = module.select_custom_role.custom_role_name
+}
+
+resource "snowflake_database_role" "create_custom_role" {
+  provider = snowflake.sys_admin
+  database = snowflake_database.database.name
+  name     = module.create_custom_role.custom_role_name
+}
+
+resource "snowflake_database_role" "manage_custom_role" {
+  provider = snowflake.sys_admin
+  database = snowflake_database.database.name
+  name     = module.manage_custom_role.custom_role_name
+}
+
+##### 3 Hierarchy
+
+resource "snowflake_grant_database_role" "grant_create_to_manage_role" {
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.create_custom_role.fully_qualified_name
+  parent_role_name   = snowflake_database_role.manage_custom_role.name
+}
+
+resource "snowflake_grant_database_role" "grant_select_to_create_role" {
+  count    = var.create_bi_role ? 1 : 0
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
+  parent_role_name   = snowflake_database_role.create_custom_role.name
+}
+
+resource "snowflake_grant_database_role" "grant_bi_to_select_role" {
+  count    = var.create_bi_role ? 1 : 0
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.bi_custom_role.fully_qualified_name
+  parent_role_name   = snowflake_database_role.select_custom_role.name
+}
+
+##### 4 Grants to database roles
+
+# Manage database role
+
+resource "snowflake_grant_privileges_to_database_role" "grants_mng_role_usage_db" {
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.manage_custom_role.fully_qualified_name
+  privileges         = ["USAGE"]
+  on_database        = snowflake_database_role.manage_custom_role.database
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grants_mng_role_all_privileges_schemas_future" {
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.manage_custom_role.fully_qualified_name
+  all_privileges     = true
+
+  on_schema {
+    future_schemas_in_database = snowflake_database_role.manage_custom_role.database
   }
 }
 
-resource "snowsql_exec" "grant_select_to_create_role" {
-  provider = snowsql.security_admin
-  create {
-    statements = <<-EOT
-    USE ROLE SECURITYADMIN;
-    GRANT ROLE "${module.select_custom_role.custom_role_name}" TO ROLE ${module.create_custom_role.custom_role_name};
-    EOT
-  }
-  delete {
-    statements = <<-EOT
-    USE ROLE SECURITYADMIN;
-    REVOKE ROLE "${module.select_custom_role.custom_role_name}" FROM ROLE ${module.create_custom_role.custom_role_name};
-    EOT
+resource "snowflake_grant_privileges_to_database_role" "grants_mng_role_all_privileges_schemas_all" {
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.manage_custom_role.fully_qualified_name
+  all_privileges     = true
+
+  on_schema {
+    all_schemas_in_database = snowflake_database_role.manage_custom_role.database
   }
 }
 
-resource "snowsql_exec" "grant_bi_to_select_role" {
-  count =  var.create_bi_role ? 1 : 0
-  provider = snowsql.security_admin
-  create {
-    statements = <<-EOT
-    USE ROLE SECURITYADMIN;
-    GRANT ROLE "${module.bi_custom_role[0].custom_role_name}" TO ROLE ${module.select_custom_role.custom_role_name};
-    EOT
-  }
-  delete {
-    statements = <<-EOT
-    USE ROLE SECURITYADMIN;
-    REVOKE ROLE "${module.bi_custom_role[0].custom_role_name}" FROM ROLE ${module.select_custom_role.custom_role_name};
-    EOT
+resource "snowflake_grant_privileges_to_database_role" "grants_mng_role_all_privileges_tables_all" {
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.manage_custom_role.fully_qualified_name
+  all_privileges     = true
+
+  on_schema_object {
+    all {
+      object_type_plural = "TABLES"
+      in_database        = snowflake_database_role.manage_custom_role.database
+    }
   }
 }
 
-resource "snowsql_exec" "grants_mng_role" {
-  provider = snowsql.security_admin
-  create {
-    statements = <<-EOT
-    USE ROLE SECURITYADMIN;
+resource "snowflake_grant_privileges_to_database_role" "grants_mng_role_all_privileges_tables_future" {
+  provider = snowflake.security_admin
 
-    GRANT USAGE ON DATABASE ${var.database_name} TO ROLE ${module.manage_custom_role.custom_role_name};
+  database_role_name = snowflake_database_role.manage_custom_role.fully_qualified_name
+  all_privileges     = true
 
-    GRANT ALL PRIVILEGES ON FUTURE SCHEMAS IN  DATABASE ${var.database_name} TO ROLE ${module.manage_custom_role.custom_role_name};
-    GRANT ALL PRIVILEGES ON ALL SCHEMAS IN  DATABASE ${var.database_name} TO ROLE ${module.manage_custom_role.custom_role_name};
-
-    GRANT ALL PRIVILEGES ON FUTURE TABLES IN DATABASE ${var.database_name} TO ROLE ${module.manage_custom_role.custom_role_name};
-    GRANT ALL PRIVILEGES ON ALL TABLES IN DATABASE ${var.database_name} TO ROLE ${module.manage_custom_role.custom_role_name};
-    
-    EOT
-  }
-  delete {
-    statements = <<-EOT
-    USE ROLE SECURITYADMIN;
-    
-    REVOKE USAGE ON DATABASE ${var.database_name} FROM ROLE ${module.manage_custom_role.custom_role_name};
-
-    REVOKE ALL PRIVILEGES ON FUTURE SCHEMAS IN  DATABASE ${var.database_name} FROM ROLE ${module.manage_custom_role.custom_role_name};
-    REVOKE ALL PRIVILEGES ON ALL SCHEMAS IN  DATABASE ${var.database_name} FROM ROLE ${module.manage_custom_role.custom_role_name};
-
-    REVOKE ALL PRIVILEGES ON FUTURE TABLES IN DATABASE ${var.database_name} FROM ROLE ${module.manage_custom_role.custom_role_name};
-    REVOKE ALL PRIVILEGES ON ALL TABLES IN DATABASE ${var.database_name} FROM ROLE ${module.manage_custom_role.custom_role_name};
-    
-    EOT
+  on_schema_object {
+    future {
+      object_type_plural = "TABLES"
+      in_database        = snowflake_database_role.manage_custom_role.database
+    }
   }
 }
 
-resource "snowsql_exec" "grants_create_role" {
-  provider = snowsql.security_admin
-  create {
-    statements = <<-EOT
-    USE ROLE SECURITYADMIN;
-        
-    GRANT USAGE ON DATABASE ${var.database_name} TO ROLE ${module.create_custom_role.custom_role_name};
-    GRANT CREATE SCHEMA ON DATABASE ${var.database_name} TO ROLE ${module.create_custom_role.custom_role_name};
-    
-    EOT
-  }
-  delete {
-    statements = <<-EOT
-    USE ROLE SECURITYADMIN;
-    
-    REVOKE USAGE ON DATABASE ${var.database_name} FROM ROLE ${module.create_custom_role.custom_role_name};
-    REVOKE CREATE SCHEMA ON DATABASE ${var.database_name} FROM ROLE ${module.create_custom_role.custom_role_name};
-    
-    EOT
+# Create database role
+
+resource "snowflake_grant_privileges_to_database_role" "grants_create_role" {
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.create_custom_role.fully_qualified_name
+  privileges         = ["USAGE", "CREATE SCHEMA"]
+  on_database        = snowflake_database_role.create_custom_role.database
+}
+
+# Select database role
+
+resource "snowflake_grant_privileges_to_database_role" "grants_select_role_usage_db" {
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
+  privileges         = ["USAGE"]
+  on_database        = snowflake_database_role.select_custom_role.database
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grants_select_role_usage_schema_future" {
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
+  privileges         = ["USAGE"]
+
+  on_schema {
+    future_schemas_in_database = snowflake_database_role.select_custom_role.database
   }
 }
 
-resource "snowsql_exec" "grants_select_role" {
-  provider = snowsql.security_admin
+resource "snowflake_grant_privileges_to_database_role" "grants_select_role_usage_schema_all" {
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
+  privileges         = ["USAGE"]
+
+  on_schema {
+    all_schemas_in_database = snowflake_database_role.select_custom_role.database
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grants_select_role_select_tables_future" {
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
+  privileges         = ["SELECT"]
+
+  on_schema_object {
+    future {
+      object_type_plural = "TABLES"
+      in_database        = snowflake_database_role.select_custom_role.database
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grants_select_role_select_tables_all" {
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
+  privileges         = ["SELECT"]
+
+  on_schema_object {
+    all {
+      object_type_plural = "TABLES"
+      in_database        = snowflake_database_role.select_custom_role.database
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grants_select_role_select_views_future" {
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
+  privileges         = ["SELECT"]
+
+  on_schema_object {
+    future {
+      object_type_plural = "VIEWS"
+      in_database        = snowflake_database_role.select_custom_role.database
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grants_select_role_select_views_all" {
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
+  privileges         = ["SELECT"]
+
+  on_schema_object {
+    all {
+      object_type_plural = "VIEWS"
+      in_database        = snowflake_database_role.select_custom_role.database
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grants_select_role_select_materialized_views_future" {
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
+  privileges         = ["SELECT"]
+
+  on_schema_object {
+    future {
+      object_type_plural = "MATERIALIZED VIEWS"
+      in_database        = snowflake_database_role.select_custom_role.database
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grants_select_role_select_materialized_views_all" {
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
+  privileges         = ["SELECT"]
+
+  on_schema_object {
+    all {
+      object_type_plural = "MATERIALIZED VIEWS"
+      in_database        = snowflake_database_role.select_custom_role.database
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grants_select_role_select_external_tables_future" {
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
+  privileges         = ["SELECT"]
+
+  on_schema_object {
+    future {
+      object_type_plural = "EXTERNAL TABLES"
+      in_database        = snowflake_database_role.select_custom_role.database
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grants_select_role_select_external_tables_all" {
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
+  privileges         = ["SELECT"]
+
+  on_schema_object {
+    all {
+      object_type_plural = "EXTERNAL TABLES"
+      in_database        = snowflake_database_role.select_custom_role.database
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grant_select_usage_schema" {
+  for_each           = snowflake_schema.schema
+  provider           = snowflake.security_admin
+  database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
+  privileges         = ["USAGE"]
+
+  on_schema {
+    schema_name = "${snowflake_database_role.select_custom_role.database}.${each.value.name}"
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grant_select_future_tables_schema" {
+  for_each           = snowflake_schema.schema
+  provider           = snowflake.security_admin
+  database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
+  privileges         = ["SELECT"]
+
+  on_schema_object {
+    future {
+      object_type_plural = "TABLES"
+      in_schema          = "${snowflake_database_role.select_custom_role.database}.${each.value.name}"
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grant_select_all_tables_schema" {
+  for_each           = snowflake_schema.schema
+  provider           = snowflake.security_admin
+  database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
+  privileges         = ["SELECT"]
+
+  on_schema_object {
+    all {
+      object_type_plural = "TABLES"
+      in_schema          = "${snowflake_database_role.select_custom_role.database}.${each.value.name}"
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grant_select_future_views_schema" {
+  for_each           = snowflake_schema.schema
+  provider           = snowflake.security_admin
+  database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
+  privileges         = ["SELECT"]
+
+  on_schema_object {
+    future {
+      object_type_plural = "VIEWS"
+      in_schema          = "${snowflake_database_role.select_custom_role.database}.${each.value.name}"
+    }
+  }
+}
+
+# BI database role
+
+resource "snowflake_grant_privileges_to_database_role" "grants_bi_role" {
+  provider = snowflake.security_admin
+
+  database_role_name = snowflake_database_role.bi_custom_role.fully_qualified_name
+  privileges         = ["USAGE"]
+  on_database        = snowflake_database_role.bi_custom_role.database
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grant_bi_usage_schema" {
   for_each = snowflake_schema.schema
 
-  create {
-    statements = <<-EOT
-    USE ROLE SECURITYADMIN;
+  provider           = snowflake.security_admin
+  database_role_name = snowflake_database_role.bi_custom_role.fully_qualified_name
+  privileges         = ["USAGE"]
 
-    GRANT USAGE ON DATABASE ${var.database_name} TO ROLE ${module.select_custom_role.custom_role_name};
-
-    GRANT USAGE ON FUTURE SCHEMAS IN  DATABASE ${var.database_name} TO ROLE ${module.select_custom_role.custom_role_name};
-    GRANT USAGE ON ALL SCHEMAS IN  DATABASE ${var.database_name} TO ROLE ${module.select_custom_role.custom_role_name};
-
-    GRANT SELECT ON FUTURE TABLES IN DATABASE ${var.database_name} TO ROLE ${module.select_custom_role.custom_role_name};
-    GRANT SELECT ON ALL TABLES IN DATABASE ${var.database_name} TO ROLE ${module.select_custom_role.custom_role_name};
-
-    GRANT SELECT ON FUTURE VIEWS IN DATABASE ${var.database_name} TO ROLE ${module.select_custom_role.custom_role_name};
-    GRANT SELECT ON ALL VIEWS IN DATABASE ${var.database_name} TO ROLE ${module.select_custom_role.custom_role_name};
-
-    GRANT SELECT ON FUTURE MATERIALIZED VIEWS IN DATABASE ${var.database_name} TO ROLE ${module.select_custom_role.custom_role_name};
-    GRANT SELECT ON ALL MATERIALIZED VIEWS IN DATABASE ${var.database_name} TO ROLE ${module.select_custom_role.custom_role_name};
-
-    GRANT SELECT ON FUTURE EXTERNAL TABLES IN DATABASE ${var.database_name} TO ROLE ${module.select_custom_role.custom_role_name};
-    GRANT SELECT ON ALL EXTERNAL TABLES IN DATABASE ${var.database_name} TO ROLE ${module.select_custom_role.custom_role_name};
-   
-    GRANT USAGE ON SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.select_custom_role.custom_role_name};
-
-    GRANT SELECT ON FUTURE TABLES IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.select_custom_role.custom_role_name};
-    GRANT SELECT ON ALL TABLES IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.select_custom_role.custom_role_name};
-
-    GRANT SELECT ON FUTURE VIEWS IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.select_custom_role.custom_role_name};
-    GRANT SELECT ON ALL VIEWS IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.select_custom_role.custom_role_name};
-
-    GRANT SELECT ON FUTURE MATERIALIZED VIEWS IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.select_custom_role.custom_role_name};
-    GRANT SELECT ON ALL MATERIALIZED VIEWS IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.select_custom_role.custom_role_name};
-
-   
-    GRANT USAGE ON SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.select_custom_role.custom_role_name};
-
-    GRANT SELECT ON FUTURE TABLES IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.select_custom_role.custom_role_name};
-    GRANT SELECT ON ALL TABLES IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.select_custom_role.custom_role_name};
-
-    GRANT SELECT ON FUTURE VIEWS IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.select_custom_role.custom_role_name};
-    GRANT SELECT ON ALL VIEWS IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.select_custom_role.custom_role_name};
-
-    GRANT SELECT ON FUTURE MATERIALIZED VIEWS IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.select_custom_role.custom_role_name};
-    GRANT SELECT ON ALL MATERIALIZED VIEWS IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.select_custom_role.custom_role_name};
-
-    EOT
-  }
-  delete {
-    statements = <<-EOT
-    USE ROLE SECURITYADMIN;
-    REVOKE USAGE ON DATABASE ${var.database_name} FROM ROLE ${module.select_custom_role.custom_role_name};
-
-    REVOKE USAGE ON FUTURE SCHEMAS IN  DATABASE ${var.database_name} FROM ROLE ${module.select_custom_role.custom_role_name};
-    REVOKE USAGE ON ALL SCHEMAS IN  DATABASE ${var.database_name} FROM ROLE ${module.select_custom_role.custom_role_name};
-
-    REVOKE SELECT ON FUTURE TABLES IN DATABASE ${var.database_name} FROM ROLE ${module.select_custom_role.custom_role_name};
-    REVOKE SELECT ON ALL TABLES IN DATABASE ${var.database_name} FROM ROLE ${module.select_custom_role.custom_role_name};
-
-    REVOKE SELECT ON FUTURE VIEWS IN DATABASE ${var.database_name} FROM ROLE ${module.select_custom_role.custom_role_name};
-    REVOKE SELECT ON ALL VIEWS IN DATABASE ${var.database_name} FROM ROLE ${module.select_custom_role.custom_role_name};
-
-    REVOKE SELECT ON FUTURE MATERIALIZED VIEWS IN DATABASE ${var.database_name} FROM ROLE ${module.select_custom_role.custom_role_name};
-    REVOKE SELECT ON ALL MATERIALIZED VIEWS IN DATABASE ${var.database_name} FROM ROLE ${module.select_custom_role.custom_role_name};
-
-    REVOKE SELECT ON FUTURE EXTERNAL TABLES IN DATABASE ${var.database_name} FROM ROLE ${module.select_custom_role.custom_role_name};
-    REVOKE SELECT ON ALL EXTERNAL TABLES IN DATABASE ${var.database_name} FROM ROLE ${module.select_custom_role.custom_role_name};
-    
-    REVOKE USAGE ON SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.select_custom_role.custom_role_name};
-
-    REVOKE SELECT ON FUTURE TABLES IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.select_custom_role.custom_role_name};
-    REVOKE SELECT ON ALL TABLES IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.select_custom_role.custom_role_name};
-
-    REVOKE SELECT ON FUTURE VIEWS IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.select_custom_role.custom_role_name};
-    REVOKE SELECT ON ALL VIEWS IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.select_custom_role.custom_role_name};
-
-    REVOKE SELECT ON FUTURE MATERIALIZED VIEWS IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.select_custom_role.custom_role_name};
-    REVOKE SELECT ON ALL MATERIALIZED VIEWS IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.select_custom_role.custom_role_name};
-
-
-    
-    REVOKE USAGE ON SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.select_custom_role.custom_role_name};
-
-    REVOKE SELECT ON FUTURE TABLES IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.select_custom_role.custom_role_name};
-    REVOKE SELECT ON ALL TABLES IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.select_custom_role.custom_role_name};
-
-    REVOKE SELECT ON FUTURE VIEWS IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.select_custom_role.custom_role_name};
-    REVOKE SELECT ON ALL VIEWS IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.select_custom_role.custom_role_name};
-
-    REVOKE SELECT ON FUTURE MATERIALIZED VIEWS IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.select_custom_role.custom_role_name};
-    REVOKE SELECT ON ALL MATERIALIZED VIEWS IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.select_custom_role.custom_role_name};
-
-
-    EOT
+  on_schema {
+    schema_name = "${snowflake_database_role.bi_custom_role.database}.${each.value.name}"
   }
 }
 
-resource "snowsql_exec" "grants_bi_role" {
-  provider = snowsql.security_admin
+resource "snowflake_grant_privileges_to_database_role" "grant_bi_select_future_tables_schema" {
+  for_each = snowflake_schema.schema
 
-  for_each = var.create_bi_role ? { 
-    for schema in snowflake_schema.schema : 
-    "${schema.name}" => schema
-  } : {}
+  provider           = snowflake.security_admin
+  database_role_name = snowflake_database_role.bi_custom_role.fully_qualified_name
+  privileges         = ["SELECT"]
 
-  create {
-    statements = <<-EOT
-    USE ROLE SECURITYADMIN;
-
-    GRANT USAGE ON DATABASE ${var.database_name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
-    GRANT USAGE ON SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
-
-    GRANT SELECT ON FUTURE TABLES IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
-    GRANT SELECT ON ALL TABLES IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
-
-    GRANT SELECT ON FUTURE VIEWS IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
-    GRANT SELECT ON ALL VIEWS IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
-
-    GRANT SELECT ON FUTURE MATERIALIZED VIEWS IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
-    GRANT SELECT ON ALL MATERIALIZED VIEWS IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
- 
-    GRANT USAGE ON SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
-
-    GRANT SELECT ON FUTURE TABLES IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
-    GRANT SELECT ON ALL TABLES IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
-
-    GRANT SELECT ON FUTURE VIEWS IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
-    GRANT SELECT ON ALL VIEWS IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
-
-    GRANT SELECT ON FUTURE MATERIALIZED VIEWS IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
-    GRANT SELECT ON ALL MATERIALIZED VIEWS IN SCHEMA ${var.database_name}.${each.value.name} TO ROLE ${module.bi_custom_role[0].custom_role_name};
- 
-    EOT
-  }
-  delete {
-    statements = <<-EOT
-    USE ROLE SECURITYADMIN;
-    
-    REVOKE USAGE ON DATABASE ${var.database_name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
-    REVOKE USAGE ON SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
-
-    REVOKE SELECT ON FUTURE TABLES IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
-    REVOKE SELECT ON ALL TABLES IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
-
-    REVOKE SELECT ON FUTURE VIEWS IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
-    REVOKE SELECT ON ALL VIEWS IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
-
-    REVOKE SELECT ON FUTURE MATERIALIZED VIEWS IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
-    REVOKE SELECT ON ALL MATERIALIZED VIEWS IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
-    REVOKE USAGE ON SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
-
-    REVOKE SELECT ON FUTURE TABLES IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
-    REVOKE SELECT ON ALL TABLES IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
-
-    REVOKE SELECT ON FUTURE VIEWS IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
-    REVOKE SELECT ON ALL VIEWS IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
-
-    REVOKE SELECT ON FUTURE MATERIALIZED VIEWS IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
-    REVOKE SELECT ON ALL MATERIALIZED VIEWS IN SCHEMA ${var.database_name}.${each.value.name} FROM ROLE ${module.bi_custom_role[0].custom_role_name};
-    
-    EOT
+  on_schema_object {
+    future {
+      object_type_plural = "TABLES"
+      in_schema          = "${snowflake_database_role.bi_custom_role.database}.${each.value.name}"
+    }
   }
 }
+
+resource "snowflake_grant_privileges_to_database_role" "grant_bi_select_all_tables_schema" {
+  for_each = snowflake_schema.schema
+
+  provider           = snowflake.security_admin
+  database_role_name = snowflake_database_role.bi_custom_role.fully_qualified_name
+  privileges         = ["SELECT"]
+
+  on_schema_object {
+    all {
+      object_type_plural = "TABLES"
+      in_schema          = "${snowflake_database_role.bi_custom_role.database}.${each.value.name}"
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grant_bi_select_future_views_schema" {
+  for_each = snowflake_schema.schema
+
+  provider           = snowflake.security_admin
+  database_role_name = snowflake_database_role.bi_custom_role.fully_qualified_name
+  privileges         = ["SELECT"]
+
+  on_schema_object {
+    future {
+      object_type_plural = "VIEWS"
+      in_schema          = "${snowflake_database_role.bi_custom_role.database}.${each.value.name}"
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grant_bi_select_all_views_schema" {
+  for_each = snowflake_schema.schema
+
+  provider           = snowflake.security_admin
+  database_role_name = snowflake_database_role.bi_custom_role.fully_qualified_name
+  privileges         = ["SELECT"]
+
+  on_schema_object {
+    all {
+      object_type_plural = "VIEWS"
+      in_schema          = "${snowflake_database_role.bi_custom_role.database}.${each.value.name}"
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grant_bi_select_future_mviews_schema" {
+  for_each = snowflake_schema.schema
+
+  provider           = snowflake.security_admin
+  database_role_name = snowflake_database_role.bi_custom_role.fully_qualified_name
+  privileges         = ["SELECT"]
+
+  on_schema_object {
+    future {
+      object_type_plural = "MATERIALIZED VIEWS"
+      in_schema          = "${snowflake_database_role.bi_custom_role.database}.${each.value.name}"
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grant_bi_select_all_mviews_schema" {
+  for_each = snowflake_schema.schema
+
+  provider           = snowflake.security_admin
+  database_role_name = snowflake_database_role.bi_custom_role.fully_qualified_name
+  privileges         = ["SELECT"]
+
+  on_schema_object {
+    all {
+      object_type_plural = "MATERIALIZED VIEWS"
+      in_schema          = "${snowflake_database_role.bi_custom_role.database}.${each.value.name}"
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grant_bi_select_future_external_tables_schema" {
+  for_each = snowflake_schema.schema
+
+  provider           = snowflake.security_admin
+  database_role_name = snowflake_database_role.bi_custom_role.fully_qualified_name
+  privileges         = ["SELECT"]
+
+  on_schema_object {
+    future {
+      object_type_plural = "EXTERNAL TABLES"
+      in_schema          = "${snowflake_database_role.bi_custom_role.database}.${each.value.name}"
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grant_bi_select_all_external_tables_schema" {
+  for_each = snowflake_schema.schema
+
+  provider           = snowflake.security_admin
+  database_role_name = snowflake_database_role.bi_custom_role.fully_qualified_name
+  privileges         = ["SELECT"]
+
+  on_schema_object {
+    all {
+      object_type_plural = "EXTERNAL TABLES"
+      in_schema          = "${snowflake_database_role.bi_custom_role.database}.${each.value.name}"
+    }
+  }
+}
+
+##### 4 Account roles receive database roles
 
 resource "snowsql_exec" "grant_manage_role_to_var_assigned_roles" {
   provider = snowsql.security_admin
