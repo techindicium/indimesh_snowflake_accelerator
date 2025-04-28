@@ -3,21 +3,37 @@ resource "snowflake_account_role" "custom_role" {
   name     = var.custom_role_name
 }
 
-resource "snowsql_exec" "inherit_role" {
-  count    = var.inherit_sysadmin == true ? 1 : 0
-  provider = snowsql.security_admin
-  create {
-    statements = <<-EOT
-    USE ROLE SECURITYADMIN;
-    GRANT ROLE "${snowflake_account_role.custom_role.name}" TO ROLE SYSADMIN;
-    GRANT ROLE "${snowflake_account_role.custom_role.name}" TO ROLE SECURITYADMIN;
-    EOT
-  }
-  delete {
-    statements = <<-EOT
-    USE ROLE SECURITYADMIN;
-    REVOKE ROLE "${snowflake_account_role.custom_role.name}" FROM ROLE SYSADMIN;
-    REVOKE ROLE "${snowflake_account_role.custom_role.name}" FROM ROLE SECURITYADMIN;
-    EOT
-  }
+# resource "snowsql_exec" "inherit_role" {
+#   count    = var.inherit_sysadmin == true ? 1 : 0
+#   provider = snowsql.security_admin
+#   create {
+#     statements = <<-EOT
+#     USE ROLE SECURITYADMIN;
+#     GRANT ROLE "${snowflake_account_role.custom_role.name}" TO ROLE SYSADMIN;
+#     GRANT ROLE "${snowflake_account_role.custom_role.name}" TO ROLE SECURITYADMIN;
+#     EOT
+#   }
+#   delete {
+#     statements = <<-EOT
+#     USE ROLE SECURITYADMIN;
+#     REVOKE ROLE "${snowflake_account_role.custom_role.name}" FROM ROLE SYSADMIN;
+#     REVOKE ROLE "${snowflake_account_role.custom_role.name}" FROM ROLE SECURITYADMIN;
+#     EOT
+#   }
+# }
+
+resource "snowflake_grant_account_role" "inherit_role" {
+  count = var.inherit_sysadmin == true ? 1 : 0
+  provider = snowflake.sys_admin
+
+  role_name = "SYSADMIN"
+  parent_role_name = snowflake_account_role.custom_role.name
+}
+
+resource "snowflake_grant_account_role" "inherit_role" {
+  count = var.inherit_sysadmin == true ? 1 : 0
+  provider = snowflake.sys_admin
+
+  role_name = "SECURITYADMIN"
+  parent_role_name = snowflake_account_role.custom_role.name
 }

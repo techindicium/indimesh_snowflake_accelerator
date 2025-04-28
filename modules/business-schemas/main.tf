@@ -29,20 +29,42 @@ resource "snowflake_file_format" "file_format" {
     null_if                     = var.format_null
 }
 
-resource "snowsql_exec" "create_stage" {
-    depends_on                  = [ snowflake_file_format.file_format ]
-    provider                    = snowsql.sys_admin
+# resource "snowsql_exec" "create_stage" {
+#     depends_on                  = [ snowflake_file_format.file_format ]
+#     provider                    = snowsql.sys_admin
 
-    create {
-        statements = <<-EOT
-            USE ROLE sysadmin;
-            CREATE OR REPLACE STAGE ${var.database_name}.${var.schema_name}.${var.stage_name} URL= ${var.url_s3} FILE_FORMAT=${var.database_name}.${var.schema_name}.${var.file_format_name} STORAGE_INTEGRATION=${var.storage_integration};
-            GRANT OWNERSHIP ON STAGE ${var.database_name}.${var.schema_name}.${var.stage_name} to role SYSADMIN copy current grants;
-        EOT
-    }
-    delete {
-        statements = <<-EOT
-            USE ROLE SYSADMIN;
-        EOT
-    }
+#     create {
+#         statements = <<-EOT
+#             USE ROLE sysadmin;
+#             CREATE OR REPLACE STAGE ${var.database_name}.${var.schema_name}.${var.stage_name} URL= ${var.url_s3} FILE_FORMAT=${var.database_name}.${var.schema_name}.${var.file_format_name} STORAGE_INTEGRATION=${var.storage_integration};
+#             GRANT OWNERSHIP ON STAGE ${var.database_name}.${var.schema_name}.${var.stage_name} to role SYSADMIN copy current grants;
+#         EOT
+#     }
+#     delete {
+#         statements = <<-EOT
+#             USE ROLE SYSADMIN;
+#         EOT
+#     }
+# }
+
+# TODO: checar com o Felp se o FILE_FORMAT deveria ter esse valor mesmo
+resource "snowflake_stage" "stage" {
+  provider = snowflake.sys_admin
+  depends_on = [ snowflake_file_format.file_format ]
+
+  name = var.stage_name
+  database = var.database_name
+  schema = var.schema_name
+
+  file_format = "${var.database_name}.${var.schema_name}.${var.stage_name}"
+  storage_integration = var.storage_integration
+  url = var.url_s3
+}
+
+resource "snowflake_grant_ownership" "name" {
+  account_role_name = "SYSADMIN"
+  on {
+    object_type = "STAGE"
+    object_name = "${var.database_name}.${var.schema_name}.${var.stage_name}"
+  }
 }
