@@ -1,25 +1,15 @@
+variable "schema" {
+  description = "Schema created in the infrastructure"
+  type        = string
+  default     = null
+}
+
 variable "database_name" {
   description = "Name of the business database."
   type        = string
   default     = null
 }
 
-variable "create_bi_role" {
-  description = "Should the module create a role for BI purposes(select on marts schema)."
-  type        = bool
-  default     = true
-}
-
-variable "comment" {
-  description = "Description of the business database."
-  type        = string
-  default     = null
-}
-
-variable "staging_schema_data_retention_days" {
-  description = "Number of days to keep timetravel."
-  type        = number
-}
 
 variable "assign_manage_roles" {
   description = "Roles to assign the manage/full roles to."
@@ -45,8 +35,4 @@ variable "assign_bi_roles" {
   default     = []
 }
 
-# variable "schemas" {
-#   description = "Schemas created in the infrastructure"
-#   type        = list
-#   default     = []
-# }
+
