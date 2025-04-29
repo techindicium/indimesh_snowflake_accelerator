@@ -22,7 +22,7 @@ resource "snowflake_account_role" "custom_role" {
 #   }
 # }
 
-resource "snowflake_grant_account_role" "inherit_role" {
+resource "snowflake_grant_account_role" "inherit_role_sysadmin" {
   count = var.inherit_sysadmin == true ? 1 : 0
   provider = snowflake.sys_admin
 
@@ -30,7 +30,7 @@ resource "snowflake_grant_account_role" "inherit_role" {
   parent_role_name = snowflake_account_role.custom_role.name
 }
 
-resource "snowflake_grant_account_role" "inherit_role" {
+resource "snowflake_grant_account_role" "inherit_role_securityadmin" {
   count = var.inherit_sysadmin == true ? 1 : 0
   provider = snowflake.sys_admin
 
