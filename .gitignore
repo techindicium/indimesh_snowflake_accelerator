@@ -12,5 +12,3 @@ modules/snowflake-base/terraform.tfstate.backup
 
 tests/go.mod
 tests/go.sum
-
-dev
