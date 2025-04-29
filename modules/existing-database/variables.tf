@@ -10,22 +10,6 @@ variable "create_bi_role" {
   default     = true
 }
 
-variable "comment" {
-  description = "Description of the business database."
-  type        = string
-  default     = null
-}
-
-variable "data_retention_time_in_days" {
-  description = "Number of days to keep timetravel."
-  type        = number
-}
-
-variable "staging_schema_data_retention_days" {
-  description = "Number of days to keep timetravel."
-  type        = number
-}
-
 variable "assign_manage_roles" {
   description = "Roles to assign the manage/full roles to."
   type        = list
@@ -49,9 +33,3 @@ variable "assign_bi_roles" {
   type        = list
   default     = []
 }
-
-# variable "schemas" {
-#   description = "Schemas created in the infrastructure"
-#   type        = list
-#   default     = []
-# }

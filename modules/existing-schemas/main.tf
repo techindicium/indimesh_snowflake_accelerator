@@ -12,9 +12,3 @@ locals {
     db_name = var.database_name
     schema_name = var.schema
 }
-
-resource "snowflake_schema" "database_schemas" {
-  provider = snowflake.sys_admin
-  name     = local.schema_name
-  database = local.db_name
-}
