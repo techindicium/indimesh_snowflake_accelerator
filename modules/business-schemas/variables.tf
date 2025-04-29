@@ -29,21 +29,22 @@ variable "file_format_name" {
 }
 
 variable "database_name" {
-  description = "Name of the database."
+  description = "Name of the business database."
   type        = string
   default     = null
 }
 
-variable "schema_name" {
-  description = "Name of the schema."
-  type        = string
-  default     = null
+
+variable "assign_manage_roles" {
+  description = "Roles to assign the manage/full roles to."
+  type        = list
+  default     = []
 }
 
-variable "table_name" {
-  description = "Name of the schema."
-  type        = string
-  default     = null
+variable "assign_create_roles" {
+  description = "Roles to assign the create/write roles to."
+  type        = list
+  default     = []
 }
 
 variable "storage_integration" {
