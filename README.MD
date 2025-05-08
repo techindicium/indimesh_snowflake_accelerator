@@ -9,8 +9,9 @@ This is the repository of the snowflake base project, which aims to facilitate t
 4. [Permissions and users](#permissions-and-users)
 5. [Setting the bucket](#setting-the-bucket)
 6. [Up Structure to Snowflake](#up-structure-to-snowflake)
-7. [Example of how to use in other projects](#example-of-how-to-use-in-other-projects)
-8. [How to contribute to the repository](#how-to-contribute-to-the-repository)
+7. [Github Sync](#github-sync)
+8. [Example of how to use in other projects](#example-of-how-to-use-in-other-projects)
+9. [How to contribute to the repository](#how-to-contribute-to-the-repository)
 
 ## Requirements
 
@@ -180,6 +181,14 @@ By default, the config.yaml and the var.data_bucket_arns have the bucket mention
 ## Up Structure to Snowflake
 - [Multi Area Setup](/examples/multiarea_setup/README.md)
 
+## Github Sync
+
+The repository stored in Bitbucket is intended for the development of the Snowflake accelerator, and the repository stored in Github is intended for use by users, calling the Terraform modules stored here through links to the public repository.
+
+With this in mind, it was necessary to create a way to synchronize the repositories, so that whenever a new update is uploaded to the main branch in the Bitbucket repository, the **Sync Github** pipeline is activated, executing a *git push* command to the Github repository.
+
+For this Bitbucket pipeline to work on Github, it was necessary to create an **SSH Key** in **Repository Settings > Pipelines > SSH Keys** in Bitbucket, using the public key generated to allow writing to the Github repository in **Settings > Security > Deploy keys > Add deploy key** and enabling **Allow write access**. Even though the key was created in Bitbucket, it must still be entered in the same in **Repository settings > Security > Access keys**.
+
 ## Example of how to use in other projects
 
 Based on the repository structure, to call a specific module like snowpipe in a Terraform project, you can do so using the source parameter in the module block, as in the example below, taken from the [Mesh AWS Snowflake](https://bitbucket.org/indiciumtech/awssnowflake_reference_platform/src/main/infrastructure/2_users_and_groups/roles.tf) project:
@@ -188,8 +197,8 @@ Based on the repository structure, to call a specific module like snowpipe in a 
 module "custom_roles" {
   for_each = toset(local.config.roles)
   
-  # Fix the source string by replacing <BITBUCKET_TOKEN> with the access token generated in the repository, <TAG>" with the repository version you want, for example, 'v0.0.2'.
-  source = "git::https://x-token-auth:<BITBUCKET_TOKEN>@bitbucket.org/indiciumtech/snowflake-base.git//module/custom-role?ref=<TAG>"
+  # Fix the source string by replacing <TAG>" with the repository version you want, for example, 'v0.0.9'.
+  source = "git::https://github.com/techindicium/indimesh_snowflake_accelerator.git//module/custom-role?ref=<TAG>"
   
   providers = {
     snowflake.sys_admin      = snowflake.sys_admin
