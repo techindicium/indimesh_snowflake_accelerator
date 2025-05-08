@@ -1,59 +1,67 @@
 image: atlassian/default-image:latest
 
+definitions:
+  steps:
+    - step: &update_tag
+        name: Update TAG when merging
+        script:
+          # Install JQ
+          - apt-get update && apt-get install -y jq
+
+          # Default config for git
+          - git config --global user.email "no-reply@bitbucket.org"
+          - git config --global user.name "Bitbucket Bot"
+
+          # Use BITBUCKET_TOKEN to get ID from last PR
+          - PR_ID=$(curl -s -u "x-token-auth:$BITBUCKET_TOKEN" \
+            "https://api.bitbucket.org/2.0/repositories/indiciumtech/snowflake-base/pullrequests?q=destination.branch.name==\"master\"&state=MERGED" | jq -r '.values[0].id')
+
+          # Extracts name of the author of the last PR and configure Git with this credentials
+          - |
+            if [ -n "$PR_ID" ]; then
+              echo "PR found: $PR_ID";
+
+              AUTHOR_NAME=$(curl -s -u "x-token-auth:$BITBUCKET_TOKEN" \
+                "https://api.bitbucket.org/2.0/repositories/indiciumtech/snowflake-base/pullrequests/$PR_ID" | jq -r '.author.display_name')
+              
+              echo "Merge Author: $AUTHOR_NAME";
+              echo "Git setup with the author of the merged branch";
+              
+              git config --global user.name "$AUTHOR_NAME"
+            else
+              echo "No merged PRs found. Using default configuration.";
+            fi
+
+          # Create a new tag
+          - |
+            latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null)
+            if [ -z "$latest_tag" ]; then
+              echo "No tags found. Creating first tag..."
+              new_tag="v0.0.0"
+            else
+              echo "Last tag: $latest_tag"
+              new_tag=$(echo $latest_tag | awk -F. '{print $1 "." $2 "." $3+1}')
+              echo "New tag: $new_tag"
+            fi
+
+          - git tag $new_tag
+          - git push origin $new_tag
+    
+    - step: &sync_github
+        name: Sync GitHub
+        image: alpine/git:latest
+        clone:
+          enabled: false
+        script:
+          - git clone --mirror git@bitbucket.org:indiciumtech/snowflake-base.git indimesh_snowflake_accelerator.git
+          - cd indimesh_snowflake_accelerator.git
+          - git push --mirror git@github.com:techindicium/indimesh_snowflake_accelerator.git
+
 pipelines:
   branches:
     master:
-      - step:
-          name: Update TAG when merging
-          script:
-            # Install JQ
-            - apt-get update && apt-get install -y jq
-
-            # Default config for git
-            - git config --global user.email "no-reply@bitbucket.org"
-            - git config --global user.name "Bitbucket Bot"
-
-            # Use BITBUCKET_TOKEN to get ID from last PR
-            - PR_ID=$(curl -s -u "x-token-auth:$BITBUCKET_TOKEN" \
-              "https://api.bitbucket.org/2.0/repositories/indiciumtech/snowflake-base/pullrequests?q=destination.branch.name==\"master\"&state=MERGED" | jq -r '.values[0].id')
-
-            # Extracts name of the author of the last PR and configure Git with this credentials
-            - |
-              if [ -n "$PR_ID" ]; then
-                echo "PR found: $PR_ID";
-
-                AUTHOR_NAME=$(curl -s -u "x-token-auth:$BITBUCKET_TOKEN" \
-                  "https://api.bitbucket.org/2.0/repositories/indiciumtech/snowflake-base/pullrequests/$PR_ID" | jq -r '.author.display_name')
-                
-                echo "Merge Author: $AUTHOR_NAME";
-                echo "Git setup with the author of the merged branch";
-                
-                git config --global user.name "$AUTHOR_NAME"
-              else
-                echo "No merged PRs found. Using default configuration.";
-              fi
-
-            # Create a new tag
-            - |
-              latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null)
-              if [ -z "$latest_tag" ]; then
-                echo "No tags found. Creating first tag..."
-                new_tag="v0.0.0"
-              else
-                echo "Last tag: $latest_tag"
-                new_tag=$(echo $latest_tag | awk -F. '{print $1 "." $2 "." $3+1}')
-                echo "New tag: $new_tag"
-              fi
-
-            - git tag $new_tag
-            - git push origin $new_tag
+    - step: *update_tag
+  custom:
+    sync_github:
+    - step: *sync_github
       
-      - step:
-          name: Sync to GitHub
-          image: alpine/git:latest
-          clone:
-            enabled: false
-          script:
-            - git clone --mirror git@bitbucket.org:indiciumtech/snowflake-base.git indimesh_snowflake_accelerator.git
-            - cd indimesh_snowflake_accelerator.git
-            - git push --mirror git@github.com:techindicium/indimesh_snowflake_accelerator.git
