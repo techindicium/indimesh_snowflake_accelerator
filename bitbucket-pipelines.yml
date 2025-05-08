@@ -61,7 +61,5 @@ pipelines:
   branches:
     master:
     - step: *update_tag
-  custom:
-    sync_github:
     - step: *sync_github
       
