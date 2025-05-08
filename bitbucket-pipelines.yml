@@ -47,3 +47,13 @@ pipelines:
 
             - git tag $new_tag
             - git push origin $new_tag
+      
+      - step:
+          name: Sync to GitHub
+          image: alpine/git:latest
+          clone:
+            enabled: false
+          script:
+            - git clone --mirror git@bitbucket.org:indiciumtech/snowflake-base.git indimesh_snowflake_accelerator.git
+            - cd indimesh_snowflake_accelerator.git
+            - git push --mirror git@github.com:techindicium/indimesh_snowflake_accelerator.git
