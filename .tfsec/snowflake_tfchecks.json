@@ -29,30 +29,6 @@
       }
     },
     {
-      "code": "CUS9103",
-      "description": "`snowflake_file_format` should set `skip_header` ≥ 1 when processing CSV to avoid header lines in data",
-      "impact": "Headers can be inserted as records if not skipped",
-      "resolution": "Set `skip_header = 1`",
-      "requiredTypes": ["resource"],
-      "requiredLabels": ["snowflake_file_format"],
-      "severity": "WARNING",
-      "matchSpec": {
-        "action": "and",
-        "predicateMatchSpec": [
-          {
-            "name": "format_type",
-            "action": "equals",
-            "value": "CSV"
-          },
-          {
-            "name": "skip_header",
-            "action": "greaterThanOrEqualTo",
-            "value": 1
-          }
-        ]
-      }
-    },
-    {
       "code": "CUS9105",
       "description": "`snowflake_alert` must have explicit `condition` and `enabled = true`",
       "impact": "Alerts without condition or disabled do not trigger notifications",

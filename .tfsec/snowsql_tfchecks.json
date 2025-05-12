@@ -21,7 +21,7 @@
       "resolution": "Add `;` at the end of the command",
       "requiredTypes": ["resource"],
       "requiredLabels": ["snowsql_command"],
-      "severity": "WARNING",
+      "severity": "ERROR",
       "matchSpec": {
         "name": "command",
         "action": "regexMatches",
