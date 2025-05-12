@@ -54,3 +54,23 @@ No features at the moment, just corrections and adjustments.
 ### Features
 
 No features at the moment, just corrections and adjustments.
+
+# v0.0.11
+
+### What's changed
+
+- File ```modules/business-database/main.tf```: Variable `data_retention_time_in_days` in resource `snowflake_database` now has implicit value `7`, instead of being used by variable.
+
+- File ```modules/business-database/main.tf```: Variable `with_managed_access` in resource `snowflake_schema` now has implicit value `true`.
+
+- File ```modules/business-schemas/main.tf```: Variable `with_managed_access` in resource `snowflake_schema` now has implicit value `true`.
+
+- File ```modules/business-schemas/main.tf```: Variable `skip_header` in resource `snowflake_file_format` will be equal to `1` if `var.file_format` is equal to `CSV`, and `0` otherwise.
+
+- File ```modules/snowpipe/variables.tf```: Variable `auto_ingest` will have the default value `false`.
+
+### Features
+
+- Creation of file `.tfsec/snowflake_tfchecks.json` with code verification rules by the `tfsec` pipeline for resources of the `Snowflake-Labs/snowflake` provider.
+
+- Creation of file `.tfsec/snowsql_tfchecks.json` with code verification rules by the `tfsec` pipeline for resources of the `aidanmelen/snowsql` provider.
