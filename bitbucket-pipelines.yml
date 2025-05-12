@@ -59,11 +59,9 @@ definitions:
 
     - step: &tfsec_scan
         name: Security Scan with tfsec
-        image: aquasec/tfsec:latest
+        image: aquasec/tfsec-ci:latest
         script:
-          - tfsec . --exclude-downloaded-modules --no-color
-        # artifacts:
-        #   - tfsec_report.txt
+          - tfsec . --exclude-downloaded-modules --no-color --custom-check-dir .tfsec
 
 
 pipelines:

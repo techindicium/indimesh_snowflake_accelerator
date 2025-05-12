@@ -1,0 +1,164 @@
+{
+  "checks": [
+    {
+      "code": "CUS9101",
+      "description": "snowflake_database deve ter data_retention_time_in_days ≥ 7 para garantir recoverability",
+      "impact": "Sem retenção adequada, backups não cobrem janela de recuperação exigida",
+      "resolution": "Defina `data_retention_time_in_days` >= 7",
+      "requiredTypes": ["resource"],
+      "requiredLabels": ["snowflake_database"],
+      "severity": "ERROR",
+      "matchSpec": {
+        "name": "data_retention_time_in_days",
+        "comparison": ">=",
+        "value": 7
+      }
+    },
+    {
+      "code": "CUS9102",
+      "description": "snowflake_schema deve ter `managed_access` habilitado para controle de privilégios centralizado",
+      "impact": "Sem managed access, privilégios podem ser atribuídos isoladamente sem supervisão",
+      "resolution": "Defina `with_managed_access = true`",
+      "requiredTypes": ["resource"],
+      "requiredLabels": ["snowflake_schema"],
+      "severity": "WARNING",
+      "matchSpec": {
+        "name": "with_managed_access",
+        "comparison": "equals",
+        "value": true
+      }
+    },
+    {
+      "code": "CUS9103",
+      "description": "snowflake_database_role não deve usar nomes padrão (`SYSADMIN`, `PUBLIC`)",
+      "impact": "Usar roles padrão pode expor privilégios excessivos",
+      "resolution": "Escolha um nome de role customizado",
+      "requiredTypes": ["resource"],
+      "requiredLabels": ["snowflake_database_role"],
+      "severity": "ERROR",
+      "matchSpec": {
+        "name": "name",
+        "regex": "^(?!(SYSADMIN|PUBLIC)$).+$"
+      }
+    },
+    {
+      "code": "CUS9105",
+      "description": "snowflake_grant_privileges_to_database_role não deve conceder OWNERSHIP diretamente",
+      "impact": "OWNERSHIP concede todos os privilégios, violando princípio do menor privilégio",
+      "resolution": "Restrinja privilégios a USAGE ou SELECT conforme necessário",
+      "requiredTypes": ["resource"],
+      "requiredLabels": ["snowflake_grant_privileges_to_database_role"],
+      "severity": "CRITICAL",
+      "matchSpec": {
+        "name": "privileges",
+        "action": "notContains",
+        "value": "OWNERSHIP"
+      }
+    },
+    {
+      "code": "CUS9106",
+      "description": "snowflake_file_format deve definir `skip_header` ≥ 1 ao processar CSV para evitar linhas de cabeçalho em dados",
+      "impact": "Cabeçalhos podem ser inseridos como registros se não ignorados",
+      "resolution": "Defina `skip_header = 1`",
+      "requiredTypes": ["resource"],
+      "requiredLabels": ["snowflake_file_format"],
+      "severity": "WARNING",
+      "matchSpec": {
+        "name": "skip_header",
+        "comparison": ">=",
+        "value": 1
+      }
+    },
+    {
+      "code": "CUS9107",
+      "description": "snowflake_table deve usar `data_retention_time_in_days` ≥ 1 para manter dados de fail-safe",
+      "impact": "Sem retenção, dados recém-deletados não ficam disponíveis para reconstrução",
+      "resolution": "Defina `data_retention_time_in_days` >= 1",
+      "requiredTypes": ["resource"],
+      "requiredLabels": ["snowflake_table"],
+      "severity": "ERROR",
+      "matchSpec": {
+        "name": "data_retention_time_in_days",
+        "comparison": ">=",
+        "value": 1
+      }
+    },
+    {
+      "code": "CUS9108",
+      "description": "snowflake_account_role não deve ser `ACCOUNTADMIN` ou `ORGADMIN` para roles customizados",
+      "impact": "Roles com privilégios totais aumentam o risco de alterações não autorizadas",
+      "resolution": "Use roles com privilégios granulares",
+      "requiredTypes": ["resource"],
+      "requiredLabels": ["snowflake_account_role"],
+      "severity": "ERROR",
+      "matchSpec": {
+        "name": "name",
+        "regex": "^(?!(ACCOUNTADMIN|ORGADMIN)$).+$"
+      }
+    },
+    {
+      "code": "CUS9109",
+      "description": "snowflake_alert deve ter `condition` explícito e `enabled = true`",
+      "impact": "Alerts sem condição ou desabilitados não disparam notificações",
+      "resolution": "Configure `condition` e defina `enabled = true`",
+      "requiredTypes": ["resource"],
+      "requiredLabels": ["snowflake_alert"],
+      "severity": "WARNING",
+      "matchSpec": {
+        "action": "and",
+        "predicateMatchSpec": [
+          {
+            "name": "condition",
+            "action": "isPresent"
+          },
+          {
+            "name": "enabled",
+            "action": "equals",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "code": "CUS9110",
+      "description": "snowflake_pipe deve definir `auto_ingest = false` em produção para evitar ingestão não subterrânea",
+      "impact": "Ingestão automática pode causar custos inesperados",
+      "resolution": "Defina `auto_ingest = false`",
+      "requiredTypes": ["resource"],
+      "requiredLabels": ["snowflake_pipe"],
+      "severity": "INFO",
+      "matchSpec": {
+        "name": "auto_ingest",
+        "comparison": "equals",
+        "value": false
+      }
+    },
+    {
+      "code": "CUS9111",
+      "description": "snowflake_storage_integration deve restringir `allowed_locations` para buckets aprovados",
+      "impact": "Integrações com storage abertas podem vazar dados sensíveis",
+      "resolution": "Liste explicitamente `allowed_locations` permitidas",
+      "requiredTypes": ["resource"],
+      "requiredLabels": ["snowflake_storage_integration"],
+      "severity": "ERROR",
+      "matchSpec": {
+        "name": "allowed_locations",
+        "action": "isPresent"
+      }
+    },
+    {
+      "code": "CUS9112",
+      "description": "snowflake_warehouse deve ter `auto_suspend` ≤ 600 para otimizar custos",
+      "impact": "Warehouses sempre ativos geram custos desnecessários",
+      "resolution": "Defina `auto_suspend` ≤ 600",
+      "requiredTypes": ["resource"],
+      "requiredLabels": ["snowflake_warehouse"],
+      "severity": "WARNING",
+      "matchSpec": {
+        "name": "auto_suspend",
+        "comparison": "<=",
+        "value": 600
+      }
+    }
+  ]
+}
