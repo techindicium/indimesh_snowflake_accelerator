@@ -29,34 +29,6 @@
       }
     },
     {
-      "code": "CUS9103",
-      "description": "snowflake_database_role não deve usar nomes padrão (`SYSADMIN`, `PUBLIC`)",
-      "impact": "Usar roles padrão pode expor privilégios excessivos",
-      "resolution": "Escolha um nome de role customizado",
-      "requiredTypes": ["resource"],
-      "requiredLabels": ["snowflake_database_role"],
-      "severity": "ERROR",
-      "matchSpec": {
-        "name": "name",
-        "action": "regexMatches",
-        "value": "^(?!(SYSADMIN|PUBLIC)$).+$"
-      }
-    },
-    {
-      "code": "CUS9105",
-      "description": "snowflake_grant_privileges_to_database_role não deve conceder OWNERSHIP diretamente",
-      "impact": "OWNERSHIP concede todos os privilégios, violando princípio do menor privilégio",
-      "resolution": "Restrinja privilégios a USAGE ou SELECT conforme necessário",
-      "requiredTypes": ["resource"],
-      "requiredLabels": ["snowflake_grant_privileges_to_database_role"],
-      "severity": "CRITICAL",
-      "matchSpec": {
-        "name": "privileges",
-        "action": "notContains",
-        "value": "OWNERSHIP"
-      }
-    },
-    {
       "code": "CUS9106",
       "description": "snowflake_file_format deve definir `skip_header` ≥ 1 ao processar CSV para evitar linhas de cabeçalho em dados",
       "impact": "Cabeçalhos podem ser inseridos como registros se não ignorados",
@@ -82,20 +54,6 @@
         "name": "data_retention_time_in_days",
         "action": "greaterThanOrEqualTo",
         "value": 1
-      }
-    },
-    {
-      "code": "CUS9108",
-      "description": "snowflake_account_role não deve ser `ACCOUNTADMIN` ou `ORGADMIN` para roles customizados",
-      "impact": "Roles com privilégios totais aumentam o risco de alterações não autorizadas",
-      "resolution": "Use roles com privilégios granulares",
-      "requiredTypes": ["resource"],
-      "requiredLabels": ["snowflake_account_role"],
-      "severity": "ERROR",
-      "matchSpec": {
-        "name": "name",
-        "action": "regexMatches",
-        "value": "^(?!(ACCOUNTADMIN|ORGADMIN)$).+$"
       }
     },
     {
@@ -144,7 +102,7 @@
       "requiredLabels": ["snowflake_storage_integration"],
       "severity": "ERROR",
       "matchSpec": {
-        "name": "allowed_locations",
+        "name": "storage_allowed_locations",
         "action": "isPresent"
       }
     },
