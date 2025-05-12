@@ -17,6 +17,7 @@ resource "snowflake_schema" "schema_name" {
     provider                    = snowflake.sys_admin
     name                        = var.schema_name
     database                    = var.database_name
+    with_managed_access         = true
 }
 
 resource "snowflake_file_format" "file_format" {

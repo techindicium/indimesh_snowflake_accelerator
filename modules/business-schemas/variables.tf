@@ -63,21 +63,3 @@ variable "stage_name" {
   type = string
   default = null
 }
-
-variable "skip_header" {
-  description = "Number of lines at the start of the file to skip."
-  type        = number
-  default     = 1
-}
-
-variable "with_managed_access" {
-  description = "Specifies a managed schema. Managed access schemas centralize privilege management with the schema owner. Available options are: 'true' or 'false'. When the value is not set in the configuration the provider will put 'default' there which means to use the Snowflake default for this value."
-  type        = string
-  default     = "true"
-}
-
-variable "data_retention_time_in_days" {
-  description = "Number of days to keep timetravel."
-  type        = number
-  default     = 7
-}
