@@ -10,7 +10,8 @@
       "severity": "ERROR",
       "matchSpec": {
         "name": "command",
-        "regex": "(?i)^CREATE\\s+OR\\s+REPLACE\\b"
+        "action": "regexMatches",
+        "value": "(?i)^CREATE\\s+OR\\s+REPLACE\\b"
       }
     },
     {
@@ -23,7 +24,8 @@
       "severity": "WARNING",
       "matchSpec": {
         "name": "command",
-        "regex": ";\\s*$"
+        "action": "regexMatches",
+        "value": ";\\s*$"
       }
     }
   ]
