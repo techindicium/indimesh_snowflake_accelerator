@@ -10,7 +10,7 @@
       "severity": "ERROR",
       "matchSpec": {
         "name": "data_retention_time_in_days",
-        "comparison": ">=",
+        "action": "greaterThanOrEqualTo",
         "value": 7
       }
     },
@@ -24,7 +24,7 @@
       "severity": "WARNING",
       "matchSpec": {
         "name": "with_managed_access",
-        "comparison": "equals",
+        "action": "equals",
         "value": true
       }
     },
@@ -38,7 +38,8 @@
       "severity": "ERROR",
       "matchSpec": {
         "name": "name",
-        "regex": "^(?!(SYSADMIN|PUBLIC)$).+$"
+        "action": "regexMatches",
+        "value": "^(?!(SYSADMIN|PUBLIC)$).+$"
       }
     },
     {
@@ -65,7 +66,7 @@
       "severity": "WARNING",
       "matchSpec": {
         "name": "skip_header",
-        "comparison": ">=",
+        "action": "greaterThanOrEqualTo",
         "value": 1
       }
     },
@@ -79,7 +80,7 @@
       "severity": "ERROR",
       "matchSpec": {
         "name": "data_retention_time_in_days",
-        "comparison": ">=",
+        "action": "greaterThanOrEqualTo",
         "value": 1
       }
     },
@@ -93,7 +94,8 @@
       "severity": "ERROR",
       "matchSpec": {
         "name": "name",
-        "regex": "^(?!(ACCOUNTADMIN|ORGADMIN)$).+$"
+        "action": "regexMatches",
+        "value": "^(?!(ACCOUNTADMIN|ORGADMIN)$).+$"
       }
     },
     {
@@ -129,7 +131,7 @@
       "severity": "INFO",
       "matchSpec": {
         "name": "auto_ingest",
-        "comparison": "equals",
+        "action": "equals",
         "value": false
       }
     },
@@ -156,7 +158,7 @@
       "severity": "WARNING",
       "matchSpec": {
         "name": "auto_suspend",
-        "comparison": "<=",
+        "action": "lessThanOrEqualTo",
         "value": 600
       }
     }
