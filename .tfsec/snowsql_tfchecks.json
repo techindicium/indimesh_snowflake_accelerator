@@ -2,9 +2,9 @@
   "checks": [
     {
       "code": "CUS9501",
-      "description": "Assegure que comandos Snowsql utilizem `CREATE OR REPLACE` para idempotência",
-      "impact": "Sem idempotência, execuções repetidas podem falhar",
-      "resolution": "Use `CREATE OR REPLACE` em vez de `CREATE`",
+      "description": "Ensure that Snowsql commands use `CREATE OR REPLACE` for idempotency",
+      "impact": "Without idempotency, repeated executions may fail",
+      "resolution": "Use `CREATE OR REPLACE` instead of `CREATE`",
       "requiredTypes": ["resource"],
       "requiredLabels": ["snowsql_command"],
       "severity": "ERROR",
@@ -16,9 +16,9 @@
     },
     {
       "code": "CUS9502",
-      "description": "Comandos Snowsql devem terminar com ponto-e-vírgula",
-      "impact": "Falta de ponto-e-vírgula pode causar erros de parse",
-      "resolution": "Adicione `;` no fim do comando",
+      "description": "Snowsql commands must end with a semicolon",
+      "impact": "Missing a semicolon may cause parsing errors",
+      "resolution": "Add `;` at the end of the command",
       "requiredTypes": ["resource"],
       "requiredLabels": ["snowsql_command"],
       "severity": "WARNING",
