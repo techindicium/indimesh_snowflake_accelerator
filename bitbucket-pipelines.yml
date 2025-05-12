@@ -57,9 +57,21 @@ definitions:
           - cd indimesh_snowflake_accelerator.git
           - git push --mirror git@github.com:techindicium/indimesh_snowflake_accelerator.git
 
+    - step: &tfsec_scan
+        name: Security Scan with tfsec
+        image: aquasec/tfsec:latest
+        script:
+          - tfsec . --exclude-downloaded-modules --no-color
+        # artifacts:
+        #   - tfsec_report.txt
+
+
 pipelines:
   branches:
     master:
     - step: *update_tag
     - step: *sync_github
+  custom:
+    tfsec_scan:
+      - step: *tfsec_scan
       
