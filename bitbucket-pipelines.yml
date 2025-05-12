@@ -61,8 +61,12 @@ definitions:
         name: Security Scan with tfsec
         image: aquasec/tfsec-ci:latest
         script:
-          - tfsec . --exclude-downloaded-modules --no-color --custom-check-dir .tfsec
-
+          - tfsec . \ 
+            --force-all-dirs \
+            --exclude-path .terraform \
+            --verbose
+            --custom-check-dir .tfsec \
+            --no-color 
 
 pipelines:
   branches:

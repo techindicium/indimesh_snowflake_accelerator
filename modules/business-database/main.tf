@@ -2,7 +2,7 @@ resource "snowflake_database" "database" {
   provider                    = snowflake.sys_admin
   name                        = var.database_name
   is_transient                = false
-  data_retention_time_in_days = 0
+  data_retention_time_in_days = var.data_retention_time_in_days
   comment                     = var.comment
 }
 
