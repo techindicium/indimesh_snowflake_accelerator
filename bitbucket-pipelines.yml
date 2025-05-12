@@ -64,7 +64,7 @@ definitions:
           - tfsec . \ 
             --force-all-dirs \
             --exclude-path .terraform \
-            --verbose
+            --verbose \
             --custom-check-dir .tfsec \
             --no-color 
 
