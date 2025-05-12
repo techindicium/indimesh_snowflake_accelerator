@@ -68,7 +68,6 @@ pipelines:
     master:
     - step: *update_tag
     - step: *sync_github
-  custom:
-    tfsec_scan:
-      - step: *tfsec_scan
-      
+  pull-requests:
+    '**':
+    - step: *tfsec_scan
