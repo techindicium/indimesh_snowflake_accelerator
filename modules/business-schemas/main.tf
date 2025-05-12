@@ -26,6 +26,7 @@ resource "snowflake_file_format" "file_format" {
     database                    = var.database_name
     schema                      = var.schema_name
     format_type                 = var.file_format
+    skip_header                 = var.file_format == "CSV" ? 1 : 0
     null_if                     = var.format_null
 }
 

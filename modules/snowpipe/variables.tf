@@ -16,6 +16,7 @@ variable "schema" {
 variable "auto_ingest" {
   type        = bool
   description = "Enable auto ingestion for the pipe."
+  default     = false
 }
 
 variable "aws_sns_topic_arn" {

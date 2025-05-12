@@ -11,6 +11,7 @@ resource "snowflake_schema" "schema" {
   provider = snowflake.sys_admin
   database = snowflake_database.database.name
   name     = each.value
+  with_managed_access = true
   comment  = "${each.value} schema for ${var.database_name}"
 
   depends_on = [snowflake_database.database]
