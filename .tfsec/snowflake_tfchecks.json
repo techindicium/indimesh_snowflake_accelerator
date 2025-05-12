@@ -53,34 +53,6 @@
       }
     },
     {
-      "code": "CUS9104",
-      "description": "`snowflake_schema` should use `data_retention_time_in_days` ≥ 7 to retain fail-safe data",
-      "impact": "Without retention, newly deleted data is not available for reconstruction",
-      "resolution": "Set `data_retention_time_in_days` >= 7",
-      "requiredTypes": ["resource"],
-      "requiredLabels": ["snowflake_schema"],
-      "severity": "ERROR",
-      "matchSpec": {
-        "name": "data_retention_time_in_days",
-        "action": "greaterThanOrEqualTo",
-        "value": 7
-      }
-    },
-    {
-      "code": "CUS9104",
-      "description": "`snowflake_table` should use `data_retention_time_in_days` ≥ 7 to retain fail-safe data",
-      "impact": "Without retention, newly deleted data is not available for reconstruction",
-      "resolution": "Set `data_retention_time_in_days` >= 7",
-      "requiredTypes": ["resource"],
-      "requiredLabels": ["snowflake_table"],
-      "severity": "ERROR",
-      "matchSpec": {
-        "name": "data_retention_time_in_days",
-        "action": "greaterThanOrEqualTo",
-        "value": 7
-      }
-    },
-    {
       "code": "CUS9105",
       "description": "`snowflake_alert` must have explicit `condition` and `enabled = true`",
       "impact": "Alerts without condition or disabled do not trigger notifications",
