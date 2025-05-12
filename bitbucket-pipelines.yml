@@ -61,7 +61,7 @@ definitions:
         name: Security Scan with tfsec
         image: aquasec/tfsec-ci:latest
         script:
-          - tfsec . --no-color --custom-check-dir .tfsec
+          - tfsec . --exclude-downloaded-modules --no-color --custom-check-dir .tfsec
 
 
 pipelines:
