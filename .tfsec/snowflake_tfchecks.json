@@ -29,28 +29,31 @@
       }
     },
     {
-      "code": "CUS9106",
+      "code": "CUS9103",
       "description": "`snowflake_file_format` should set `skip_header` ≥ 1 when processing CSV to avoid header lines in data",
       "impact": "Headers can be inserted as records if not skipped",
       "resolution": "Set `skip_header = 1`",
       "requiredTypes": ["resource"],
       "requiredLabels": ["snowflake_file_format"],
       "severity": "WARNING",
-      "predicateMatchSpec": [
-        {
-          "name": "format_type",
-          "action": "equals",
-          "value": "CSV"
-        },
-        {
-          "name": "skip_header",
-          "action": "greaterThanOrEqualTo",
-          "value": 1
-        }
-      ]
+      "matchSpec": {
+        "action": "and",
+        "predicateMatchSpec": [
+          {
+            "name": "format_type",
+            "action": "equals",
+            "value": "CSV"
+          },
+          {
+            "name": "skip_header",
+            "action": "greaterThanOrEqualTo",
+            "value": 1
+          }
+        ]
+      }
     },
     {
-      "code": "CUS9107",
+      "code": "CUS9104",
       "description": "`snowflake_table` should use `data_retention_time_in_days` ≥ 1 to retain fail-safe data",
       "impact": "Without retention, newly deleted data is not available for reconstruction",
       "resolution": "Set `data_retention_time_in_days` >= 1",
@@ -64,7 +67,7 @@
       }
     },
     {
-      "code": "CUS9109",
+      "code": "CUS9105",
       "description": "`snowflake_alert` must have explicit `condition` and `enabled = true`",
       "impact": "Alerts without condition or disabled do not trigger notifications",
       "resolution": "Configure `condition` and set `enabled = true`",
@@ -87,7 +90,7 @@
       }
     },
     {
-      "code": "CUS9110",
+      "code": "CUS9106",
       "description": "`snowflake_pipe` should set `auto_ingest = false` in production to avoid non-subsurface ingestion",
       "impact": "Automatic ingestion may cause unexpected costs",
       "resolution": "Set `auto_ingest = false`",
@@ -101,7 +104,7 @@
       }
     },
     {
-      "code": "CUS9111",
+      "code": "CUS9107",
       "description": "`snowflake_storage_integration` should restrict `storage_allowed_locations` to approved buckets",
       "impact": "Open storage integrations may leak sensitive data",
       "resolution": "Explicitly list allowed `allowed_locations`",
@@ -114,7 +117,7 @@
       }
     },
     {
-      "code": "CUS9112",
+      "code": "CUS9108",
       "description": "`snowflake_warehouse` should have `auto_suspend` ≤ 600 to optimize costs",
       "impact": "Always-on warehouses generate unnecessary costs",
       "resolution": "Set `auto_suspend` ≤ 600",
