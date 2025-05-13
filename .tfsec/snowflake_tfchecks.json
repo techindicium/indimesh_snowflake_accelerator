@@ -1,0 +1,96 @@
+{
+  "checks": [
+    {
+      "code": "CUS9101",
+      "description": "`snowflake_database` must have `data_retention_time_in_days` ≥ 7 to ensure recoverability",
+      "impact": "Without adequate retention, backups do not cover required recovery window",
+      "resolution": "Set `data_retention_time_in_days` >= 7",
+      "requiredTypes": ["resource"],
+      "requiredLabels": ["snowflake_database"],
+      "severity": "ERROR",
+      "matchSpec": {
+        "name": "data_retention_time_in_days",
+        "action": "greaterThanOrEqualTo",
+        "value": 7
+      }
+    },
+    {
+      "code": "CUS9102",
+      "description": "`snowflake_schema` must have `with_managed_access` enabled for centralized privilege control",
+      "impact": "Without managed access, privileges can be assigned in isolation without supervision",
+      "resolution": "Set `with_managed_access = true`",
+      "requiredTypes": ["resource"],
+      "requiredLabels": ["snowflake_schema"],
+      "severity": "WARNING",
+      "matchSpec": {
+        "name": "with_managed_access",
+        "action": "equals",
+        "value": true
+      }
+    },
+    {
+      "code": "CUS9105",
+      "description": "`snowflake_alert` must have explicit `condition` and `enabled = true`",
+      "impact": "Alerts without condition or disabled do not trigger notifications",
+      "resolution": "Configure `condition` and set `enabled = true`",
+      "requiredTypes": ["resource"],
+      "requiredLabels": ["snowflake_alert"],
+      "severity": "WARNING",
+      "matchSpec": {
+        "action": "and",
+        "predicateMatchSpec": [
+          {
+            "name": "condition",
+            "action": "isPresent"
+          },
+          {
+            "name": "enabled",
+            "action": "equals",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "code": "CUS9106",
+      "description": "`snowflake_pipe` should set `auto_ingest = false` in production to avoid non-subsurface ingestion",
+      "impact": "Automatic ingestion may cause unexpected costs",
+      "resolution": "Set `auto_ingest = false`",
+      "requiredTypes": ["resource"],
+      "requiredLabels": ["snowflake_pipe"],
+      "severity": "INFO",
+      "matchSpec": {
+        "name": "auto_ingest",
+        "action": "equals",
+        "value": false
+      }
+    },
+    {
+      "code": "CUS9107",
+      "description": "`snowflake_storage_integration` should restrict `storage_allowed_locations` to approved buckets",
+      "impact": "Open storage integrations may leak sensitive data",
+      "resolution": "Explicitly list allowed `allowed_locations`",
+      "requiredTypes": ["resource"],
+      "requiredLabels": ["snowflake_storage_integration"],
+      "severity": "ERROR",
+      "matchSpec": {
+        "name": "storage_allowed_locations",
+        "action": "isPresent"
+      }
+    },
+    {
+      "code": "CUS9108",
+      "description": "`snowflake_warehouse` should have `auto_suspend` ≤ 600 to optimize costs",
+      "impact": "Always-on warehouses generate unnecessary costs",
+      "resolution": "Set `auto_suspend` ≤ 600",
+      "requiredTypes": ["resource"],
+      "requiredLabels": ["snowflake_warehouse"],
+      "severity": "WARNING",
+      "matchSpec": {
+        "name": "auto_suspend",
+        "action": "lessThanOrEqualTo",
+        "value": 600
+      }
+    }
+  ]
+}
