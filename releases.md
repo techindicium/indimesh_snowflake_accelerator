@@ -74,3 +74,14 @@ No features at the moment, just corrections and adjustments.
 - Creation of file `.tfsec/snowflake_tfchecks.json` with code verification rules by the `tfsec` pipeline for resources of the `Snowflake-Labs/snowflake` provider.
 
 - Creation of file `.tfsec/snowsql_tfchecks.json` with code verification rules by the `tfsec` pipeline for resources of the `aidanmelen/snowsql` provider.
+
+# v0.0.12
+- File ```modules/business-database/roles.tf```: Changed resources creation to use "Snowflake-Labs/snowflake" provider instead of "aidanmelen/snowsql".
+
+- File ```modules/business-schemas/main.tf```: "Snowflake-Labs/snowflake" provider version changed from 0.70.0 to 0.98.0
+
+- File ```modules/custom-role/main.tf```: Changed resources creation to use "Snowflake-Labs/snowflake" provider instead of "aidanmelen/snowsql".
+
+
+### Features
+No features at the moment, just slight enhancements
