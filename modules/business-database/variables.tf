@@ -16,11 +16,6 @@ variable "comment" {
   default     = null
 }
 
-variable "data_retention_time_in_days" {
-  description = "Number of days to keep timetravel."
-  type        = number
-}
-
 variable "staging_schema_data_retention_days" {
   description = "Number of days to keep timetravel."
   type        = number
