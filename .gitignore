@@ -6,9 +6,9 @@
 *.terraform.tfstate.backup
 *.terraform.tfstate
 
-modules/snowflake-base/.terraform.lock.hcl
-modules/snowflake-base/terraform.tfstate
-modules/snowflake-base/terraform.tfstate.backup
+modules/indimesh_snowflake_accelerator/.terraform.lock.hcl
+modules/indimesh_snowflake_accelerator/terraform.tfstate
+modules/indimesh_snowflake_accelerator/terraform.tfstate.backup
 
 tests/go.mod
 tests/go.sum

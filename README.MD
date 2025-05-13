@@ -156,7 +156,7 @@ Upon completing this step, your account will be authenticated to proceed with up
 ## Repository Structure
 
 ```
-└── snowflake-base
+└── indimesh_snowflake_accelerator
     ├── examples            -> Contains example templates to up a snowflake structure
     ├── modules
     │ ├── business-database -> Configuration to up databases
@@ -215,7 +215,7 @@ Points to note when using the module:
 
 1. The `source` variable is hard-coded, which means that it does not accept the use of variables within the string, and only accepts the string in literal form.
 
-2. The access token can be obtained by creating a read access token in the [Snowflake Base](https://bitbucket.org/indiciumtech/snowflake-base/src/master/) repository itself.
+2. The access token can be obtained by creating a read access token in the [Snowflake Base](https://bitbucket.org/indiciumtech/indimesh_snowflake_accelerator/src/master/) repository itself.
 
 3. Also check if the path to the module is correct at the end of the `source` string, something like `/modules/custom-role`
 
