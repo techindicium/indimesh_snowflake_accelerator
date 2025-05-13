@@ -11,15 +11,15 @@ variable "file_format" {
 }
 
 variable "format_null" {
-    description = "null format"
-    type = list
-    default = ["NULL", "null"]
+  description = "null format"
+  type        = list(any)
+  default     = ["NULL", "null"]
 }
 
 variable "external_stage_name" {
-    description = "stage name"
-    type = string
-    default = "STAGESEXT"
+  description = "stage name"
+  type        = string
+  default     = "STAGESEXT"
 }
 
 variable "file_format_name" {
@@ -48,18 +48,18 @@ variable "table_name" {
 
 variable "storage_integration" {
   description = "Name of the Storage Integration."
-  type = string
-  default = "POCDEV_STORAGE_INTEGRATION"
+  type        = string
+  default     = "POCDEV_STORAGE_INTEGRATION"
 }
 
 variable "url_s3" {
   description = "URL to the stage integration."
-  type = string
-  default = null
+  type        = string
+  default     = null
 }
 
 variable "stage_name" {
   description = "Name of the stage."
-  type = string
-  default = null
+  type        = string
+  default     = null
 }
