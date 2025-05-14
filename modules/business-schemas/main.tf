@@ -2,7 +2,7 @@ terraform {
   required_providers {
     snowflake = {
       source                = "Snowflake-Labs/snowflake"
-      version               = "0.70.0"
+      version               = "0.98.0"
       configuration_aliases = [snowflake.sys_admin, snowflake.security_admin]
     }
     snowsql = {
@@ -17,6 +17,7 @@ resource "snowflake_schema" "schema_name" {
     provider                    = snowflake.sys_admin
     name                        = var.schema_name
     database                    = var.database_name
+    with_managed_access         = true
 }
 
 resource "snowflake_file_format" "file_format" {
@@ -26,6 +27,7 @@ resource "snowflake_file_format" "file_format" {
     database                    = var.database_name
     schema                      = var.schema_name
     format_type                 = var.file_format
+    skip_header                 = var.file_format == "CSV" ? 1 : 0
     null_if                     = var.format_null
 }
 

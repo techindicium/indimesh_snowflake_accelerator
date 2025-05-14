@@ -1,0 +1,32 @@
+{
+  "checks": [
+    {
+      "code": "CUS9501",
+      "description": "Ensure that Snowsql commands use `CREATE OR REPLACE` for idempotency",
+      "impact": "Without idempotency, repeated executions may fail",
+      "resolution": "Use `CREATE OR REPLACE` instead of `CREATE`",
+      "requiredTypes": ["resource"],
+      "requiredLabels": ["snowsql_command"],
+      "severity": "ERROR",
+      "matchSpec": {
+        "name": "command",
+        "action": "regexMatches",
+        "value": "(?i)^CREATE\\s+OR\\s+REPLACE\\b"
+      }
+    },
+    {
+      "code": "CUS9502",
+      "description": "Snowsql commands must end with a semicolon",
+      "impact": "Missing a semicolon may cause parsing errors",
+      "resolution": "Add `;` at the end of the command",
+      "requiredTypes": ["resource"],
+      "requiredLabels": ["snowsql_command"],
+      "severity": "ERROR",
+      "matchSpec": {
+        "name": "command",
+        "action": "regexMatches",
+        "value": ";\\s*$"
+      }
+    }
+  ]
+}
