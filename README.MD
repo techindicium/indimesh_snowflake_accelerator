@@ -191,7 +191,7 @@ For this Bitbucket pipeline to work on Github, it was necessary to create an **S
 
 ## Example of how to use in other projects
 
-Based on the repository structure, to call a specific module like snowpipe in a Terraform project, you can do so using the source parameter in the module block, as in the example below, taken from the [Mesh AWS Snowflake](https://bitbucket.org/indiciumtech/awssnowflake_reference_platform/src/main/infrastructure/2_users_and_groups/roles.tf) project:
+Based on the repository structure, to call a specific module like snowpipe in a Terraform project, you can do so using the source parameter in the module block, as in the example below, taken from the [Mesh AWS Snowflake](https://bitbucket.org/indiciumtech/indimesh_aws_snowflake_reference/src/main/infrastructure/2_users_and_groups/roles.tf) project:
 
 ```terraform
 module "custom_roles" {
