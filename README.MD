@@ -156,7 +156,7 @@ Upon completing this step, your account will be authenticated to proceed with up
 ## Repository Structure
 
 ```
-└── snowflake-base
+└── indimesh_snowflake_accelerator
     ├── examples            -> Contains example templates to up a snowflake structure
     ├── modules
     │ ├── business-database -> Configuration to up databases
@@ -191,7 +191,7 @@ For this Bitbucket pipeline to work on Github, it was necessary to create an **S
 
 ## Example of how to use in other projects
 
-Based on the repository structure, to call a specific module like snowpipe in a Terraform project, you can do so using the source parameter in the module block, as in the example below, taken from the [Mesh AWS Snowflake](https://bitbucket.org/indiciumtech/awssnowflake_reference_platform/src/main/infrastructure/2_users_and_groups/roles.tf) project:
+Based on the repository structure, to call a specific module like snowpipe in a Terraform project, you can do so using the source parameter in the module block, as in the example below, taken from the [Mesh AWS Snowflake](https://bitbucket.org/indiciumtech/indimesh_aws_snowflake_reference/src/main/infrastructure/2_users_and_groups/roles.tf) project:
 
 ```terraform
 module "custom_roles" {
@@ -215,7 +215,7 @@ Points to note when using the module:
 
 1. The `source` variable is hard-coded, which means that it does not accept the use of variables within the string, and only accepts the string in literal form.
 
-2. The access token can be obtained by creating a read access token in the [Snowflake Base](https://bitbucket.org/indiciumtech/snowflake-base/src/master/) repository itself.
+2. The access token can be obtained by creating a read access token in the [Snowflake Base](https://bitbucket.org/indiciumtech/indimesh_snowflake_accelerator/src/master/) repository itself.
 
 3. Also check if the path to the module is correct at the end of the `source` string, something like `/modules/custom-role`
 
