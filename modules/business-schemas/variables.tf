@@ -64,3 +64,21 @@ variable "stage_name" {
   type        = string
   default     = null
 }
+
+variable "schema_name" {
+  description = "Name of the schema"
+  type = string
+  default = null
+}
+
+variable "assign_select_roles" {
+  description = "Roles to assign the select roles to."
+  type = list(string)
+  default = []
+}
+
+variable "assign_bi_roles" {
+  description = "Roles to assign the BI roles to."
+  type = list(any)
+  default = []
+}
