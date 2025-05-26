@@ -1,12 +1,13 @@
-
 module "schema_manage_custom_role" {
   source   = "../custom-role"
   providers = {
     snowflake.sys_admin      = snowflake.sys_admin
     snowflake.security_admin = snowflake.security_admin
+    snowsql.sys_admin        = snowsql.sys_admin
+    snowsql.security_admin   = snowsql.security_admin
   }
 
-  custom_role_name = "DB_${local.db_name}_${local.schema_name}_MNG_ROL"
+  custom_role_name = "DB_${var.database_name}_${var.schema_name}_MNG_ROL"
   inherit_sysadmin = false
 }
 
@@ -15,9 +16,11 @@ module "schema_create_custom_role" {
   providers = {
     snowflake.sys_admin      = snowflake.sys_admin
     snowflake.security_admin = snowflake.security_admin
+    snowsql.sys_admin        = snowsql.sys_admin
+    snowsql.security_admin   = snowsql.security_admin
   }
 
-  custom_role_name = "DB_${local.db_name}_${local.schema_name}_CRT_ROL"
+  custom_role_name = "DB_${var.database_name}_${var.schema_name}_CRT_ROL"
   inherit_sysadmin = false
 }
 
@@ -26,9 +29,11 @@ module "schema_select_custom_role" {
   providers = {
     snowflake.sys_admin      = snowflake.sys_admin
     snowflake.security_admin = snowflake.security_admin
+    snowsql.sys_admin        = snowsql.sys_admin
+    snowsql.security_admin   = snowsql.security_admin
   }
 
-  custom_role_name = "DB_${local.db_name}_${local.schema_name}_SEL_ROL"
+  custom_role_name = "DB_${var.database_name}_${var.schema_name}_SEL_ROL"
   inherit_sysadmin = false
 }
 
@@ -37,34 +42,36 @@ module "schema_bi_custom_role" {
   providers = {
     snowflake.sys_admin      = snowflake.sys_admin
     snowflake.security_admin = snowflake.security_admin
+    snowsql.sys_admin        = snowsql.sys_admin
+    snowsql.security_admin   = snowsql.security_admin
   }
 
-  custom_role_name = "DB_${local.db_name}_${local.schema_name}_BI_ROL"
+  custom_role_name = "DB_${var.database_name}_${var.schema_name}_BI_ROL"
   inherit_sysadmin = false
 }
 
 
 resource "snowflake_database_role" "schema_bi_custom_role" {
   provider = snowflake.sys_admin
-  database = local.db_name
+  database = var.database_name
   name     = module.schema_bi_custom_role.custom_role_name
 }
 
 resource "snowflake_database_role" "schema_select_custom_role" {
   provider = snowflake.sys_admin
-  database = local.db_name
+  database = var.database_name
   name     = module.schema_select_custom_role.custom_role_name
 }
 
 resource "snowflake_database_role" "schema_create_custom_role" {
   provider = snowflake.sys_admin
-  database = local.db_name
+  database = var.database_name
   name     = module.schema_create_custom_role.custom_role_name
 }
 
 resource "snowflake_database_role" "schema_manage_custom_role" {
   provider = snowflake.sys_admin
-  database = local.db_name
+  database = var.database_name
   name     = module.schema_manage_custom_role.custom_role_name
 }
 
@@ -96,7 +103,7 @@ resource "snowflake_grant_privileges_to_database_role" "grants_mng_role_usage_sc
   database_role_name = snowflake_database_role.schema_manage_custom_role.fully_qualified_name
   privileges         = ["USAGE"]
   on_schema {
-    schema_name = "${local.db_name}.${local.schema_name}"
+    schema_name = "${var.database_name}.${var.schema_name}"
   }
 }
 
@@ -106,7 +113,7 @@ resource "snowflake_grant_privileges_to_database_role" "grants_mng_role_all_priv
   database_role_name = snowflake_database_role.schema_manage_custom_role.fully_qualified_name
   all_privileges     = true
   on_schema {
-    schema_name = "${local.db_name}.${local.schema_name}"
+    schema_name = "${var.database_name}.${var.schema_name}"
   }
 }
 
@@ -118,7 +125,7 @@ resource "snowflake_grant_privileges_to_database_role" "grants_mng_role_all_priv
   on_schema_object {
     all {
       object_type_plural = "TABLES"
-      in_schema = "${local.db_name}.${local.schema_name}"
+      in_schema = "${var.database_name}.${var.schema_name}"
     }
   }
 }
@@ -129,7 +136,7 @@ resource "snowflake_grant_privileges_to_database_role" "grants_create_role" {
   database_role_name = snowflake_database_role.schema_create_custom_role.fully_qualified_name
   privileges         = ["USAGE", "CREATE STAGE"]
   on_schema {
-    schema_name = "${local.db_name}.${local.schema_name}"
+    schema_name = "${var.database_name}.${var.schema_name}"
   }
 }
 
@@ -139,7 +146,7 @@ resource "snowflake_grant_privileges_to_database_role" "grants_select_role_usage
   database_role_name = snowflake_database_role.schema_select_custom_role.fully_qualified_name
   privileges         = ["USAGE"]
   on_schema {
-    schema_name = "${local.db_name}.${local.schema_name}"
+    schema_name = "${var.database_name}.${var.schema_name}"
   }
 }
 
@@ -151,7 +158,7 @@ resource "snowflake_grant_privileges_to_database_role" "grants_select_role_selec
   on_schema_object {
     all {
       object_type_plural = "TABLES"
-      in_schema = "${local.db_name}.${local.schema_name}"
+      in_schema = "${var.database_name}.${var.schema_name}"
     }
   }
 }
@@ -164,7 +171,7 @@ resource "snowflake_grant_privileges_to_database_role" "grants_select_role_selec
   on_schema_object {
     all {
       object_type_plural = "VIEWS"
-      in_schema = "${local.db_name}.${local.schema_name}"
+      in_schema = "${var.database_name}.${var.schema_name}"
     }
   }
 }
@@ -177,7 +184,7 @@ resource "snowflake_grant_privileges_to_database_role" "grants_select_role_selec
   on_schema_object {
     all {
       object_type_plural = "MATERIALIZED VIEWS"
-      in_schema = "${local.db_name}.${local.schema_name}"
+      in_schema = "${var.database_name}.${var.schema_name}"
     }
   }
 }
@@ -190,7 +197,7 @@ resource "snowflake_grant_privileges_to_database_role" "grants_select_role_selec
   on_schema_object {
     all {
       object_type_plural = "EXTERNAL TABLES"
-      in_schema = "${local.db_name}.${local.schema_name}"
+      in_schema = "${var.database_name}.${var.schema_name}"
     }
   }
 }
@@ -201,7 +208,7 @@ resource "snowflake_grant_privileges_to_database_role" "grants_bi_role_usage_sch
   database_role_name = snowflake_database_role.schema_bi_custom_role.fully_qualified_name
   privileges         = ["USAGE"]
   on_schema {
-    schema_name = "${local.db_name}.${local.schema_name}"
+    schema_name = "${var.database_name}.${var.schema_name}"
   }
 }
 
@@ -213,7 +220,7 @@ resource "snowflake_grant_privileges_to_database_role" "grants_stage_privileges_
   on_schema_object {
     all {
       object_type_plural = "STAGES"
-      in_schema = "${local.db_name}.${local.schema_name}"
+      in_schema = "${var.database_name}.${var.schema_name}"
     }
   }
 }

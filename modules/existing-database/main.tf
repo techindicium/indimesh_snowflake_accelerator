@@ -5,6 +5,11 @@ terraform {
       version               = "0.98.0"
       configuration_aliases = [snowflake.sys_admin, snowflake.security_admin]
     }
+    snowsql = {
+      source                = "aidanmelen/snowsql"
+      version               = "1.3.3"
+      configuration_aliases = [snowsql.sys_admin, snowsql.security_admin]
+    }
   }
 }
 
@@ -16,8 +21,10 @@ module "manage_custom_role" {
   source   = "../custom-role"
 
   providers = {
-    snowflake.sys_admin      = snowflake.sys_admin  
+    snowflake.sys_admin      = snowflake.sys_admin
     snowflake.security_admin = snowflake.security_admin
+    snowsql.sys_admin        = snowsql.sys_admin
+    snowsql.security_admin   = snowsql.security_admin
   }
   
   custom_role_name = "DB_${local.db_name}_MNG_ROL"
@@ -29,8 +36,10 @@ module "create_custom_role" {
   source   = "../custom-role"
 
   providers = {
-    snowflake.sys_admin      = snowflake.sys_admin  
+    snowflake.sys_admin      = snowflake.sys_admin
     snowflake.security_admin = snowflake.security_admin
+    snowsql.sys_admin        = snowsql.sys_admin
+    snowsql.security_admin   = snowsql.security_admin
   }
   
   custom_role_name = "DB_${local.db_name}_CRT_ROL"
@@ -42,8 +51,10 @@ module "select_custom_role" {
   source   = "../custom-role"
 
   providers = {
-    snowflake.sys_admin      = snowflake.sys_admin  
-    snowflake.security_admin   = snowflake.security_admin
+    snowflake.sys_admin      = snowflake.sys_admin
+    snowflake.security_admin = snowflake.security_admin
+    snowsql.sys_admin        = snowsql.sys_admin
+    snowsql.security_admin   = snowsql.security_admin
   }
   
   custom_role_name = "DB_${local.db_name}_SEL_ROL"
@@ -56,8 +67,10 @@ module "bi_custom_role" {
   count =  var.create_bi_role ? 1 : 0
 
   providers = {
-    snowflake.sys_admin      = snowflake.sys_admin  
-    snowflake.security_admin   = snowflake.security_admin
+    snowflake.sys_admin      = snowflake.sys_admin
+    snowflake.security_admin = snowflake.security_admin
+    snowsql.sys_admin        = snowsql.sys_admin
+    snowsql.security_admin   = snowsql.security_admin
   }
   
   custom_role_name = "DB_${local.db_name}_BI_ROL"
@@ -88,7 +101,6 @@ resource "snowflake_database_role" "manage_custom_role" {
   database = local.db_name
   name     = module.manage_custom_role.custom_role_name
 }
-
 
 resource "snowflake_grant_database_role" "grant_create_to_manage_role" {
   provider = snowflake.security_admin

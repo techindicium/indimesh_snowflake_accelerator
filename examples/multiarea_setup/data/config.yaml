@@ -51,12 +51,13 @@ existing_databases:
     create_bi_role: false
     schemas: # use it to create new schemas on existing databases
       MARTS:
+        name: MARTS
         assign_manage_roles: []
         assign_create_roles: [TL_ROL]
         assign_select_roles: [SPDO_AE_ROL]
         assign_bi_roles: [ BI_ROL ]
-    legacy_schemas: # use it to map existing schemas on existing databases
       PUBLIC:
+        name: PUBLIC
         assign_manage_roles: []
         assign_create_roles: [TL_ROL]
         assign_select_roles: [DE_ROL]

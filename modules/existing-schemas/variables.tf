@@ -1,4 +1,4 @@
-variable "schema" {
+variable "schema_name" {
   description = "Schema created in the infrastructure"
   type        = string
   default     = null

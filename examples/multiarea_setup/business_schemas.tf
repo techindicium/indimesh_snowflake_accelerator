@@ -18,4 +18,3 @@ stage_name = each.value.stage_name
     snowsql.sys_admin = snowsql.sys_admin
   }
 }
-
