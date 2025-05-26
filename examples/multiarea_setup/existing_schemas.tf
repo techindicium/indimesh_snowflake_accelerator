@@ -1,6 +1,6 @@
 locals {
   schema_map = {
-    for db_key, db_val in local.config.existing_databases : 
+    for db_key, db_val in local.config.existing_databases :
     db_key => [
       for schema_key, schema_val in db_val.schemas : {
         key                 = "${db_key}.${schema_key}"

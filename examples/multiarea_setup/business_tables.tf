@@ -5,6 +5,10 @@ module "business_table" {
 
   table_name = each.value.table_name
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> cd17eb7 (fix: format files)
   providers = {
     snowflake.sys_admin      = snowflake.sys_admin
     snowflake.security_admin = snowflake.security_admin
