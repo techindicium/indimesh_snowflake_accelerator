@@ -7,14 +7,14 @@ variable "aws_region" {
 variable "snowflake_account" {
   type      = string
   sensitive = true
-  default  = "WHYQFQG-IQ65686"
+  default   = "WHYQFQG-IQ65686"
 }
 
 #The prefix is a naming string on the storage-integration module on storage_integration.tf
 variable "prefix" {
   type        = string
   description = "this will be the prefix used to name the Resources on Storage-integration's module."
-  default = "pocdev"
+  default     = "pocdev"
 }
 
 variable "snowflake_integration_user_roles" {
@@ -59,15 +59,15 @@ variable "env" {
 
 variable "AWS_REGION" {
   description = "AWS Region to be used on the Storage-Integration module."
-  type = string
+  type        = string
 }
 
 variable "AWS_SECRET_ACCESS_KEY" {
   description = "AWS Secret Access Key to be used on the Storage-Integration module."
-  type = string
+  type        = string
 }
 
-variable "AWS_ACCESS_KEY_ID"{
+variable "AWS_ACCESS_KEY_ID" {
   description = "AWS Acess Key ID to be used on the Storage-Integration module."
-  type = string
+  type        = string
 }
