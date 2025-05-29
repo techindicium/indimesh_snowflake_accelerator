@@ -1,6 +1,6 @@
 # Multiarea Example
 
-This example configures an multi business areas snowflake setup.
+This folder serves as an example implementation of the Terraform modules for Snowflake infrastructure available in this repository. The configuration is driven by a `config.yaml`file that defines users, roles, warehouses, databases, schemas, and access controls.
 
 It creates 2 warehouses:
 
@@ -12,6 +12,7 @@ It creates 2 warehouses:
 - hr_role
 - ae_role
 - dev_role
+- ds_role
 
 3 databases:
 
@@ -31,14 +32,24 @@ Users with dev_user can only read on dev_db.
 
 ## Running the example
 
-Configure your authentication using keys
-You need securityadmin and sysadmin in the desired account.
-Run:
+#### Prerequisites
+- Terraform installed
+- AWS CLI configured
+- Snowflake account credentials available
 
+
+#### Setup AWS Profile
+```bash
+aws configure --profile demo_multiarea
+```
+
+#### Create infrastructure
 ```
 terraform init
+terraform plan
 terraform apply
 ```
+
 After running the tests on this module, you can run a terraform destroy command to tear down the created structure and set up one according to your needs.
 
 ```

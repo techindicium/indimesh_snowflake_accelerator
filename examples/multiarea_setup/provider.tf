@@ -2,6 +2,8 @@ terraform {
   required_version = ">=1.2.9"
   backend "s3" {
     encrypt = true
+    bucket  = "indicium-mesh-tfstates"
+    key     = "terraformstate/snowflake_demo_project/state"
   }
   required_providers {
     aws = {
@@ -9,23 +11,23 @@ terraform {
       version = ">= 4.47"
     }
     snowsql = {
-      source  = "aidanmelen/snowsql"
-      version = "1.3.3"
+      source                = "aidanmelen/snowsql"
+      version               = "1.3.3"
       configuration_aliases = [snowsql.sys_admin, snowsql.security_admin]
     }
     snowflake = {
       source  = "Snowflake-Labs/snowflake"
-      version = "0.70.0"
+      version = "0.98.0"
       configuration_aliases = [
         snowflake.storage_integration_role,
-      ]      
+      ]
     }
   }
 }
 
 provider "aws" {
-  region = "us-east-2"
-  profile = "training"
+  region  = "us-east-2"
+  profile = "indicium-mesh" # Set the correct profile
 }
 
 provider "snowsql" {
@@ -58,6 +60,5 @@ provider "snowflake" {
 
 provider "snowflake" {
   alias = "storage_integration_role"
-  account = var.snowflake_account
-  role    = var.snowflake_storage_integration_owner_role
+  role  = var.snowflake_storage_integration_owner_role
 }

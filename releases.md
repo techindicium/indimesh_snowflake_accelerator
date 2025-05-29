@@ -85,3 +85,14 @@ No features at the moment, just corrections and adjustments.
 
 ### Features
 No features at the moment, just slight enhancements
+
+# v0.0.13
+- File ```modules/business-table/main.tf```: "Snowflake-Labs/snowflake" provider version changed from 0.70.0 to 0.98.0.
+
+- File ```modules/snowpipe/versions.tf```: "Snowflake-Labs/snowflake" provider version changed from 0.97.0 to 0.98.0
+
+- File ```modules/storage-integration/version.tf```: "Snowflake-Labs/snowflake" provider version changed from 0.97.0 to 0.98.0
+
+
+### Features
+No features at the moment, just slight enhancements

@@ -8,7 +8,7 @@ module "grants_by_schemas" {
     snowflake.security_admin = snowflake.security_admin
   }
 
-  database_name = "${module.project_data.sf_database_prefix != "" ? module.project_data.sf_database_prefix : var.sf_database_prefix}_${each.value.database_name}"
+  database_name = each.value.database_name
   schemas       = each.value.schemas
 
   depends_on = [module.business_databases]

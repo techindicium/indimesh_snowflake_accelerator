@@ -7,14 +7,14 @@ variable "aws_region" {
 variable "snowflake_account" {
   type      = string
   sensitive = true
-  default  = "WHYQFQG-IQ65686"
+  default   = "WHYQFQG-IQ65686"
 }
 
 #The prefix is a naming string on the storage-integration module on storage_integration.tf
 variable "prefix" {
   type        = string
   description = "this will be the prefix used to name the Resources on Storage-integration's module."
-  default = "pocdev"
+  default     = "pocdev"
 }
 
 variable "snowflake_integration_user_roles" {
@@ -59,15 +59,56 @@ variable "env" {
 
 variable "AWS_REGION" {
   description = "AWS Region to be used on the Storage-Integration module."
-  type = string
+  type        = string
 }
 
 variable "AWS_SECRET_ACCESS_KEY" {
   description = "AWS Secret Access Key to be used on the Storage-Integration module."
-  type = string
+  type        = string
 }
 
-variable "AWS_ACCESS_KEY_ID"{
+variable "AWS_ACCESS_KEY_ID" {
   description = "AWS Acess Key ID to be used on the Storage-Integration module."
-  type = string
+  type        = string
+}
+
+variable "storage_integration_name" {
+  type        = string
+  description = "Storage integration name"
+  default     = "DEMO_PROJECT_STORAGE_INTEGRATION"
+}
+
+variable "storage_integration_policy_name" {
+  type        = string
+  description = "Storage integration policy name"
+  default     = "STORAGE_INTEGRATION_POLICY"
+}
+
+variable "storage_integration_role_name" {
+  type        = string
+  description = "Storage integration role name"
+  default     = "POCDEV_STORAGE_INTEGRATION"
+}
+
+variable "aws_account_id" {
+  type        = string
+  description = "AWS account id"
+  default     = "835825599161"
+}
+
+variable "region" {
+  type        = string
+  description = "AWS region"
+  default     = "us-east-1"
+}
+
+variable "tf_state_s3_bucket_name" {
+  type        = string
+  description = "Terrraform backend S3 bucket name"
+  default     = "indicium-mesh-tfstates"
+}
+
+variable "aws_sns_topic_arn" {
+  type        = string
+  description = "ARN of the AWS SNS topic which will receive alerts"
 }

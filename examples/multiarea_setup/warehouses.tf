@@ -19,8 +19,8 @@ module "snowflake_warehouses" {
   statement_timeout_in_seconds        = each.value.statement_timeout_in_seconds
   scaling_policy                      = each.value.scaling_policy
   create_optional_resource            = false
-  auto_resume                         = true 
-  
+  auto_resume                         = true
+
   # Iterate all roles created with custom_role module and return only those included in the
   # assign_warehouse_role_to_roles config
   assign_warehouse_role_to_roles = [
@@ -28,4 +28,3 @@ module "snowflake_warehouses" {
     if contains(each.value.assign_warehouse_role_to_roles, custom_role.custom_role_name)
   ]
 }
-

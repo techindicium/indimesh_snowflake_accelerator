@@ -1,9 +1,14 @@
-wh_terraform: "COMPUTE_WH"
+wh_terraform: "TERRAFORM_WH"
 
 roles:
   - AE_ROLE
   - PRD_ROLE
   - DEV_ROLE
+  - DS_ROLE
+
+# This role must also be defined under `roles` for its creation
+cortex_analyst_roles:
+  - DS_ROLE
 
 users:
 
@@ -120,7 +125,7 @@ schemas:
     stage_name: STAGE_ONE
     file_format: PARQUET
     file_format_name: FILE_FORMAT_ONE
-    url_stage: s3://mybucket/schema_one
+    url_stage: s3://indicium-mesh-datalake/schema_one
 
   SECOND:
     database_name: BRONZE_DB
@@ -128,7 +133,7 @@ schemas:
     stage_name: STAGE_TWO
     file_format: PARQUET
     file_format_name: FILE_FORMAT_TWO
-    url_stage: s3://mybucket/schema_two
+    url_stage: s3://indicium-mesh-datalake/schema_two
 
 snowpipe:
   
@@ -159,3 +164,19 @@ snowpipe:
     table_name: TABLE_FOUR
     stage_name: STAGE_TWO
     pipe_name: PIPE_FOUR
+
+grants_by_schemas:
+
+  BRONZE:
+    database_name: BRONZE_DB
+    schemas:
+      SCHEMA_ONE:
+        assign_manage_roles: []
+        assign_create_roles: [PRD_ROLE]
+        assign_select_roles: [AE_ROLE]
+        assign_bi_roles: [AE_ROLE]
+      SCHEMA_TWO:
+        assign_manage_roles: []
+        assign_create_roles: [PRD_ROLE]
+        assign_select_roles: [AE_ROLE]
+        assign_bi_roles: [AE_ROLE]
