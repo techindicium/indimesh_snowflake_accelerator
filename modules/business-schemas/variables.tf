@@ -34,17 +34,16 @@ variable "database_name" {
   default     = null
 }
 
-
-variable "assign_manage_roles" {
-  description = "Roles to assign the manage/full roles to."
-  type        = list
-  default     = []
+variable "schema_name" {
+  description = "Name of the schema"
+  type = string
+  default = null
 }
 
-variable "assign_create_roles" {
-  description = "Roles to assign the create/write roles to."
-  type        = list
-  default     = []
+variable "table_name" {
+  description = "Name of the schema."
+  type        = string
+  default     = null
 }
 
 variable "storage_integration" {
@@ -63,22 +62,4 @@ variable "stage_name" {
   description = "Name of the stage."
   type        = string
   default     = null
-}
-
-variable "schema_name" {
-  description = "Name of the schema"
-  type = string
-  default = null
-}
-
-variable "assign_select_roles" {
-  description = "Roles to assign the select roles to."
-  type = list(string)
-  default = []
-}
-
-variable "assign_bi_roles" {
-  description = "Roles to assign the BI roles to."
-  type = list(any)
-  default = []
 }
