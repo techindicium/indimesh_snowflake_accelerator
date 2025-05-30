@@ -1,4 +1,6 @@
-### 1 - CREATING DATABASE ROLES
+# ---------------------------------------- #
+#   1 - CREATING DATABASE ROLES            #
+# ---------------------------------------- #
 resource "snowflake_database_role" "database_roles" {
   for_each = local.db_role_definitions
 

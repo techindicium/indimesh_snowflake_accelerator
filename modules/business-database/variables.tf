@@ -1,5 +1,5 @@
 variable "database_name" {
-  description = "Name of the database."
+  description = "Name of the business database."
   type        = string
   default     = null
 }
