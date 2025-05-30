@@ -96,3 +96,10 @@ No features at the moment, just slight enhancements
 
 ### Features
 No features at the moment, just slight enhancements
+
+# v0.0.16
+- File ```modules/storage-integration/versions```: "Snowflake-Labs/snowflake" provider version changed from 0.97.0 to 0.98.0.
+- Module ```grants-by-schema```: Changes the logic of granting privileges to roles
+
+### Features
+The module `grants-by-schema` had its granting privileges logic changed. Now we create 4 database roles with the necessary privileges, which will be inherited by other roles.
