@@ -103,24 +103,24 @@ resource "snowflake_database_role" "manage_custom_role" {
 resource "snowflake_grant_database_role" "grant_create_to_manage_role" {
   provider = snowflake.security_admin
 
-  database_role_name = snowflake_database_role.create_custom_role.fully_qualified_name
-  parent_role_name   = snowflake_database_role.manage_custom_role.name
+  database_role_name        = snowflake_database_role.create_custom_role.fully_qualified_name
+  parent_database_role_name = snowflake_database_role.manage_custom_role.fully_qualified_name
 }
 
 resource "snowflake_grant_database_role" "grant_select_to_create_role" {
   count    = var.create_bi_role ? 1 : 0
   provider = snowflake.security_admin
 
-  database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
-  parent_role_name   = snowflake_database_role.create_custom_role.name
+  database_role_name        = snowflake_database_role.select_custom_role.fully_qualified_name
+  parent_database_role_name = snowflake_database_role.create_custom_role.fully_qualified_name
 }
 
 resource "snowflake_grant_database_role" "grant_bi_to_select_role" {
   count    = var.create_bi_role ? 1 : 0
   provider = snowflake.security_admin
 
-  database_role_name = snowflake_database_role.bi_custom_role.fully_qualified_name
-  parent_role_name   = snowflake_database_role.select_custom_role.name
+  database_role_name        = snowflake_database_role.bi_custom_role.fully_qualified_name
+  parent_database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
 }
 
 ##### 4 Grants to database roles
@@ -131,7 +131,7 @@ resource "snowflake_grant_privileges_to_database_role" "grants_mng_role_usage_db
   provider = snowflake.security_admin
 
   database_role_name = snowflake_database_role.manage_custom_role.fully_qualified_name
-  privileges         = ["USAGE"]
+  all_privileges     = true
   on_database        = snowflake_database_role.manage_custom_role.database
 }
 
@@ -534,7 +534,29 @@ resource "snowflake_grant_privileges_to_database_role" "grant_bi_select_all_exte
   }
 }
 
-##### 4 Account roles receive database roles
+##### 5 Custom roles receive database roles
+
+resource "snowflake_grant_database_role" "manage_roles" {
+  database_role_name = snowflake_database_role.manage_custom_role.fully_qualified_name
+  parent_role_name   = module.manage_custom_role.custom_role_name
+}
+
+resource "snowflake_grant_database_role" "create_roles" {
+  database_role_name = snowflake_database_role.create_custom_role.fully_qualified_name
+  parent_role_name   = module.create_custom_role.custom_role_name
+}
+
+resource "snowflake_grant_database_role" "select_roles" {
+  database_role_name = snowflake_database_role.select_custom_role.fully_qualified_name
+  parent_role_name   = module.select_custom_role.custom_role_name
+}
+
+resource "snowflake_grant_database_role" "bi_roles" {
+  database_role_name = snowflake_database_role.bi_custom_role.fully_qualified_name
+  parent_role_name   = module.bi_custom_role[0].custom_role_name
+}
+
+##### 6 Account roles receive custom roles
 
 resource "snowflake_grant_account_role" "grant_manage_role_to_var_assigned_roles" {
   provider = snowflake.security_admin
@@ -548,7 +570,7 @@ resource "snowflake_grant_account_role" "grant_manage_role_to_var_assigned_roles
 
 resource "snowflake_grant_account_role" "grant_create_role_to_var_assigned_roles" {
   provider = snowflake.security_admin
-  for_each = { for role in var.assign_manage_roles : role => role }
+  for_each = { for role in var.assign_create_roles : role => role }
 
   role_name        = module.create_custom_role.custom_role_name
   parent_role_name = each.key

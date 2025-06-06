@@ -96,3 +96,9 @@ No features at the moment, just slight enhancements
 
 ### Features
 No features at the moment, just slight enhancements
+
+# v0.0.15
+- File ```modules/business-database/roles.tf```: Bug fix in the database roles hierarchy and their assignment to custom roles.
+
+### Features
+No features at the moment, just slight enhancements
