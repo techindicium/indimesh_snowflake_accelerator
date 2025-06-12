@@ -45,6 +45,29 @@ users:
     default_role: DEV_ROLE            
     secondary_roles: []
 
+existing_databases:
+  DB_EXISTING:
+    database_name: DB_EXISTING
+    database_comment: "DB_EXISTING stuff"
+    assign_manage_roles: [TL_ROL, DE_ROL, LOADER_ROL]
+    assign_create_roles: [ ]
+    assign_select_roles: [LOADER_ROL]
+    assign_bi_roles: [BI_ROL]
+    create_bi_role: false
+    schemas: # use it to create new schemas on existing databases
+      MARTS:
+        name: MARTS
+        assign_manage_roles: []
+        assign_create_roles: [TL_ROL]
+        assign_select_roles: [SPDO_AE_ROL]
+        assign_bi_roles: [ BI_ROL ]
+      PUBLIC:
+        name: PUBLIC
+        assign_manage_roles: []
+        assign_create_roles: [TL_ROL]
+        assign_select_roles: [DE_ROL]
+        assign_bi_roles: [BI_ROL]
+
 business_databases:
  
   HUMAN_RESOURCES:
@@ -56,6 +79,12 @@ business_databases:
     assign_create_roles: []
     assign_select_roles: [AE_ROLE]
     assign_bi_roles: []
+    schemas:
+      MARTS:
+        assign_manage_roles: [ ]
+        assign_create_roles: [ TL_ROL ]
+        assign_select_roles: [ SPDO_AE_ROL ]
+        assign_bi_roles: [ BI_ROL ]
   
   PRD:
     database_name: PRD_DB
@@ -66,6 +95,12 @@ business_databases:
     assign_create_roles: []
     assign_select_roles: [AE_ROLE]
     assign_bi_roles: []
+    schemas:
+      MARTS:
+        assign_manage_roles: [ ]
+        assign_create_roles: [ TL_ROL ]
+        assign_select_roles: [ SPDO_AE_ROL ]
+        assign_bi_roles: [ BI_ROL ]
 
   DEV:
     database_name: DEV_DB
@@ -76,6 +111,12 @@ business_databases:
     assign_create_roles: [AE_ROLE]
     assign_select_roles: [DEV_ROLE]
     assign_bi_roles: []
+    schemas:
+      MARTS:
+        assign_manage_roles: [ ]
+        assign_create_roles: [ TL_ROL ]
+        assign_select_roles: [ SPDO_AE_ROL ]
+        assign_bi_roles: [ BI_ROL ]
 
   BRONZE:
     database_name: BRONZE_DB
@@ -86,6 +127,7 @@ business_databases:
     assign_create_roles: [AE_ROLE]
     assign_select_roles: [DEV_ROLE]
     assign_bi_roles: []
+    schemas: []
 
 warehouses:
  

@@ -35,9 +35,9 @@ variable "database_name" {
 }
 
 variable "schema_name" {
-  description = "Name of the schema."
-  type        = string
-  default     = null
+  description = "Name of the schema"
+  type = string
+  default = null
 }
 
 variable "table_name" {

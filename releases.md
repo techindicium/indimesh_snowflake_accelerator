@@ -102,3 +102,10 @@ No features at the moment, just slight enhancements
 
 ### Features
 No features at the moment, just slight enhancements
+
+# v0.0.16
+- Module ```grants-by-schema```: Changes the logic of granting privileges to roles
+- Module ```existing-databases```: New module "existing-databases" added to project
+
+### Features
+The module `grants-by-schema` had its granting privileges logic changed. Now we create 4 database roles with the necessary privileges, which will be inherited by other roles.

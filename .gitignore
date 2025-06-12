@@ -12,3 +12,4 @@ modules/indimesh_snowflake_accelerator/terraform.tfstate.backup
 
 tests/go.mod
 tests/go.sum
+.idea/

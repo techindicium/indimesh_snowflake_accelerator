@@ -1,6 +1,5 @@
 module "grants_by_schemas" {
   source = "../../modules/grants-by-schemas"
-
   for_each = local.config.grants_by_schemas
 
   providers = {
