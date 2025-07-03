@@ -1,6 +1,7 @@
 # ---------------------------------------- #
 #   1 - CREATING DATABASE ROLES            #
 # ---------------------------------------- #
+
 resource "snowflake_database_role" "database_roles" {
   for_each = local.db_role_definitions
 
@@ -13,6 +14,7 @@ resource "snowflake_database_role" "database_roles" {
 # ---------------------------------------- #
 #  2 - CREATING DATABASE ROLES HIERARCHY   #
 # ---------------------------------------- #
+
 resource "snowflake_grant_database_role" "grant_crt_to_mng_role" {
   provider = snowflake.sys_admin
   for_each = var.schemas
@@ -46,6 +48,7 @@ resource "snowflake_grant_database_role" "grant_bi_to_sel_role" {
 # ---------------------------------------- #
 #  3 - PRIVILEGES TO MANAGE DATABASE ROLE  #
 # ---------------------------------------- #
+
 resource "snowflake_grant_privileges_to_database_role" "grants_mng_role_all_on_schema" {
   provider = snowflake.sys_admin
   for_each = var.schemas
@@ -64,7 +67,21 @@ resource "snowflake_grant_privileges_to_database_role" "grants_mng_role_all_on_t
   database_role_name = snowflake_database_role.database_roles["${each.key}.MNG"].fully_qualified_name
   all_privileges     = true
   on_schema_object {
-    all { // Aplica a todas as tabelas (existentes e futuras) dentro do schema
+    all {
+      object_type_plural = "TABLES"
+      in_schema          = "${var.database_name}.${each.key}"
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grants_mng_role_future_tables_in_schema" {
+  provider = snowflake.sys_admin
+  for_each = var.schemas
+
+  database_role_name = snowflake_database_role.database_roles["${each.key}.MNG"].fully_qualified_name
+  all_privileges     = true
+  on_schema_object {
+    future {
       object_type_plural = "TABLES"
       in_schema          = "${var.database_name}.${each.key}"
     }
@@ -85,9 +102,24 @@ resource "snowflake_grant_privileges_to_database_role" "grants_stage_privileges_
   }
 }
 
+resource "snowflake_grant_privileges_to_database_role" "grants_future_stages_privileges_to_manage_role" {
+  provider = snowflake.sys_admin
+  for_each = var.schemas
+
+  database_role_name = snowflake_database_role.database_roles["${each.key}.MNG"].fully_qualified_name
+  all_privileges     = true
+  on_schema_object {
+    future {
+      object_type_plural = "STAGES"
+      in_schema          = "${var.database_name}.${each.key}"
+    }
+  }
+}
+
 # ---------------------------------------- #
 #  4 - PRIVILEGES ON CREATE DATABASE ROLE  #
 # ---------------------------------------- #
+
 resource "snowflake_grant_privileges_to_database_role" "grants_create_role" {
   provider = snowflake.sys_admin
   for_each = var.schemas
@@ -102,6 +134,7 @@ resource "snowflake_grant_privileges_to_database_role" "grants_create_role" {
 # ---------------------------------------- #
 #  5 - PRIVILEGES ON SELECT DATABASE ROLE  #
 # ---------------------------------------- #
+
 resource "snowflake_grant_privileges_to_database_role" "grants_sel_role_usage_on_schema" {
   provider = snowflake.sys_admin
   for_each = var.schemas
@@ -127,6 +160,20 @@ resource "snowflake_grant_privileges_to_database_role" "grants_sel_role_select_o
   }
 }
 
+resource "snowflake_grant_privileges_to_database_role" "grants_sel_role_select_on_future_tables" {
+  provider = snowflake.sys_admin
+  for_each = var.schemas
+
+  database_role_name = snowflake_database_role.database_roles["${each.key}.SEL"].fully_qualified_name
+  privileges         = ["SELECT"]
+  on_schema_object {
+    future {
+      object_type_plural = "TABLES"
+      in_schema          = "${var.database_name}.${each.key}"
+    }
+  }
+}
+
 resource "snowflake_grant_privileges_to_database_role" "grants_sel_role_select_on_all_views" {
   provider = snowflake.sys_admin
   for_each = var.schemas
@@ -141,7 +188,21 @@ resource "snowflake_grant_privileges_to_database_role" "grants_sel_role_select_o
   }
 }
 
-resource "snowflake_grant_privileges_to_database_role" "grants_sel_role_select_on_all_mviews" { # Nome do recurso ligeiramente ajustado
+resource "snowflake_grant_privileges_to_database_role" "grants_sel_role_select_on_future_views" {
+  provider = snowflake.sys_admin
+  for_each = var.schemas
+
+  database_role_name = snowflake_database_role.database_roles["${each.key}.SEL"].fully_qualified_name
+  privileges         = ["SELECT"]
+  on_schema_object {
+    future {
+      object_type_plural = "VIEWS"
+      in_schema          = "${var.database_name}.${each.key}"
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grants_sel_role_select_on_all_mviews" {
   provider = snowflake.sys_admin
   for_each = var.schemas
 
@@ -155,7 +216,21 @@ resource "snowflake_grant_privileges_to_database_role" "grants_sel_role_select_o
   }
 }
 
-resource "snowflake_grant_privileges_to_database_role" "grants_sel_role_select_on_all_ext_tables" { # Nome do recurso ligeiramente ajustado
+resource "snowflake_grant_privileges_to_database_role" "grants_sel_role_select_on_future_mviews" {
+  provider = snowflake.sys_admin
+  for_each = var.schemas
+
+  database_role_name = snowflake_database_role.database_roles["${each.key}.SEL"].fully_qualified_name
+  privileges         = ["SELECT"]
+  on_schema_object {
+    future {
+      object_type_plural = "MATERIALIZED VIEWS"
+      in_schema          = "${var.database_name}.${each.key}"
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_database_role" "grants_sel_role_select_on_all_ext_tables" {
   provider = snowflake.sys_admin
   for_each = var.schemas
 
@@ -169,9 +244,24 @@ resource "snowflake_grant_privileges_to_database_role" "grants_sel_role_select_o
   }
 }
 
+resource "snowflake_grant_privileges_to_database_role" "grants_sel_role_select_on_future_ext_tables" {
+  provider = snowflake.sys_admin
+  for_each = var.schemas
+
+  database_role_name = snowflake_database_role.database_roles["${each.key}.SEL"].fully_qualified_name
+  privileges         = ["SELECT"]
+  on_schema_object {
+    future {
+      object_type_plural = "EXTERNAL TABLES"
+      in_schema          = "${var.database_name}.${each.key}"
+    }
+  }
+}
+
 # ---------------------------------------- #
 #   6 - PRIVILEGES ON BI DATABASE ROLE     #
 # ---------------------------------------- #
+
 resource "snowflake_grant_privileges_to_database_role" "grants_bi_role_usage_schema" {
   provider = snowflake.sys_admin
   for_each = var.schemas
@@ -186,6 +276,7 @@ resource "snowflake_grant_privileges_to_database_role" "grants_bi_role_usage_sch
 # ---------------------------------------- #
 #   7 - GIVE DATABASE ROLE TO OTHER ROLES  #
 # ---------------------------------------- #
+
 resource "snowflake_grant_database_role" "grant_manage_role_to_var_assigned_roles" {
   for_each = local.manage_role_assignments_map
   provider = snowflake.security_admin
@@ -216,4 +307,16 @@ resource "snowflake_grant_database_role" "grant_bi_role_to_var_assigned_roles" {
 
   database_role_name = each.value.db_role_to_grant_fqn
   parent_role_name   = each.value.parent_account_role
+}
+
+# -------------------------------------------------------------------------------- #
+#   8 - GIVE DATABASE ROLES FROM SCHEMAS TO DATABASE ROLES FROM DATABASES  #
+# -------------------------------------------------------------------------------- #
+
+resource "snowflake_grant_database_role" "grant_schema_role_to_database_role" {
+  for_each = local.schema_to_database_role_grants
+  provider = snowflake.security_admin
+
+  database_role_name        = each.value.child_role_fqn
+  parent_database_role_name = each.value.parent_role_fqn
 }
