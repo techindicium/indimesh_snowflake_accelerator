@@ -109,3 +109,9 @@ No features at the moment, just slight enhancements
 
 ### Features
 The module `grants-by-schema` had its granting privileges logic changed. Now we create 4 database roles with the necessary privileges, which will be inherited by other roles.
+
+# v0.0.17
+- Module ```grants-by-schema```: Changes the logic of granting privileges to roles
+
+### Features
+Added resources what apply grants on future objects created in schemas.
