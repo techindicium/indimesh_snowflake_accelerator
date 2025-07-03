@@ -308,3 +308,15 @@ resource "snowflake_grant_database_role" "grant_bi_role_to_var_assigned_roles" {
   database_role_name = each.value.db_role_to_grant_fqn
   parent_role_name   = each.value.parent_account_role
 }
+
+# -------------------------------------------------------------------------------- #
+#   8 - GIVE DATABASE ROLES FROM SCHEMAS TO DATABASE ROLES FROM DATABASES  #
+# -------------------------------------------------------------------------------- #
+
+resource "snowflake_grant_database_role" "grant_schema_role_to_database_role" {
+  for_each = local.schema_to_database_role_grants
+  provider = snowflake.security_admin
+
+  database_role_name        = each.value.child_role_fqn
+  parent_database_role_name = each.value.parent_role_fqn
+}

@@ -77,6 +77,7 @@ locals {
         schema_name = schema_key
         role_suffix = role_suffix
         full_role_name = "DB_${upper(var.database_name)}_${upper(schema_key)}_${role_suffix}_ROL"
+        full_role_database_name = "DB_${upper(var.database_name)}_${role_suffix}_ROL"
       }
     ]
   ])
@@ -87,7 +88,20 @@ locals {
       schema_name    = item.schema_name
       role_suffix    = item.role_suffix
       full_role_name = item.full_role_name
+      full_role_database_name = item.full_role_database_name
     }
   }
 
+  database_level_roles = {
+    for suffix in local.role_type_suffixes :
+    suffix => "DB_${upper(var.database_name)}_${suffix}_ROL"
+  }
+
+  schema_to_database_role_grants = {
+    for key, definition in local.db_role_definitions :
+    key => {
+      child_role_fqn  = snowflake_database_role.database_roles[key].fully_qualified_name
+      parent_role_fqn = "${var.database_name}.${local.database_level_roles[definition.role_suffix]}"
+    }
+  }
 }
