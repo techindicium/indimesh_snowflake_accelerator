@@ -116,3 +116,9 @@ The module `grants-by-schema` had its granting privileges logic changed. Now we 
 ### Features
 - Added resources what apply grants on future objects created in schemas.
 - Added `snowflake_grant_database_role` resource to grant database roles from schemas to database roles from databases.
+
+# v0.0.18
+- Module ```business-database```: Removing "staging_schema_data_retention_days", because it was not used
+
+### Features
+No features at the moment, just slight adjustments

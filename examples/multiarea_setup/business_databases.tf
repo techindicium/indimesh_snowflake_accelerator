@@ -12,7 +12,6 @@ module "business_databases" {
 
   database_name                      = each.value.database_name
   comment                            = each.value.database_comment
-  staging_schema_data_retention_days = each.value.staging_schema_data_retention_days
 
   # Iterate all roles created with custom_role module and return only those included in the
   # assign_manage_roles, assign_create_roles, assign_select_roles and assign_br_roles configs

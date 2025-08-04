@@ -16,11 +16,6 @@ variable "comment" {
   default     = null
 }
 
-variable "staging_schema_data_retention_days" {
-  description = "Number of days to keep timetravel."
-  type        = number
-}
-
 variable "assign_manage_roles" {
   description = "Roles to assign the manage/full roles to."
   type        = list(any)
