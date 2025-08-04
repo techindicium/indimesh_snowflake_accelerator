@@ -74,7 +74,6 @@ business_databases:
     database_name: HUMAN_RESOURCES_DB
     database_comment: "HUMAN_RESOURCES_DB stuff"
     data_retention_time_in_days: 0
-    staging_schema_data_retention_days: 0
     assign_manage_roles: [PRD_ROL]
     assign_create_roles: []
     assign_select_roles: [AE_ROLE]
@@ -90,7 +89,6 @@ business_databases:
     database_name: PRD_DB
     database_comment: "PRD stuff"
     data_retention_time_in_days: 0
-    staging_schema_data_retention_days: 0
     assign_manage_roles: [PRD_ROL]
     assign_create_roles: []
     assign_select_roles: [AE_ROLE]
@@ -106,7 +104,6 @@ business_databases:
     database_name: DEV_DB
     database_comment: "PRD stuff"
     data_retention_time_in_days: 0
-    staging_schema_data_retention_days: 0
     assign_manage_roles: [PRD_ROL]
     assign_create_roles: [AE_ROLE]
     assign_select_roles: [DEV_ROLE]
@@ -122,7 +119,6 @@ business_databases:
     database_name: BRONZE_DB
     database_comment: "BRONZE stuff"
     data_retention_time_in_days: 0
-    staging_schema_data_retention_days: 0
     assign_manage_roles: [PRD_ROL]
     assign_create_roles: [AE_ROLE]
     assign_select_roles: [DEV_ROLE]
