@@ -1,14 +1,18 @@
 terraform {
   required_providers {
     snowflake = {
-      source = "snowflakedb/snowflake"
-      version = "2.6.0"
-      configuration_aliases = [snowflake.sys_admin, snowflake.security_admin]
+      source                = "snowflakedb/snowflake"
+      version               = "2.6.0"
+      configuration_aliases = [snowflake.security_admin]
     }
     snowsql = {
       source                = "aidanmelen/snowsql"
       version               = "1.3.3"
-      configuration_aliases = [snowsql.sys_admin, snowsql.security_admin]
+      configuration_aliases = [snowsql.security_admin]
+    }
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
     }
   }
 }
