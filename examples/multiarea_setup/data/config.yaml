@@ -168,6 +168,15 @@ spcs_compute_pools:
     usage_roles: [AE_ROLE]
     all_privileges_roles: [PRD_ROLE]
 
+spcs_image_repositories:
+
+  HUMAN_RESOURCES_REPO:
+    image_repository_name: HUMAN_RESOURCES_REPO
+    database_name: HUMAN_RESOURCES_DB
+    schema_name: MARTS
+    read_roles: [AE_ROLE]
+    write_roles: [PRD_ROLE]
+
 schemas:
 
   FIRST:
