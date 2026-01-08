@@ -155,6 +155,28 @@ warehouses:
     scaling_policy: null
     assign_warehouse_role_to_roles: [PRD_ROLE]
 
+spcs_compute_pools:
+
+  HUMAN_RESOURCES_POOL_CPU_XS:
+    compute_pool_name: HUMAN_RESOURCES_POOL_CPU_XS
+    instance_family: CPU_X64_XS
+    min_nodes: 1
+    max_nodes: 2
+    auto_resume: true
+    initially_suspended: false
+    auto_suspend_secs: 300
+    usage_roles: [AE_ROLE]
+    all_privileges_roles: [PRD_ROLE]
+
+spcs_image_repositories:
+
+  HUMAN_RESOURCES_REPO:
+    image_repository_name: HUMAN_RESOURCES_REPO
+    database_name: HUMAN_RESOURCES_DB
+    schema_name: MARTS
+    read_roles: [AE_ROLE]
+    write_roles: [PRD_ROLE]
+
 schemas:
 
   FIRST:

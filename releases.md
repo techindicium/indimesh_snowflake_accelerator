@@ -122,3 +122,10 @@ The module `grants-by-schema` had its granting privileges logic changed. Now we 
 
 ### Features
 No features at the moment, just slight adjustments
+
+# v0.0.19
+- Module ```spcs-compute-pool```: Adding "spcs_compute_pool" module to create compute pools
+- Module ```spcs-image-repository```: Adding "spcs_image_repository" module to create image repositories
+
+### Features
+New modules added to the project to support Snowpark Container Services: `spcs-compute-pool` for compute management and `spcs-image-repository` for storing container images.
